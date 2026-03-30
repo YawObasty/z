@@ -5,179 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NanaObasty Marketplace | Ghana</title>
     <style>
-        /* --- PREVIOUS STYLES --- */
-        :root { --bg: #f4f7f6; --card-bg: #fff; --text: #333; --nav-bg: #1a2a3a; --border: #eee; --input-bg: #fff; --accent: #4db8ff; --heart: #ff4757; }
+        /* --- CORE STYLES --- */
+        :root { --bg: #f4f7f6; --card-bg: #fff; --text: #333; --nav-bg: #1a2a3a; --border: #eee; --input-bg: #fff; --accent: #4db8ff; --heart: #ff4757; --verified: #1d9bf0; }
         [data-theme="dark"] { --bg: #0f172a; --card-bg: #1e293b; --text: #f1f5f9; --nav-bg: #020617; --border: #334155; --input-bg: #334155; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: background 0.3s, color 0.3s; }
-        body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 80px; }
-        nav.top-nav { background: var(--nav-bg); color: #fff; padding: 1rem 10%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.4rem; font-weight: bold; color: var(--accent); }
-        .theme-toggle { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #fff; margin-right: 15px; }
-        .filter-container { padding: 15px 10%; background: var(--card-bg); border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 10px; position: sticky; top: 60px; z-index: 999; }
-        .search-bar { flex: 2; min-width: 200px; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--input-bg); color: var(--text); }
-        .marketplace { padding: 30px 10%; min-height: 60vh; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .product-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border); cursor: pointer; }
-        .product-img { height: 180px; background-size: cover; background-position: center; position: relative; }
-        .product-info { padding: 15px; }
+        body { background-color: var(--bg); color: var(--text); padding-bottom: 80px; }
         
-        .view-count { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem; z-index: 10; }
-        .like-btn { position: absolute; top: 10px; right: 10px; background: white; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 11; color: #ccc; }
-        .like-btn.active { color: var(--heart); }
-
-        .seller-identity { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-        .mini-avatar { width: 32px; height: 32px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; background-size: cover; background-position: center; border: 1px solid var(--border); flex-shrink: 0; }
-        .seller-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-
-        /* --- UPDATED PROFILE & EDIT STYLES --- */
-        .profile-pic-large { width: 90px; height: 90px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: bold; margin: 0 auto 15px; background-size: cover; background-position: center; border: 3px solid var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        
-        .edit-profile-box { text-align: center; }
-        .edit-input-group { text-align: left; margin-bottom: 15px; }
-        .edit-input-group label { display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; color: var(--accent); }
-        .edit-input-group input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); outline: none; }
-        .file-custom { position: relative; display: inline-block; width: 100%; margin-bottom: 20px; }
-        .file-custom input { width: 100%; opacity: 0; position: absolute; z-index: 2; cursor: pointer; }
-        .file-label { display: block; background: var(--bg); padding: 10px; border: 2px dashed var(--accent); border-radius: 10px; font-size: 0.8rem; cursor: pointer; }
-
-        .my-listings-container { margin-top: 20px; text-align: left; border-top: 2px solid var(--border); padding-top: 15px; }
-        .manage-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg); border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); }
-        .manage-item img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; }
-        .manage-item-info { flex: 1; font-size: 0.85rem; }
-        .manage-actions { display: flex; gap: 5px; flex-wrap: wrap; }
-        .del-mini-btn { background: #ff4757; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; }
-        .edit-mini-btn { background: var(--accent); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; }
-        .sold-mini-btn { background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; }
-        .sold-badge { background: #ff4757; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
-        
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; align-items: center; justify-content: center; }
+        /* --- MODAL OVERLAYS --- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: var(--card-bg); color: var(--text); padding: 30px; border-radius: 15px; max-width: 450px; width: 95%; max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: var(--card-bg); color: var(--text); padding: 25px; border-radius: 20px; max-width: 500px; width: 95%; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+        /* --- POST ITEM FORM STYLES --- */
+        .post-form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .post-form-grid { display: grid; gap: 15px; }
+        .post-form-grid input, .post-form-grid select, .post-form-grid textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--input-bg); color: var(--text); font-size: 0.95rem; }
+        .post-form-grid label { font-size: 0.8rem; font-weight: bold; color: var(--accent); margin-bottom: -10px; }
+
+        /* --- PRODUCT GRID --- */
+        nav.top-nav { background: var(--nav-bg); color: #fff; padding: 1rem 10%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; padding: 20px 10%; }
+        .product-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .product-img { height: 200px; background-size: cover; background-position: center; }
         
-        .btn { background: var(--accent); color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; width: 100%; }
-        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); margin-top: 10px; }
-        .btn-wa { background: #25D366; width: 100%; display: block; text-align: center; color: white; text-decoration: none; margin-top: 10px; border-radius: 8px; padding: 10px; font-weight: bold; }
-        #sell { padding: 50px 10%; background: var(--card-bg); text-align: center; border-top: 1px solid var(--border); }
-        .sell-form { display: none; max-width: 500px; margin: 20px auto; flex-direction: column; gap: 12px; text-align: left; }
-        .sell-form.active { display: flex; }
-        .sell-form input, .sell-form select, .sell-form textarea { padding: 12px; border: 1px solid var(--border); border-radius: 8px; width: 100%; background: var(--input-bg); color: var(--text); }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 2000; }
-        .bottom-nav a { color: var(--text); text-decoration: none; font-size: 0.9rem; }
+        /* --- BUTTONS --- */
+        .btn { background: var(--accent); color: #fff; padding: 12px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; width: 100%; transition: transform 0.2s; }
+        .btn:active { transform: scale(0.98); }
+        .close-modal { background: none; border: none; color: gray; font-size: 1.5rem; cursor: pointer; }
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid var(--border); z-index: 2000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--text); font-size: 0.75rem; gap: 4px; border: none; background: none; cursor: pointer; }
+        .nav-item.sell-btn-main { background: var(--accent); color: white; width: 50px; height: 50px; border-radius: 50%; margin-top: -30px; border: 5px solid var(--bg); box-shadow: 0 4px 10px rgba(0,0,0,0.2); justify-content: center; font-size: 1.2rem; }
     </style>
 </head>
 <body data-theme="light">
 
     <nav class="top-nav">
         <div class="logo">NANAOBASTY</div>
-        <div style="display: flex; align-items: center;">
-            <button onclick="toggleTheme()" class="theme-toggle" id="themeBtn">🌙</button>
-            <button onclick="openAuth()" class="btn" id="navAuthBtn" style="width:auto; padding: 8px 15px;">Account</button>
-        </div>
+        <button onclick="toggleTheme()" id="themeBtn" style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer;">🌙</button>
     </nav>
 
-    <div class="filter-container">
-        <input type="text" id="searchInput" class="search-bar" placeholder="Search items...">
-        <select id="regFilter" style="padding:10px; border-radius:8px; border:1px solid #ddd; background: var(--input-bg); color: var(--text);">
-            <option value="All">All Regions</option>
-            <option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option>
-            <option>Central Region</option><option>Western Region</option><option>Volta Region</option>
-        </select>
+    <div id="productGrid" class="product-grid">
+        </div>
+
+    <div id="postModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="post-form-header">
+                <h3>Post New Item</h3>
+                <button class="close-modal" onclick="closePostModal()">×</button>
+            </div>
+            <form id="sellForm" class="post-form-grid">
+                <label>Item Photo</label>
+                <input type="file" id="pImage" accept="image/*" required>
+                
+                <input type="text" id="pName" placeholder="What are you selling?" required>
+                <input type="number" id="pPrice" placeholder="Price (₵)" required>
+                
+                <select id="pRegion" required>
+                    <option value="">Select Region</option>
+                    <option>Greater Accra</option><option>Ashanti Region</option><option>Eastern Region</option>
+                    <option>Western Region</option><option>Central Region</option><option>Volta Region</option>
+                </select>
+                
+                <input type="text" id="pCustomLoc" placeholder="City / Town (e.g. Madina)" required>
+                <textarea id="pDesc" placeholder="Describe your item..." rows="3" required></textarea>
+                
+                <button type="submit" id="submitPostBtn" class="btn">🚀 Publish Listing</button>
+            </form>
+        </div>
     </div>
-
-    <section class="marketplace" id="buy">
-        <div id="productGrid" class="product-grid"></div>
-    </section>
-
-    <section id="sell">
-        <h2>Post Your Item</h2>
-        <form class="sell-form" id="sellForm">
-            <input type="text" id="pName" placeholder="Item Name" required>
-            <input type="number" id="pPrice" placeholder="Price (₵)" required>
-            <select id="pRegion" required>
-                <option value="">-- Choose Region --</option>
-                <option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option>
-            </select>
-            <input type="text" id="pCustomLoc" placeholder="City / Town" required>
-            <input type="file" id="pImage" accept="image/*" required>
-            <textarea id="pDesc" placeholder="Brief details..." rows="3" required></textarea>
-            <button type="submit" class="btn">Publish Now</button>
-        </form>
-    </section>
 
     <div id="authModal" class="modal-overlay">
         <div class="modal-content">
             <div id="profileSection" style="display:none;">
-                <div id="profileDisplay">
-                    <div class="profile-card">
-                        <div id="profilePic" class="profile-pic-large">?</div>
-                        <h3 id="userHeader" style="text-align: center;">Account</h3>
-                        <div class="profile-info-row"><span>Name:</span><b id="profName">...</b></div>
-                        <div class="profile-info-row"><span>Phone:</span><b id="profPhone">...</b></div>
-                    </div>
-                    
-                    <button onclick="showEditForm()" class="btn btn-outline">✏️ Update Profile</button>
-                    
-                    <div class="my-listings-container">
-                        <h4 style="margin-bottom:10px; color: var(--heart);">❤️ My Wishlist</h4>
-                        <div id="myWishlist"></div>
-                    </div>
-
-                    <div class="my-listings-container" id="myListingsView">
-                        <h4 style="margin-bottom:10px;">📦 My Listings</h4>
-                        <div id="myItemsList"></div>
-                    </div>
-
-                    <button onclick="signOutUser()" class="btn" style="background:#e74c3c; margin-top:20px;">Logout</button>
-                </div>
-
-                <form id="editProfileForm" class="edit-profile-box" style="display:none; flex-direction:column;">
-                    <h3 style="margin-bottom: 20px;">Edit Profile</h3>
-                    
-                    <div id="editPicPreview" class="profile-pic-large" style="margin-bottom: 10px;">?</div>
-                    
-                    <div class="file-custom">
-                        <label class="file-label">Change Profile Photo</label>
-                        <input type="file" id="editPic" accept="image/*" onchange="previewProfilePic(this)">
-                    </div>
-
-                    <div class="edit-input-group">
-                        <label>Full Name</label>
-                        <input type="text" id="editName" placeholder="Enter your name" required>
-                    </div>
-
-                    <div class="edit-input-group">
-                        <label>WhatsApp Number</label>
-                        <input type="tel" id="editPhone" placeholder="e.g. 0540000000" required>
-                    </div>
-
-                    <button type="submit" id="saveProfileBtn" class="btn">Save Changes</button>
-                    <button type="button" onclick="hideEditForm()" style="background:none; border:none; color:gray; cursor:pointer; margin-top:15px; font-size: 0.9rem;">Cancel</button>
-                </form>
+                <h3 style="text-align:center; margin-bottom:15px;">Your Profile</h3>
+                <div id="profilePic" style="width:80px; height:80px; border-radius:50%; margin:0 auto 10px; background-size:cover; background-position:center; display:flex; align-items:center; justify-content:center; background-color:var(--accent); color:white; font-weight:bold; font-size:2rem;"></div>
+                <p id="profName" style="text-align:center; font-weight:bold;"></p>
+                <button onclick="signOutUser()" class="btn" style="background:#e74c3c; margin-top:20px;">Logout</button>
             </div>
-
             <div id="authFields">
-                <h3 id="authTitle">Login</h3>
-                <form id="loginForm" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-                    <input type="email" id="lEmail" placeholder="Email" required style="padding:12px; border:1px solid #ddd; border-radius:8px;">
-                    <input type="password" id="lPass" placeholder="Password" required style="padding:12px; border:1px solid #ddd; border-radius:8px;">
-                    <button type="submit" class="btn">Login</button>
-                </form>
+                <h3>Please Login</h3>
+                <p>You need an account to post or view profile.</p>
+                <button onclick="/* Logic to trigger login */" class="btn" style="margin-top:15px;">Go to Login</button>
             </div>
-
-            <button onclick="closeAuth()" style="margin-top:20px; background:none; border:none; color:gray; cursor:pointer; width:100%;">Close</button>
+            <button onclick="closeAuth()" style="margin-top:15px; width:100%; background:none; border:none; color:gray;">Close</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="#buy">🛒 Explore</a>
-        <a href="#sell">➕ Sell</a>
-        <a href="javascript:void(0)" onclick="openAuth()">👤 Account</a>
+        <button class="nav-item" onclick="window.scrollTo(0,0)">
+            <span>🛒</span> Explore
+        </button>
+        
+        <button class="nav-item sell-btn-main" onclick="openPostModal()">
+            ➕
+        </button>
+        
+        <button class="nav-item" onclick="openAuth()">
+            <span>👤</span> Account
+        </button>
     </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, updateDoc, increment, deleteDoc, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I", authDomain: "obasty-market.firebaseapp.com", projectId: "obasty-market", appId: "1:753490577388:web:8b2dac8f4082d89ee662c9" };
         const app = initializeApp(firebaseConfig);
@@ -185,165 +118,89 @@
         const db = getFirestore(app);
         
         let userData = null;
-        let allListings = [];
-        let likedIds = [];
         const IMGBB_API = "f6f1d931d2c5da11833752754cf2dfcd";
 
         onAuthStateChanged(auth, async (user) => {
             if(user) {
                 const s = await getDoc(doc(db, "users", user.uid));
                 userData = s.data();
-                likedIds = userData?.wishlist || [];
                 document.getElementById('authFields').style.display = 'none';
                 document.getElementById('profileSection').style.display = 'block';
-                
-                // Populate Edit Form with existing data
-                document.getElementById('editName').value = userData?.name || "";
-                document.getElementById('editPhone').value = userData?.phone || "";
-                
-                updateProfileUI();
-                loadMyListings(user.uid);
-                renderWishlist();
-            } else {
-                userData = null;
-                likedIds = [];
-                document.getElementById('authFields').style.display = 'block';
-                document.getElementById('profileSection').style.display = 'none';
+                document.getElementById('profName').innerText = userData.name;
+                if(userData.photo) document.getElementById('profilePic').style.backgroundImage = `url('${userData.photo}')`;
             }
-            applyFilters();
         });
 
-        // LIVE PREVIEW FOR PROFILE PIC
-        window.previewProfilePic = (input) => {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const preview = document.getElementById('editPicPreview');
-                    preview.style.backgroundImage = `url('${e.target.result}')`;
-                    preview.innerText = "";
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        };
-
-        function updateProfileUI() {
-            const userName = userData?.name || "User";
-            document.getElementById('userHeader').innerText = userName;
-            document.getElementById('profName').innerText = userName;
-            document.getElementById('profPhone').innerText = userData?.phone || "N/A";
-            const picDivs = [document.getElementById('profilePic'), document.getElementById('editPicPreview')];
-            
-            picDivs.forEach(div => {
-                if(userData?.photo) {
-                    div.style.backgroundImage = `url('${userData.photo}')`;
-                    div.innerText = "";
-                } else {
-                    div.style.backgroundImage = "none";
-                    div.innerText = userName[0].toUpperCase();
-                }
-            });
-        }
-
-        document.getElementById('editProfileForm').onsubmit = async (e) => {
+        // HANDLE POSTING
+        document.getElementById('sellForm').onsubmit = async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('saveProfileBtn');
-            btn.innerText = "Saving..."; btn.disabled = true;
+            if(!auth.currentUser) return alert("Please login first!");
 
-            let photoUrl = userData.photo || "";
-            const file = document.getElementById('editPic').files[0];
+            const btn = document.getElementById('submitPostBtn');
+            btn.innerText = "Uploading..."; btn.disabled = true;
 
-            if(file) {
-                const fd = new FormData(); fd.append("image", file);
+            try {
+                const fd = new FormData(); fd.append("image", document.getElementById('pImage').files[0]);
                 const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API}`, { method: "POST", body: fd });
-                const imgData = await res.json();
-                photoUrl = imgData.data.url;
-            }
+                const img = await res.json();
 
-            await updateDoc(doc(db, "users", auth.currentUser.uid), {
-                name: document.getElementById('editName').value,
-                phone: document.getElementById('editPhone').value,
-                photo: photoUrl
-            });
-
-            alert("Profile Updated!");
-            location.reload();
-        };
-
-        // Standard logic for listings/wishlist/filters remain below...
-        window.toggleLike = async (id, e) => {
-            e.stopPropagation();
-            if(!auth.currentUser) { alert("Please login!"); return; }
-            likedIds = likedIds.includes(id) ? likedIds.filter(i => i !== id) : [...likedIds, id];
-            await updateDoc(doc(db, "users", auth.currentUser.uid), { wishlist: likedIds });
-            applyFilters(); renderWishlist();
-        };
-
-        function renderWishlist() {
-            const container = document.getElementById('myWishlist');
-            const liked = allListings.filter(i => likedIds.includes(i.id));
-            container.innerHTML = liked.length ? "" : "<p style='font-size:0.8rem; color:gray;'>No liked items.</p>";
-            liked.forEach(i => container.innerHTML += `<div class="manage-item"><img src="${i.image}"><div class="manage-item-info"><strong>${i.name}</strong></div><button class="del-mini-btn" onclick="toggleLike('${i.id}', event)">Remove</button></div>`);
-        }
-
-        function loadMyListings(uid) {
-            const q = query(collection(db, "listings"), where("sellerId", "==", uid));
-            onSnapshot(q, (snap) => {
-                const list = document.getElementById('myItemsList');
-                list.innerHTML = snap.empty ? "<p style='font-size:0.8rem; color:gray;'>No items posted.</p>" : "";
-                snap.forEach(d => {
-                    const i = d.data();
-                    list.innerHTML += `<div class="manage-item"><img src="${i.image}"><div class="manage-item-info"><strong>${i.name}</strong></div><button class="del-mini-btn" onclick="deleteMyItem('${d.id}')">Delete</button></div>`;
+                await addDoc(collection(db, "listings"), {
+                    name: document.getElementById('pName').value,
+                    price: document.getElementById('pPrice').value,
+                    region: document.getElementById('pRegion').value,
+                    location: document.getElementById('pCustomLoc').value,
+                    image: img.data.url,
+                    sellerId: auth.currentUser.uid,
+                    sellerName: userData.name,
+                    sellerPhone: userData.phone,
+                    sellerPhoto: userData.photo || "",
+                    createdAt: new Date()
                 });
-            });
-        }
 
-        window.deleteMyItem = async (id) => { if(confirm("Delete?")) await deleteDoc(doc(db, "listings", id)); };
+                alert("Item Published Successfully!");
+                closePostModal();
+                location.reload();
+            } catch(err) {
+                alert("Error posting item. Try again.");
+                btn.innerText = "Publish Listing"; btn.disabled = false;
+            }
+        };
 
-        function renderListings(data) {
-            const grid = document.getElementById('productGrid'); grid.innerHTML = "";
-            data.forEach(item => {
-                const isLiked = likedIds.includes(item.id);
+        // RENDER SHOP
+        onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = "";
+            snap.forEach(d => {
+                const item = d.data();
                 grid.innerHTML += `
                     <div class="product-card">
-                        <button class="like-btn ${isLiked?'active':''}" onclick="toggleLike('${item.id}', event)">${isLiked?'❤️':'🤍'}</button>
                         <div class="product-img" style="background-image:url('${item.image}')"></div>
                         <div class="product-info">
-                            <strong>${item.name}</strong>
-                            <p style="color:#2ecc71; font-weight:bold;">₵ ${item.price}</p>
-                            <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}" class="btn-wa">Chat</a>
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                                <div style="width:24px; height:24px; border-radius:50%; background-image:url('${item.sellerPhoto}'); background-size:cover; background-color:#ddd;"></div>
+                                <span style="font-size:0.8rem; font-weight:bold;">${item.sellerName}</span>
+                            </div>
+                            <h4 style="margin-bottom:5px;">${item.name}</h4>
+                            <p style="color:var(--accent); font-weight:bold; font-size:1.1rem;">₵ ${item.price}</p>
+                            <p style="font-size:0.8rem; color:gray;">📍 ${item.location}, ${item.region}</p>
                         </div>
                     </div>`;
             });
-        }
-
-        onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
-            allListings = []; snap.forEach(d => allListings.push({id: d.id, ...d.data()})); 
-            applyFilters(); renderWishlist();
         });
 
-        function applyFilters() {
-            const s = document.getElementById('searchInput').value.toLowerCase();
-            renderListings(allListings.filter(i => i.name.toLowerCase().includes(s)));
-        }
-        document.getElementById('searchInput').oninput = applyFilters;
         window.signOutUser = () => signOut(auth).then(() => location.reload());
     </script>
 
     <script>
-        function toggleTheme() {
-            const b = document.body; const isD = b.getAttribute('data-theme') === 'dark';
-            b.setAttribute('data-theme', isD ? 'light' : 'dark');
-            document.getElementById('themeBtn').innerText = isD ? '🌙' : '☀️';
-        }
+        function openPostModal() { document.getElementById('postModal').classList.add('active'); }
+        function closePostModal() { document.getElementById('postModal').classList.remove('active'); }
         function openAuth() { document.getElementById('authModal').classList.add('active'); }
         function closeAuth() { document.getElementById('authModal').classList.remove('active'); }
-        function showEditForm() {
-            document.getElementById('profileDisplay').style.display = 'none';
-            document.getElementById('editProfileForm').style.display = 'flex';
-        }
-        function hideEditForm() {
-            document.getElementById('profileDisplay').style.display = 'block';
-            document.getElementById('editProfileForm').style.display = 'none';
+        function toggleTheme() {
+            const b = document.body;
+            const isDark = b.getAttribute('data-theme') === 'dark';
+            b.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('themeBtn').innerText = isDark ? '🌙' : '☀️';
         }
     </script>
 </body>
