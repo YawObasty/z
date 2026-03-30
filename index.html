@@ -11,80 +11,48 @@
         body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 80px; }
         nav.top-nav { background: var(--nav-bg); color: #fff; padding: 1rem 10%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 1.4rem; font-weight: bold; color: var(--accent); }
-        .theme-toggle { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #fff; margin-right: 15px; }
-        .filter-container { padding: 15px 10%; background: var(--card-bg); border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 10px; position: sticky; top: 60px; z-index: 999; }
-        .search-bar { flex: 2; min-width: 200px; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--input-bg); color: var(--text); }
-        .filter-select { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); flex: 1; }
+        
+        .filter-container { padding: 15px 10%; background: var(--card-bg); border-bottom: 1px solid var(--border); display: flex; gap: 10px; position: sticky; top: 60px; z-index: 999; }
+        .search-bar { flex: 2; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--input-bg); color: var(--text); }
+        
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; padding: 30px 10%; }
         .product-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border); }
-        .sold-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 180px; background: rgba(0,0,0,0.6); color: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; z-index: 5; }
         .product-img { height: 180px; background-size: cover; background-position: center; }
         .product-info { padding: 15px; }
         
-        /* --- PROFILE AVATAR STYLES --- */
         .seller-badge { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 0.8rem; }
-        .avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent); }
-        .profile-pic-large { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 15px; border: 3px solid var(--accent); display: block; }
+        .avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+        
+        /* --- VIEW COUNTER STYLE --- */
+        .view-count { font-size: 0.75rem; color: gray; display: flex; align-items: center; gap: 4px; margin-top: 5px; }
 
-        .report-btn { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.4); color: white; border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 0.7rem; z-index: 10; }
         .btn { background: var(--accent); color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; width: 100%; margin-top: 10px; }
         .btn-wa { background: #25D366; width: 100%; display: block; text-align: center; color: white; text-decoration: none; border-radius: 8px; padding: 10px; font-weight: bold; margin-top: 10px;}
+        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--card-bg); color: var(--text); padding: 30px; border-radius: 15px; max-width: 450px; width: 90%; }
-        .sell-form { display: none; max-width: 500px; margin: 20px auto; flex-direction: column; gap: 12px; padding: 0 10%; }
-        .sell-form.active { display: flex; }
-        .sell-form input, .sell-form select, .sell-form textarea { padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--input-bg); color: var(--text); }
+        
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 2000; }
-        .bottom-nav a { color: var(--text); text-decoration: none; font-size: 0.9rem; }
     </style>
 </head>
 <body data-theme="light">
 
     <nav class="top-nav">
         <div class="logo">NANAOBASTY</div>
-        <div style="display: flex; align-items: center;">
-            <button onclick="toggleTheme()" class="theme-toggle" id="themeBtn">🌙</button>
-            <button onclick="openAuth()" class="btn" id="navAuthBtn" style="width:auto; padding: 8px 15px; margin:0;">Account</button>
-        </div>
+        <button onclick="openAuth()" class="btn" style="width:auto; padding: 8px 15px; margin:0;">Account</button>
     </nav>
 
     <div class="filter-container">
         <input type="text" id="searchInput" class="search-bar" placeholder="Search products...">
-        <select id="catFilter" class="filter-select"><option value="All">All Categories</option><option>Electronics</option><option>Fashion</option><option>Services</option></select>
     </div>
 
     <div id="productGrid" class="product-grid"></div>
 
-    <section id="sell">
-        <h2 style="text-align: center; margin-top: 20px;">Sell Something</h2>
-        <form class="sell-form" id="sellForm">
-            <input type="text" id="pName" placeholder="Item Name" required>
-            <input type="number" id="pPrice" placeholder="Price (₵)" required>
-            <select id="pCategory" required><option value="">-- Category --</option><option>Electronics</option><option>Fashion</option><option>Services</option></select>
-            <input type="file" id="pImage" accept="image/*" required>
-            <textarea id="pDesc" placeholder="Details..." rows="3" required></textarea>
-            <button type="submit" class="btn">Publish Now</button>
-        </form>
-    </section>
-
     <div id="authModal" class="modal-overlay">
         <div class="modal-content">
-            <div id="authFields">
-                <h3>Login / Sign Up</h3>
-                <form id="signupForm" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-                    <input type="text" id="rName" placeholder="Full Name" required>
-                    <input type="email" id="rEmail" placeholder="Email" required>
-                    <input type="tel" id="rPhone" placeholder="WhatsApp Number" required>
-                    <label style="font-size: 0.8rem;">Profile Picture:</label>
-                    <input type="file" id="rAvatar" accept="image/*" required>
-                    <input type="password" id="rPass" placeholder="Password" required>
-                    <button type="submit" class="btn">Create Account</button>
-                </form>
-            </div>
-            <div id="profileSection" style="display:none; text-align:center;">
-                <img id="userPic" class="profile-pic-large" src="">
-                <h3 id="userHeader">Account</h3>
+            <div id="profileSection" style="text-align:center;">
+                <h3 id="userHeader">Welcome</h3>
                 <button onclick="signOutUser()" class="btn" style="background:#e74c3c;">Logout</button>
             </div>
             <button onclick="closeAuth()" style="margin-top:20px; background:none; border:none; color:gray; cursor:pointer; width:100%;">Close</button>
@@ -92,81 +60,34 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="#buy">🛒 Explore</a>
+        <a href="#">🛒 Explore</a>
         <a href="#sell">➕ Sell</a>
         <a href="javascript:void(0)" onclick="openAuth()">👤 Account</a>
     </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I", authDomain: "obasty-market.firebaseapp.com", projectId: "obasty-market", appId: "1:753490577388:web:8b2dac8f4082d89ee662c9" };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        let userData = null;
+        
         let allListings = [];
-
-        async function uploadToImgBB(file) {
-            const fd = new FormData(); fd.append("image", file);
-            const res = await fetch("https://api.imgbb.com/1/upload?key=f6f1d931d2c5da11833752754cf2dfcd", { method: "POST", body: fd });
-            const data = await res.json();
-            return data.data.url;
-        }
-
-        onAuthStateChanged(auth, async (user) => {
-            if(user) {
-                const s = await getDoc(doc(db, "users", user.uid));
-                userData = s.data(); userData.uid = user.uid;
-                document.getElementById('authFields').style.display = 'none';
-                document.getElementById('profileSection').style.display = 'block';
-                document.getElementById('userPic').src = userData.photo || 'https://via.placeholder.com/150';
-                document.getElementById('userHeader').innerText = userData.name;
-                document.getElementById('sellForm').classList.add('active');
-            } else {
-                userData = null;
-                document.getElementById('authFields').style.display = 'block';
-                document.getElementById('profileSection').style.display = 'none';
-            }
-            applyFilters();
-        });
-
-        document.getElementById('signupForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const photoUrl = await uploadToImgBB(document.getElementById('rAvatar').files[0]);
-            const res = await createUserWithEmailAndPassword(auth, document.getElementById('rEmail').value, document.getElementById('rPass').value);
-            await setDoc(doc(db, "users", res.user.uid), { 
-                name: document.getElementById('rName').value, 
-                phone: document.getElementById('rPhone').value,
-                photo: photoUrl,
-                email: document.getElementById('rEmail').value
-            });
-            location.reload();
-        };
-
-        document.getElementById('sellForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const imgUrl = await uploadToImgBB(document.getElementById('pImage').files[0]);
-            await addDoc(collection(db, "listings"), {
-                name: document.getElementById('pName').value, 
-                price: document.getElementById('pPrice').value,
-                category: document.getElementById('pCategory').value,
-                image: imgUrl, 
-                sellerId: userData.uid, 
-                sellerName: userData.name,
-                sellerPhoto: userData.photo,
-                sellerPhone: userData.phone,
-                status: "available", 
-                createdAt: new Date()
-            });
-            location.reload();
-        };
+        let viewedItems = new Set(); // To prevent double counting in one session
 
         function renderListings(data) {
-            const grid = document.getElementById('productGrid'); grid.innerHTML = "";
+            const grid = document.getElementById('productGrid'); 
+            grid.innerHTML = "";
             data.forEach(item => {
+                // Increment view count if not already counted this session
+                if (!viewedItems.has(item.id)) {
+                    updateDoc(doc(db, "listings", item.id), { views: increment(1) });
+                    viewedItems.add(item.id);
+                }
+
                 grid.innerHTML += `
                     <div class="product-card">
                         <div class="product-img" style="background-image:url('${item.image}')"></div>
@@ -177,30 +98,22 @@
                             </div>
                             <strong>${item.name}</strong>
                             <p style="color:#2ecc71; font-weight:bold;">₵ ${item.price}</p>
+                            <div class="view-count">👁️ ${item.views || 0} views</div>
                             <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}" class="btn-wa">Chat</a>
                         </div>
                     </div>`;
             });
         }
 
-        function applyFilters() {
-            const s = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allListings.filter(i => i.name.toLowerCase().includes(s));
-            renderListings(filtered);
-        }
-        document.getElementById('searchInput').oninput = applyFilters;
-
         onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
-            allListings = []; snap.forEach(d => allListings.push({id: d.id, ...d.data()})); applyFilters();
+            allListings = []; 
+            snap.forEach(d => allListings.push({id: d.id, ...d.data()})); 
+            renderListings(allListings);
         });
 
         window.signOutUser = () => signOut(auth).then(() => location.reload());
         window.openAuth = () => document.getElementById('authModal').classList.add('active');
         window.closeAuth = () => document.getElementById('authModal').classList.remove('active');
-        window.toggleTheme = () => {
-            const b = document.body;
-            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-        };
     </script>
 </body>
 </html>
