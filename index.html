@@ -33,20 +33,10 @@
         .section-title { text-align: center; margin-bottom: 40px; }
         .underline { width: 50px; height: 4px; background: #4db8ff; margin: 10px auto; }
 
-        /* --- ABOUT --- */
-        .about-section { padding: 80px 10%; background: #fff; }
-        .about-container { display: flex; align-items: center; justify-content: space-between; gap: 50px; flex-wrap: wrap; }
-        .about-text { flex: 1; min-width: 300px; }
-        .about-image { flex: 1; min-width: 300px; max-width: 500px; }
-        .team-photo { width: 100%; border-radius: 15px; box-shadow: 15px 15px 0px #4db8ff; }
-
         /* --- MARKETPLACE --- */
         .marketplace { padding: 80px 10%; background: #f4f7f6; }
-        .search-filter-container { background: #fff; padding: 20px; border-radius: 12px; display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .search-wrapper { flex: 2; display: flex; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; min-width: 250px; }
-        .search-wrapper input { flex: 1; padding: 12px; border: none; outline: none; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; }
-        .product-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; transition: 0.3s; }
+        .product-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
         .product-card:hover { transform: translateY(-5px); }
         .product-img { height: 200px; background: #e0e7ff; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
         .product-info { padding: 20px; }
@@ -61,27 +51,28 @@
         .auth-tab.active { color: #4db8ff; border-bottom: 2px solid #4db8ff; }
         .auth-form { display: none; flex-direction: column; gap: 15px; text-align: left; }
         .auth-form.active { display: flex; }
-        .auth-form input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+        .auth-form input, .sell-form input, .sell-form select, .sell-form textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; width: 100%; font-size: 1rem; }
         .close-x { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #888; }
+
+        /* --- SELL SECTION --- */
+        .sell-section { padding: 80px 10%; background: #fff; }
+        .sell-form { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
+
+        /* --- SUPPORT BUBBLE --- */
+        .support-bubble { position: fixed; bottom: 90px; left: 20px; background: #25D366; color: white; padding: 10px 18px; border-radius: 50px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 2500; font-weight: bold; }
 
         /* --- MOBILE BOTTOM NAV --- */
         .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; border-top: 1px solid #eee; z-index: 2000; justify-content: space-around; padding: 12px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-        .nav-item { color: #888; display: flex; flex-direction: column; align-items: center; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+        .nav-item { color: #888; display: flex; flex-direction: column; align-items: center; font-size: 0.75rem; font-weight: 600; }
         .nav-item.active { color: #4db8ff; }
-        .nav-item span:first-child { font-size: 1.3rem; margin-bottom: 2px; }
 
-        /* --- SCROLL TO TOP --- */
-        #scrollToTop { display: none; position: fixed; bottom: 90px; right: 20px; background: #4db8ff; color: #fff; border: none; padding: 12px 16px; border-radius: 50%; cursor: pointer; z-index: 1001; font-weight: bold; }
-
-        .success-icon { font-size: 3.5rem; color: #2ecc71; margin-bottom: 15px; }
+        #scrollToTop { display: none; position: fixed; bottom: 90px; right: 20px; background: #4db8ff; color: #fff; border: none; padding: 12px 16px; border-radius: 50%; cursor: pointer; z-index: 1001; }
 
         @media (max-width: 768px) {
             .top-nav .nav-links { display: none; }
             .bottom-nav { display: flex; }
             body { padding-bottom: 80px; }
             header h1 { font-size: 2.2rem; }
-            .about-container { flex-direction: column; text-align: center; }
-            .about-text .underline { margin: 10px auto; }
         }
     </style>
 </head>
@@ -99,237 +90,174 @@
 
     <header id="home">
         <h1>NanaObasty Marketplace</h1>
-        <p>Your trusted community hub to buy local and sell fast in Koforidua Tafo.</p>
+        <p>Koforidua's Trusted Community Marketplace.</p>
         <a href="#buy" class="btn">Start Browsing</a>
-        <div style="margin-top: 20px;">
-            <button id="shareBtn" class="btn" style="background: #25D366; font-size: 0.9rem; padding: 10px 20px;">
-                📲 Share on WhatsApp
-            </button>
-        </div>
+        <button id="shareBtn" class="btn" style="background: #25D366; margin-top: 20px;">📲 Share on WhatsApp</button>
     </header>
-
-    <section id="dashboard" class="marketplace" style="background: #fff; display: none;">
-        <div class="section-title">
-            <h2>My Dashboard</h2>
-            <p>Manage your listings.</p>
-            <div class="underline"></div>
-        </div>
-        <div id="myListingsGrid" class="product-grid"></div>
-    </section>
-
-    <section class="about-section" id="about">
-        <div class="about-container">
-            <div class="about-text">
-                <div class="section-title" style="text-align: left;">
-                    <h2>About NanaObasty</h2>
-                    <div class="underline" style="margin-left: 0;"></div>
-                </div>
-                <p>Building a community for Koforidua. Safe, fast, and easy local commerce.</p>
-                <a href="#sell" class="btn" style="margin-top: 15px;">Post Your First Ad</a>
-            </div>
-            <div class="about-image">
-                <img src="photo_10_2026-02-26_13-58-16.jpg" alt="Team" class="team-photo">
-            </div>
-        </div>
-    </section>
 
     <section class="marketplace" id="buy">
         <div class="section-title"><h2>Local Marketplace</h2><div class="underline"></div></div>
-        <div class="product-grid">
-            <div class="product-card">
-                <div class="product-img">💻</div>
-                <div class="product-info"><h3>MacBook Air M1</h3><p class="price">₵ 6,800</p><p style="font-size: 0.8rem; color: #888;">📍 Old Tafo</p></div>
-            </div>
-            <div class="product-card">
-                <div class="product-img">📱</div>
-                <div class="product-info"><h3>iPhone 13 Pro</h3><p class="price">₵ 4,200</p><p style="font-size: 0.8rem; color: #888;">📍 Old Tafo</p></div>
-            </div>
+        <div id="publicListingGrid" class="product-grid">
+            <p style="text-align: center; grid-column: 1/-1;">Loading local deals...</p>
         </div>
     </section>
 
     <section class="sell-section" id="sell">
         <div class="section-title"><h2>Post an Item</h2><div class="underline"></div></div>
         <form class="sell-form" id="sellForm">
-            <input type="text" id="itemName" placeholder="Item Name" required>
+            <input type="text" id="itemName" placeholder="What are you selling?" required>
             <input type="number" id="itemPrice" placeholder="Price (GHS)" required>
-            <select id="itemCat" required><option value="">Choose Category</option><option>Electronics</option><option>Fashion</option></select>
-            <textarea id="itemDesc" placeholder="Description" rows="4"></textarea>
-            <button type="submit" class="btn">Publish Ad Now</button>
+            <select id="itemCat" required>
+                <option value="">Category</option>
+                <option>Electronics</option>
+                <option>Fashion</option>
+                <option>Home</option>
+            </select>
+            <textarea id="itemDesc" placeholder="Description & WhatsApp Number" rows="4"></textarea>
+            <button type="submit" class="btn">Publish to Marketplace</button>
         </form>
     </section>
 
     <div id="authModal" class="modal-overlay">
         <div class="modal-content">
-            <div id="logoutSection" style="display: none; padding: 20px 0;">
-    <p id="userWelcome" style="margin-bottom: 15px; font-weight: bold;"></p>
-    <button onclick="logout()" class="btn" style="background: #ff4d4d; width: 100%;">Sign Out</button>
-</div>
             <button onclick="closeAuth()" class="close-x">✕</button>
-            <div class="auth-tabs">
-                <button class="auth-tab active" id="tabLogin" onclick="switchAuth('login')">Login</button>
-                <button class="auth-tab" id="tabReg" onclick="switchAuth('register')">Register</button>
+            <div id="logoutSection" style="display: none;">
+                <h3 id="userWelcome"></h3>
+                <button onclick="logout()" class="btn" style="background: #ff4d4d; margin-top: 20px;">Sign Out</button>
             </div>
-            <form id="loginForm" class="auth-form active">
-                <h3>Welcome Back</h3>
-                <input type="email" id="loginEmail" placeholder="Email Address" required>
-                <input type="password" placeholder="Password" required>
-                <button type="submit" class="btn">Sign In</button>
-            </form>
-            <form id="registerForm" class="auth-form">
-                <h3>Create Account</h3>
-                <input type="text" id="regName" placeholder="Full Name" required>
-                <input type="email" id="regEmail" placeholder="Email Address" required>
-                <button type="submit" class="btn">Join NanaObasty</button>
-            </form>
+            <div id="authFields">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tabL" onclick="switchAuth('login')">Login</button>
+                    <button class="auth-tab" id="tabR" onclick="switchAuth('register')">Register</button>
+                </div>
+                <form id="loginForm" class="auth-form active">
+                    <input type="email" id="lEmail" placeholder="Email" required>
+                    <input type="password" placeholder="Password" required>
+                    <button type="submit" class="btn">Sign In</button>
+                </form>
+                <form id="registerForm" class="auth-form">
+                    <input type="text" id="rName" placeholder="Full Name" required>
+                    <input type="email" id="rEmail" placeholder="Email" required>
+                    <button type="submit" class="btn">Create Account</button>
+                </form>
+            </div>
         </div>
     </div>
 
     <div id="successModal" class="modal-overlay">
         <div class="modal-content">
             <div class="success-icon">✔️</div>
-            <h2>Success!</h2>
-            <p>Your listing is live on your dashboard.</p>
-            <button onclick="document.getElementById('successModal').classList.remove('active')" class="btn">Got it</button>
+            <h2>Item Published!</h2>
+            <p>Your item is now visible to everyone in Koforidua.</p>
+            <button onclick="document.getElementById('successModal').classList.remove('active')" class="btn">Great!</button>
         </div>
     </div>
 
-    <button id="scrollToTop">↑</button>
-
     <nav class="bottom-nav">
-        <a href="#home" class="nav-item active"><span>🏠</span><span>Home</span></a>
+        <a href="#home" class="nav-item"><span>🏠</span><span>Home</span></a>
         <a href="#buy" class="nav-item"><span>🛒</span><span>Buy</span></a>
         <a href="#sell" class="nav-item"><span>➕</span><span>Sell</span></a>
         <a href="javascript:void(0)" onclick="openAuth()" class="nav-item"><span>👤</span><span id="mobileUser">Account</span></a>
     </nav>
 
-    <script>
-        // --- AUTH LOGIC ---
-        function openAuth() { document.getElementById('authModal').classList.add('active'); }
-        function closeAuth() { document.getElementById('authModal').classList.remove('active'); }
+    <a href="https://wa.me/233539547368" class="support-bubble" target="_blank">
+        <span>💬</span><span>Help</span>
+    </a>
 
-        function switchAuth(type) {
-            const loginF = document.getElementById('loginForm');
-            const regF = document.getElementById('registerForm');
-            const tabL = document.getElementById('tabLogin');
-            const tabR = document.getElementById('tabReg');
-            if(type === 'login') {
-                loginF.classList.add('active'); regF.classList.remove('active');
-                tabL.classList.add('active'); tabR.classList.remove('active');
-            } else {
-                regF.classList.add('active'); loginF.classList.remove('active');
-                tabR.classList.add('active'); tabL.classList.remove('active');
-            }
-        }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        document.getElementById('registerForm').addEventListener('submit', (e) => {
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I",
+            authDomain: "obasty-market.firebaseapp.com",
+            projectId: "obasty-market",
+            storageBucket: "obasty-market.firebasestorage.app",
+            messagingSenderId: "753490577388",
+            appId: "1:753490577388:web:8b2dac8f4082d89ee662c9",
+            measurementId: "G-1S6KPNM6QS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const colRef = collection(db, "listings");
+
+        // 1. Publish to Firebase
+        document.getElementById('sellForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const user = { name: document.getElementById('regName').value, email: document.getElementById('regEmail').value, loggedIn: true };
-            localStorage.setItem('nana_user', JSON.stringify(user));
-            updateUI(); closeAuth();
-        });
+            const user = JSON.parse(localStorage.getItem('nana_user'));
+            if(!user) return openAuth();
 
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const saved = JSON.parse(localStorage.getItem('nana_user'));
-            if(saved && saved.email === document.getElementById('loginEmail').value) {
-                saved.loggedIn = true;
-                localStorage.setItem('nana_user', JSON.stringify(saved));
-                updateUI(); closeAuth();
-            } else { alert("User not found!"); }
-        });
-
-       function updateUI() {
-    const user = JSON.parse(localStorage.getItem('nana_user'));
-    const loginForm = document.getElementById('loginForm');
-    const regForm = document.getElementById('registerForm');
-    const logoutSection = document.getElementById('logoutSection');
-    const tabs = document.querySelector('.auth-tabs');
-
-    if(user && user.loggedIn) {
-        const firstName = user.name.split(' ')[0];
-        
-        // Update Nav Text
-        document.querySelector('.login-trigger').innerText = firstName;
-        document.getElementById('mobileUser').innerText = firstName;
-        
-        // Hide Forms, Show Logout inside the modal
-        loginForm.style.display = 'none';
-        regForm.style.display = 'none';
-        tabs.style.display = 'none';
-        
-        logoutSection.style.display = 'block';
-        document.getElementById('userWelcome').innerText = `Logged in as ${user.name}`;
-        
-        renderMyListings();
-    } else {
-        // Reset to default if logged out
-        logoutSection.style.display = 'none';
-        tabs.style.display = 'flex';
-        loginForm.style.display = 'flex';
-    }
-}
-
-        // --- LISTING LOGIC ---
-        document.getElementById('sellForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const item = {
-                id: Date.now(),
+            const newItem = {
                 name: document.getElementById('itemName').value,
                 price: document.getElementById('itemPrice').value,
-                date: new Date().toLocaleDateString()
+                desc: document.getElementById('itemDesc').value,
+                seller: user.name,
+                createdAt: new Date()
             };
-            let items = JSON.parse(localStorage.getItem('nana_items')) || [];
-            items.push(item);
-            localStorage.setItem('nana_items', JSON.stringify(items));
+
+            await addDoc(colRef, newItem);
             document.getElementById('successModal').classList.add('active');
             document.getElementById('sellForm').reset();
-            renderMyListings();
         });
 
-        function renderMyListings() {
-            const grid = document.getElementById('myListingsGrid');
-            const items = JSON.parse(localStorage.getItem('nana_items')) || [];
-            const user = JSON.parse(localStorage.getItem('nana_user'));
-            
-            if(user && user.loggedIn && items.length > 0) {
-                document.getElementById('dashboard').style.display = 'block';
-                grid.innerHTML = items.map(i => `
+        // 2. Real-time Display for Everyone
+        const q = query(colRef, orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+            const grid = document.getElementById('publicListingGrid');
+            grid.innerHTML = '';
+            snapshot.forEach(doc => {
+                const item = doc.data();
+                grid.innerHTML += `
                     <div class="product-card">
                         <div class="product-img">📦</div>
                         <div class="product-info">
-                            <h3>${i.name}</h3><p class="price">₵ ${i.price}</p>
-                            <button class="btn" style="background:#ff4d4d; width:100%" onclick="deleteItem(${i.id})">Remove</button>
+                            <h3>${item.name}</h3>
+                            <p class="price">₵ ${item.price}</p>
+                            <p style="font-size:0.8rem; color:#888;">Seller: ${item.seller}</p>
+                            <a href="https://wa.me/233539547368?text=Is the ${item.name} still available?" class="btn" style="width:100%; margin-top:10px;">Contact</a>
                         </div>
                     </div>
-                `).join('');
+                `;
+            });
+        });
+    </script>
+
+    <script>
+        // --- AUTH & UI LOGIC ---
+        function openAuth() { document.getElementById('authModal').classList.add('active'); }
+        function closeAuth() { document.getElementById('authModal').classList.remove('active'); }
+        
+        function switchAuth(t) {
+            document.getElementById('loginForm').style.display = t === 'login' ? 'flex' : 'none';
+            document.getElementById('registerForm').style.display = t === 'reg' ? 'flex' : 'none';
+        }
+
+        document.getElementById('registerForm').onsubmit = (e) => {
+            e.preventDefault();
+            const u = { name: document.getElementById('rName').value, email: document.getElementById('rEmail').value, loggedIn: true };
+            localStorage.setItem('nana_user', JSON.stringify(u));
+            location.reload();
+        };
+
+        function updateUI() {
+            const u = JSON.parse(localStorage.getItem('nana_user'));
+            if(u) {
+                document.getElementById('authFields').style.display = 'none';
+                document.getElementById('logoutSection').style.display = 'block';
+                document.getElementById('userWelcome').innerText = "Hi, " + u.name;
+                document.getElementById('mobileUser').innerText = u.name.split(' ')[0];
+                document.querySelector('.login-trigger').innerText = u.name.split(' ')[0];
             }
         }
 
-        function deleteItem(id) {
-            let items = JSON.parse(localStorage.getItem('nana_items')).filter(i => i.id !== id);
-            localStorage.setItem('nana_items', JSON.stringify(items));
-            renderMyListings();
-        }
-
-        // WhatsApp Share
+        function logout() { localStorage.removeItem('nana_user'); location.reload(); }
+        
         document.getElementById('shareBtn').onclick = () => {
-            const msg = encodeURIComponent("Check out NanaObasty Marketplace in Koforidua: " + window.location.href);
-            window.open(`https://wa.me/?text=${msg}`, '_blank');
+            window.open(`https://wa.me/?text=Check out NanaObasty Marketplace: ${window.location.href}`, '_blank');
         };
-
-        // Scroll Top
-        const topBtn = document.getElementById("scrollToTop");
-        window.onscroll = () => topBtn.style.display = window.scrollY > 500 ? "block" : "none";
-        topBtn.onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
 
         window.onload = updateUI;
     </script>
-    <a href="https://wa.me/233539547368?text=Hello%20NanaObasty%20Support,%20I%20need%20help%20with..." 
-   class="support-bubble" 
-   target="_blank" 
-   title="Contact Support">
-    <span class="bubble-icon">💬</span>
-    <span class="bubble-text">Help</span>
-</a>
 </body>
 </html>
