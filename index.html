@@ -36,12 +36,12 @@
 
         .filter-container { padding: 15px 10%; background: var(--card-bg); border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 10px; position: sticky; top: 60px; z-index: 999; }
         .search-bar { flex: 2; min-width: 200px; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--input-bg); color: var(--text); }
+        .filter-select { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); flex: 1; }
 
         .marketplace { padding: 30px 10%; min-height: 60vh; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
         .product-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border); }
         
-        /* --- SOLD OVERLAY --- */
         .sold-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 180px; background: rgba(0,0,0,0.6); color: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; z-index: 5; text-transform: uppercase; letter-spacing: 3px; }
         
         .product-img { height: 180px; background-size: cover; background-position: center; }
@@ -56,6 +56,7 @@
         [data-theme="dark"] #adminPanel { background: #2d1616; color: #fff; }
 
         .loc-tag { font-size: 0.65rem; color: var(--accent); font-weight: bold; display: block; margin-bottom: 5px; }
+        .cat-tag { font-size: 0.6rem; background: var(--bg); padding: 2px 6px; border-radius: 4px; margin-top: 5px; display: inline-block; }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
@@ -91,7 +92,17 @@
 
     <div class="filter-container">
         <input type="text" id="searchInput" class="search-bar" placeholder="Search products...">
-        <select id="regFilter" style="padding:10px; border-radius:8px; border:1px solid #ddd; background: var(--input-bg); color: var(--text);">
+        <select id="catFilter" class="filter-select">
+            <option value="All">All Categories</option>
+            <option>Electronics</option>
+            <option>Fashion</option>
+            <option>Home & Kitchen</option>
+            <option>Food & Grocery</option>
+            <option>Phones & Tablets</option>
+            <option>Services</option>
+            <option>Other</option>
+        </select>
+        <select id="regFilter" class="filter-select">
             <option value="All">All Regions</option>
             <option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option>
         </select>
@@ -106,6 +117,11 @@
         <form class="sell-form" id="sellForm">
             <input type="text" id="pName" placeholder="Item Name" required>
             <input type="number" id="pPrice" placeholder="Price (₵)" required>
+            <select id="pCategory" required>
+                <option value="">-- Choose Category --</option>
+                <option>Electronics</option><option>Fashion</option><option>Home & Kitchen</option>
+                <option>Food & Grocery</option><option>Phones & Tablets</option><option>Services</option><option>Other</option>
+            </select>
             <select id="pRegion" required><option value="">-- Region --</option><option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option></select>
             <input type="text" id="pCustomLoc" placeholder="City" required>
             <input type="file" id="pImage" accept="image/*" required>
@@ -168,15 +184,12 @@
             applyFilters();
         });
 
-        // SOLD & DELETE ACTIONS
         window.markAsSold = async (id) => {
-            if(confirm("Mark this item as sold? It will no longer be available for chat.")) {
-                await updateDoc(doc(db, "listings", id), { status: "sold" });
-            }
+            if(confirm("Mark this item as sold?")) await updateDoc(doc(db, "listings", id), { status: "sold" });
         };
 
         window.deleteItem = async (id) => {
-            if(confirm("Admin: Permanently delete this item?")) await deleteDoc(doc(db, "listings", id));
+            if(confirm("Delete item?")) await deleteDoc(doc(db, "listings", id));
         };
 
         window.reportItem = async (itemId, itemName) => {
@@ -185,7 +198,6 @@
             alert("Reported.");
         };
 
-        // RENDER
         function renderListings(data) {
             const grid = document.getElementById('productGrid'); grid.innerHTML = "";
             const isAdmin = auth.currentUser?.email === ADMIN_EMAIL;
@@ -202,7 +214,8 @@
                         <div class="product-info">
                             <span class="loc-tag">📍 ${item.region}</span>
                             <strong>${item.name}</strong>
-                            <p style="color:#2ecc71; font-weight:bold;">₵ ${item.price}</p>
+                            <div class="cat-tag">${item.category || 'Other'}</div>
+                            <p style="color:#2ecc71; font-weight:bold; margin-top:5px;">₵ ${item.price}</p>
                             <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}" class="btn-wa ${isSold ? 'disabled' : ''}">${isSold ? 'Item Sold' : 'Chat with Seller'}</a>
                             ${(isOwner || isAdmin) && !isSold ? `<button class="sold-btn" onclick="markAsSold('${item.id}')">Mark as Sold</button>` : ''}
                             ${isAdmin ? `<button class="admin-del-btn" onclick="deleteItem('${item.id}')">ADMIN: DELETE</button>` : ''}
@@ -213,10 +226,21 @@
 
         function applyFilters() {
             const s = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allListings.filter(i => i.name.toLowerCase().includes(s));
+            const c = document.getElementById('catFilter').value;
+            const r = document.getElementById('regFilter').value;
+
+            const filtered = allListings.filter(i => {
+                const matchSearch = i.name.toLowerCase().includes(s);
+                const matchCat = (c === "All" || i.category === c);
+                const matchReg = (r === "All" || i.region === r);
+                return matchSearch && matchCat && matchReg;
+            });
             renderListings(filtered);
         }
+
         document.getElementById('searchInput').oninput = applyFilters;
+        document.getElementById('catFilter').onchange = applyFilters;
+        document.getElementById('regFilter').onchange = applyFilters;
 
         onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
             allListings = []; snap.forEach(d => allListings.push({id: d.id, ...d.data()})); applyFilters();
@@ -234,6 +258,7 @@
             const img = await res.json();
             await addDoc(collection(db, "listings"), {
                 name: document.getElementById('pName').value, price: document.getElementById('pPrice').value,
+                category: document.getElementById('pCategory').value,
                 region: document.getElementById('pRegion').value, location: document.getElementById('pCustomLoc').value,
                 image: img.data.url, sellerId: userData.uid, sellerPhone: userData.phone, status: "available", createdAt: new Date()
             });
@@ -250,7 +275,6 @@
         }
         function openAuth() { document.getElementById('authModal').classList.add('active'); }
         function closeAuth() { document.getElementById('authModal').classList.remove('active'); }
-        function toggleAuthMode() { /* simplified for brevity */ }
     </script>
 </body>
 </html>
