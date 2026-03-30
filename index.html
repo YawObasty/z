@@ -206,7 +206,33 @@
             <button type="submit" class="btn">Publish Ad Now</button>
         </form>
     </section>
+<div id="authModal" class="modal-overlay">
+    <div class="modal-content auth-box">
+        <div class="auth-tabs">
+            <button class="auth-tab active" onclick="switchAuth('login')">Login</button>
+            <button class="auth-tab" onclick="switchAuth('register')">Register</button>
+        </div>
 
+        <form id="loginForm" class="auth-form active">
+            <h3>Welcome Back</h3>
+            <input type="email" placeholder="Email Address" required>
+            <input type="password" placeholder="Password" required>
+            <button type="submit" class="btn" style="width: 100%;">Sign In</button>
+            <p style="margin-top: 15px; font-size: 0.8rem;">Forgot Password?</p>
+        </form>
+
+        <form id="registerForm" class="auth-form">
+            <h3>Create Account</h3>
+            <input type="text" placeholder="Full Name" required>
+            <input type="email" placeholder="Email Address" required>
+            <input type="tel" placeholder="Phone Number (WhatsApp)" required>
+            <input type="password" placeholder="Create Password" required>
+            <button type="submit" class="btn" style="width: 100%;">Join NanaObasty</button>
+        </form>
+        
+        <button onclick="closeAuth()" class="close-x">✕</button>
+    </div>
+</div>
     <div id="successModal" class="modal-overlay">
         <div class="modal-content">
             <div class="success-icon">✔️</div>
