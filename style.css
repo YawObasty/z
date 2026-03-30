@@ -1,0 +1,11 @@
+#shareBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 2px solid #fff;
+}
+
+#shareBtn:hover {
+    background: #128C7E;
+    transform: scale(1.05);
+}
