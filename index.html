@@ -105,6 +105,7 @@
             <select id="pRegion" required>
                 <option value="">-- Choose Region --</option>
                 <option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option>
+                <option>Central Region</option><option>Western Region</option><option>Volta Region</option>
             </select>
             <input type="text" id="pCustomLoc" placeholder="City / Town" required>
             <input type="file" id="pImage" accept="image/*" required>
@@ -157,7 +158,7 @@
         
         let userData = null;
         let allListings = [];
-        const ADMIN_EMAIL = "admin@nanaobasty.com"; // CHANGE THIS TO YOUR EMAIL
+        const ADMIN_EMAIL = "oduroalexander82@gmail.com"; // CHANGE THIS TO YOUR EMAIL
 
         onAuthStateChanged(auth, async (user) => {
             if(user) {
