@@ -44,6 +44,10 @@
         .product-img { height: 180px; background-size: cover; background-position: center; }
         .product-info { padding: 15px; }
 
+        /* --- REPORT BUTTON STYLE --- */
+        .report-btn { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.4); color: white; border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 0.7rem; z-index: 10; }
+        .report-btn:hover { background: #e74c3c; }
+
         /* --- BADGES --- */
         .badge-neg { background: #fff3cd; color: #856404; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-left: 5px; border: 1px solid #ffeeba; }
         .loc-tag { font-size: 0.65rem; color: #4db8ff; font-weight: bold; display: block; margin-bottom: 5px; }
@@ -243,6 +247,23 @@
             }
         });
 
+        // REPORT FUNCTION
+        window.reportItem = async (itemId, itemName) => {
+            if(!userData) { alert("Please login to report items."); openAuth(); return; }
+            if(confirm("Report this item for suspicious activity?")) {
+                try {
+                    await addDoc(collection(db, "reports"), {
+                        itemId: itemId,
+                        itemName: itemName,
+                        reportedBy: userData.name,
+                        reporterEmail: userData.email,
+                        timestamp: new Date()
+                    });
+                    alert("Report submitted. We will review this item. Thank you!");
+                } catch(e) { alert("Report failed. Try again."); }
+            }
+        };
+
         // FIXED REGISTRATION
         document.getElementById('signupForm').onsubmit = async (e) => {
             e.preventDefault();
@@ -300,6 +321,7 @@
             data.forEach(item => {
                 grid.innerHTML += `
                     <div class="product-card">
+                        <button class="report-btn" onclick="reportItem('${item.id}', '${item.name}')">🚩 Report</button>
                         <div class="product-img" style="background-image:url('${item.image}')"></div>
                         <div class="product-info">
                             <span class="loc-tag">📍 ${item.region} | ${item.location}</span>
@@ -332,7 +354,7 @@
 
         onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
             allListings = [];
-            snap.forEach(d => allListings.push(d.data()));
+            snap.forEach(d => allListings.push({id: d.id, ...d.data()}));
             applyFilters();
         });
     </script>
