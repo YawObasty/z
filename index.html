@@ -24,18 +24,19 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; 
         }
 
-        /* --- FILTER SECTION --- */
+        /* --- FILTERS --- */
         .filter-container { padding: 20px 10%; background: #fff; border-bottom: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
         .search-bar { flex: 2; min-width: 200px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
         .price-filter { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 5px; font-size: 0.85rem; }
-        .cat-filter select { padding: 10px; border-radius: 8px; border: 1px solid #ddd; min-width: 140px; }
 
+        /* --- CARDS --- */
         .marketplace { padding: 40px 10%; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; }
         .product-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; }
         .product-img { height: 180px; background-size: cover; background-position: center; background-color: #eee; }
         .view-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 12px; font-size: 0.7rem; }
         .product-info { padding: 15px; }
+        .time-stamp { font-size: 0.65rem; color: #999; margin-bottom: 5px; display: block; }
 
         /* --- SELL SECTION --- */
         #sell { padding: 60px 10%; background: #fff; text-align: center; }
@@ -43,9 +44,11 @@
         .sell-form.active { display: flex; }
         .sell-form input, .sell-form select, .sell-form textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; width: 100%; }
 
-        .btn { background: #4db8ff; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; display: inline-block; text-align: center; }
-        .btn-wa { background: #25D366; width: 100%; margin-top: 10px; border-radius: 8px; }
-        .btn-edit { background: #f39c12; color: white; padding: 4px 8px; font-size: 0.7rem; border-radius: 4px; margin-right: 5px; }
+        /* --- BUTTONS --- */
+        .btn { background: #4db8ff; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; }
+        .btn-wa { background: #25D366; width: 100%; margin-top: 10px; border-radius: 8px; display: block; text-align: center; color: white; }
+        .seller-tools { display: flex; gap: 10px; margin-top: 10px; justify-content: flex-end; }
+        .btn-sm { padding: 5px 10px; font-size: 0.75rem; border-radius: 4px; color: white; cursor: pointer; border: none; }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
@@ -68,12 +71,12 @@
 
     <header>
         <h1>NanaObasty Marketplace</h1>
-        <p>Your items, your price, your way.</p>
+        <p>Fresh deals from Koforidua every hour.</p>
         <button id="shareBtnMain" class="btn" style="background: #25D366; margin-top: 15px;">📲 Share Market</button>
     </header>
 
     <div class="filter-container">
-        <input type="text" id="searchInput" class="search-bar" placeholder="Search...">
+        <input type="text" id="searchInput" class="search-bar" placeholder="What are you looking for?">
         <select id="catSelect" style="padding:10px; border-radius:8px; border:1px solid #ddd;">
             <option value="All">All Categories</option>
             <option value="Electronics">Electronics</option>
@@ -93,7 +96,7 @@
     <section id="sell">
         <h2 id="formTitle">Post an Item</h2>
         <div id="loginReminder" style="padding:20px; border:1px dashed #ccc;">
-            <p>Login to post or edit items.</p>
+            <p>You must login to post items.</p>
             <button onclick="openAuth()" class="btn" style="margin-top:10px;">Login</button>
         </div>
 
@@ -103,19 +106,18 @@
             <input type="number" id="itemPrice" placeholder="Price (GHS)" required>
             <select id="itemCat"><option>Electronics</option><option>Fashion</option><option>Home</option></select>
             <input type="file" id="itemImage" accept="image/*">
-            <p style="font-size: 0.7rem; color: gray;">(Leave image empty if editing and keeping the same photo)</p>
-            <textarea id="itemDesc" placeholder="Description + Phone" rows="3" required></textarea>
-            <button type="submit" id="publishBtn" class="btn">Publish Listing</button>
-            <button type="button" id="cancelEdit" class="btn" style="background:gray; display:none; margin-top:5px;">Cancel Edit</button>
+            <textarea id="itemDesc" placeholder="Description + WhatsApp Number" rows="3" required></textarea>
+            <button type="submit" id="publishBtn" class="btn">Publish Now</button>
+            <button type="button" id="cancelEdit" class="btn" style="background:gray; display:none; margin-top:5px;">Cancel</button>
         </form>
     </section>
 
     <div id="authModal" class="modal-overlay">
         <div class="modal-content">
-            <h3>Login</h3>
+            <h3>Account</h3>
             <div id="authFields">
                 <form id="registerForm" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-                    <input type="text" id="rName" placeholder="Name" required style="padding:12px; border:1px solid #ddd; border-radius:8px;">
+                    <input type="text" id="rName" placeholder="Enter Your Name" required style="padding:12px; border:1px solid #ddd; border-radius:8px;">
                     <button type="submit" class="btn">Login</button>
                 </form>
             </div>
@@ -123,7 +125,7 @@
                 <p id="userWelcome"></p>
                 <button onclick="logout()" class="btn" style="background:red; margin-top:15px; width: 100%;">Logout</button>
             </div>
-            <button onclick="closeAuth()" style="margin-top:15px; background:none; border:none; color:gray; cursor:pointer;">Close</button>
+            <button onclick="closeAuth()" style="margin-top:15px; border:none; color:gray; cursor:pointer; background:none;">Close</button>
         </div>
     </div>
 
@@ -135,26 +137,39 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I", authDomain: "obasty-market.firebaseapp.com", projectId: "obasty-market", appId: "1:753490577388:web:8b2dac8f4082d89ee662c9" };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const colRef = collection(db, "listings");
 
-        // --- EDIT LOGIC ---
+        // --- NEW: TIME FORMATTER ---
+        function timeAgo(date) {
+            if (!date) return "Just now";
+            const seconds = Math.floor((new Date() - date.toDate()) / 1000);
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + " years ago";
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + " months ago";
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + " days ago";
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + " hours ago";
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + " mins ago";
+            return "Just now";
+        }
+
         window.startEdit = (id, name, price, cat, desc) => {
             document.getElementById('editId').value = id;
             document.getElementById('itemName').value = name;
             document.getElementById('itemPrice').value = price;
             document.getElementById('itemCat').value = cat;
             document.getElementById('itemDesc').value = desc;
-            
-            document.getElementById('formTitle').innerText = "Edit Your Item";
-            document.getElementById('publishBtn').innerText = "Update Changes";
+            document.getElementById('formTitle').innerText = "Edit Item";
+            document.getElementById('publishBtn').innerText = "Update";
             document.getElementById('cancelEdit').style.display = "block";
-            document.getElementById('itemImage').required = false;
-            
             window.location.href = "#sell";
         };
 
@@ -165,7 +180,7 @@
             window.open(`https://api.whatsapp.com/send?phone=233539547368&text=Interested in ${name}`, '_blank');
         };
 
-        window.deleteItem = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "listings", id)); };
+        window.deleteItem = async (id) => { if(confirm("Delete?")) await deleteDoc(doc(db, "listings", id)); };
 
         async function uploadImg(file) {
             const fd = new FormData(); fd.append("image", file);
@@ -178,7 +193,7 @@
             const user = JSON.parse(localStorage.getItem('nana_user'));
             const editId = document.getElementById('editId').value;
             const btn = document.getElementById('publishBtn');
-            btn.disabled = true; btn.innerText = "Processing...";
+            btn.disabled = true; btn.innerText = "Wait...";
 
             try {
                 let imgUrl = null;
@@ -193,13 +208,8 @@
                 };
                 if(imgUrl) data.image = imgUrl;
 
-                if(editId) {
-                    await updateDoc(doc(db, "listings", editId), data);
-                    alert("Updated!");
-                } else {
-                    await addDoc(colRef, { ...data, image: imgUrl, seller: user.name, views: 0, createdAt: new Date() });
-                    alert("Posted!");
-                }
+                if(editId) { await updateDoc(doc(db, "listings", editId), data); } 
+                else { await addDoc(colRef, { ...data, image: imgUrl, seller: user.name, views: 0, createdAt: new Date() }); }
                 location.reload();
             } catch(e) { alert("Error!"); btn.disabled = false; }
         };
@@ -221,6 +231,7 @@
             const grid = document.getElementById('publicListingGrid');
             const user = JSON.parse(localStorage.getItem('nana_user'));
             grid.innerHTML = items.length ? '' : '<p style="grid-column:1/-1;text-align:center;">No items found.</p>';
+            
             items.forEach(item => {
                 const isOwner = user && (user.name === item.seller || user.name === "Admin");
                 grid.innerHTML += `
@@ -228,16 +239,21 @@
                         <div class="view-badge">🔥 ${item.views || 0}</div>
                         <div class="product-img" style="background-image:url('${item.image}')"></div>
                         <div class="product-info">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <strong>${item.name}</strong>
-                                <div>
-                                    ${isOwner ? `<button class="btn-edit" onclick="startEdit('${item.id}', '${item.name}', ${item.price}, '${item.category}', '${item.desc}')">✏️</button>` : ''}
-                                    ${isOwner ? `<button onclick="deleteItem('${item.id}')" style="background:none;border:none;cursor:pointer;">🗑️</button>` : ''}
-                                </div>
+                            <span class="time-stamp">Posted ${timeAgo(item.createdAt)}</span>
+                            <div style="display:flex; justify-content:space-between; align-items:start;">
+                                <strong style="font-size:1.1rem;">${item.name}</strong>
                             </div>
-                            <p style="color:#2ecc71; font-weight:bold; font-size:1.1rem; margin:5px 0;">₵ ${item.price}</p>
-                            <p style="font-size:0.7rem; color:gray;">Seller: ${item.seller}</p>
-                            <button onclick="trackView('${item.id}', '${item.name}')" class="btn btn-wa">Contact Seller</button>
+                            <p style="color:#2ecc71; font-weight:bold; font-size:1.2rem; margin:5px 0;">₵ ${item.price}</p>
+                            <p style="font-size:0.75rem; color:gray;">Seller: ${item.seller}</p>
+                            
+                            <a href="javascript:void(0)" onclick="trackView('${item.id}', '${item.name}')" class="btn btn-wa">Contact Seller</a>
+                            
+                            ${isOwner ? `
+                            <div class="seller-tools">
+                                <button class="btn-sm" style="background:#f39c12;" onclick="startEdit('${item.id}', '${item.name}', ${item.price}, '${item.category}', '${item.desc}')">Edit ✏️</button>
+                                <button class="btn-sm" style="background:#e74c3c;" onclick="deleteItem('${item.id}')">Delete 🗑️</button>
+                            </div>
+                            ` : ''}
                         </div>
                     </div>`;
             });
@@ -262,7 +278,7 @@
             if(u) {
                 document.getElementById('logoutSection').style.display = 'block';
                 document.getElementById('authFields').style.display = 'none';
-                document.getElementById('userWelcome').innerText = "Hi, " + u.name;
+                document.getElementById('userWelcome').innerText = "Account: " + u.name;
                 document.getElementById('sellForm').classList.add('active');
                 document.getElementById('loginReminder').style.display = 'none';
             }
