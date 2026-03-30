@@ -47,24 +47,19 @@
 
         /* --- PROFILE & EDIT STYLES --- */
         .profile-card { text-align: center; padding: 10px 0; }
-        .profile-pic-large { width: 80px; height: 80px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; margin: 0 auto 15px; }
+        .profile-pic-large { width: 90px; height: 90px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: bold; margin: 0 auto 15px; background-size: cover; background-position: center; border: 3px solid var(--accent); }
         .profile-info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
         
         .edit-profile-form { display: none; flex-direction: column; gap: 10px; margin-top: 15px; text-align: left; }
         .edit-profile-form.active { display: flex; }
 
         .seller-identity { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-        .mini-avatar { width: 30px; height: 30px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; }
+        .mini-avatar { width: 32px; height: 32px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; background-size: cover; background-position: center; }
         .seller-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
 
         .report-btn { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.4); color: white; border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 0.7rem; z-index: 10; }
         .admin-del-btn { background: #ff4757; color: white; border: none; padding: 5px; border-radius: 5px; cursor: pointer; margin-top: 10px; width: 100%; font-weight: bold; }
         
-        #adminPanel { display: none; padding: 20px 10%; background: #fff2f2; border: 2px dashed #ff4757; margin: 20px 10%; border-radius: 12px; color: #333; }
-        [data-theme="dark"] #adminPanel { background: #2d1616; color: #fff; }
-
-        .loc-tag { font-size: 0.65rem; color: var(--accent); font-weight: bold; display: block; margin-bottom: 5px; }
-
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--card-bg); color: var(--text); padding: 30px; border-radius: 15px; max-width: 450px; width: 90%; max-height: 90vh; overflow-y: auto; }
@@ -91,12 +86,6 @@
             <button onclick="openAuth()" class="btn" id="navAuthBtn" style="width:auto; padding: 8px 15px;">Account</button>
         </div>
     </nav>
-
-    <div id="adminPanel">
-        <h2 style="color:#ff4757">🚩 Admin Dashboard</h2>
-        <p>You are logged in as Administrator. You can see reports and delete items.</p>
-        <div id="reportList" style="margin-top:15px; font-size:0.85rem;"></div>
-    </div>
 
     <div class="filter-container">
         <input type="text" id="searchInput" class="search-bar" placeholder="Search items...">
@@ -151,20 +140,21 @@
                     <div class="profile-card">
                         <div id="profilePic" class="profile-pic-large">?</div>
                         <h3 id="userHeader">Account</h3>
-                        <p style="font-size:0.8rem; color:gray; margin-bottom:20px;">Marketplace Member</p>
                         <div class="profile-info-row"><span>Name:</span><b id="profName">...</b></div>
                         <div class="profile-info-row"><span>Phone:</span><b id="profPhone">...</b></div>
                     </div>
-                    <button onclick="showEditForm()" class="btn btn-outline">Edit Profile</button>
+                    <button onclick="showEditForm()" class="btn btn-outline">Update Profile Info</button>
                     <button onclick="signOutUser()" class="btn" style="background:#e74c3c; margin-top:10px;">Logout</button>
                 </div>
 
                 <form id="editProfileForm" class="edit-profile-form">
                     <h3>Update Profile</h3>
-                    <input type="text" id="editName" placeholder="New Full Name" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
-                    <input type="tel" id="editPhone" placeholder="New WhatsApp Number" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
-                    <button type="submit" class="btn">Save Changes</button>
-                    <button type="button" onclick="hideEditForm()" style="background:none; border:none; color:gray; cursor:pointer;">Cancel</button>
+                    <label style="font-size: 0.8rem; color: gray;">Profile Photo:</label>
+                    <input type="file" id="editPic" accept="image/*" style="font-size: 0.8rem;">
+                    <input type="text" id="editName" placeholder="Full Name" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                    <input type="tel" id="editPhone" placeholder="WhatsApp Number" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                    <button type="submit" id="saveProfileBtn" class="btn">Save All Changes</button>
+                    <button type="button" onclick="hideEditForm()" style="background:none; border:none; color:gray; cursor:pointer; margin-top: 10px;">Cancel</button>
                 </form>
             </div>
             <button onclick="closeAuth()" style="margin-top:20px; background:none; border:none; color:gray; cursor:pointer; width:100%;">Close</button>
@@ -180,7 +170,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc, deleteDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I", authDomain: "obasty-market.firebaseapp.com", projectId: "obasty-market", appId: "1:753490577388:web:8b2dac8f4082d89ee662c9" };
         const app = initializeApp(firebaseConfig);
@@ -189,7 +179,7 @@
         
         let userData = null;
         let allListings = [];
-        const ADMIN_EMAIL = "admin@nanaobasty.com"; 
+        const IMGBB_API = "f6f1d931d2c5da11833752754cf2dfcd";
 
         onAuthStateChanged(auth, async (user) => {
             if(user) {
@@ -199,75 +189,92 @@
                 document.getElementById('profileSection').style.display = 'block';
                 document.getElementById('sellForm').classList.add('active');
                 
-                // Set UI values
                 const userName = userData?.name || "User";
+                const userPhoto = userData?.photo || "";
+                
                 document.getElementById('userHeader').innerText = userName;
                 document.getElementById('profName').innerText = userName;
-                document.getElementById('profilePic').innerText = userName[0].toUpperCase();
                 document.getElementById('profPhone').innerText = userData?.phone || "N/A";
                 
-                // Pre-fill edit form
+                const picDiv = document.getElementById('profilePic');
+                if(userPhoto) {
+                    picDiv.style.backgroundImage = `url('${userPhoto}')`;
+                    picDiv.innerText = "";
+                } else {
+                    picDiv.style.backgroundImage = "none";
+                    picDiv.innerText = userName[0].toUpperCase();
+                }
+
                 document.getElementById('editName').value = userName;
                 document.getElementById('editPhone').value = userData?.phone || "";
-
-                if(user.email === ADMIN_EMAIL) {
-                    document.getElementById('adminPanel').style.display = 'block';
-                    loadReports();
-                }
             } else {
                 userData = null;
-                document.getElementById('adminPanel').style.display = 'none';
                 document.getElementById('authFields').style.display = 'block';
                 document.getElementById('profileSection').style.display = 'none';
             }
             applyFilters();
         });
 
-        // EDIT PROFILE LOGIC
+        // UPDATE PROFILE (WITH PHOTO)
         document.getElementById('editProfileForm').onsubmit = async (e) => {
             e.preventDefault();
-            const user = auth.currentUser;
-            const newName = document.getElementById('editName').value;
-            const newPhone = document.getElementById('editPhone').value;
+            const btn = document.getElementById('saveProfileBtn');
+            btn.innerText = "Saving...";
+            btn.disabled = true;
+
+            let photoUrl = userData?.photo || "";
+            const fileInput = document.getElementById('editPic');
+            
+            if(fileInput.files[0]) {
+                const fd = new FormData();
+                fd.append("image", fileInput.files[0]);
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API}`, { method: "POST", body: fd });
+                const imgData = await res.json();
+                photoUrl = imgData.data.url;
+            }
 
             try {
-                await updateDoc(doc(db, "users", user.uid), {
-                    name: newName,
-                    phone: newPhone
+                await updateDoc(doc(db, "users", auth.currentUser.uid), {
+                    name: document.getElementById('editName').value,
+                    phone: document.getElementById('editPhone').value,
+                    photo: photoUrl
                 });
-                alert("Profile Updated!");
+                alert("Profile Updated Successfully!");
                 location.reload();
             } catch (err) {
-                alert("Error updating profile: " + err.message);
+                alert("Update failed: " + err.message);
+                btn.innerText = "Save All Changes";
+                btn.disabled = false;
             }
         };
 
         window.logView = async (id) => {
-            const docRef = doc(db, "listings", id);
-            await updateDoc(docRef, { views: increment(1) });
+            await updateDoc(doc(db, "listings", id), { views: increment(1) });
         };
 
         function renderListings(data) {
             const grid = document.getElementById('productGrid'); grid.innerHTML = "";
-            const isAdmin = auth.currentUser?.email === ADMIN_EMAIL;
             data.forEach(item => {
-                const initial = (item.sellerName || "U")[0].toUpperCase();
                 const views = item.views || 0;
+                // Get seller photo if available, otherwise use initial
+                const sellerInitial = (item.sellerName || "U")[0].toUpperCase();
+                const sellerAvatarHtml = item.sellerPhoto 
+                    ? `<div class="mini-avatar" style="background-image:url('${item.sellerPhoto}')"></div>`
+                    : `<div class="mini-avatar">${sellerInitial}</div>`;
+
                 grid.innerHTML += `
                     <div class="product-card" onclick="logView('${item.id}')">
                         <div class="view-count">👁️ ${views}</div>
-                        <button class="report-btn" onclick="event.stopPropagation(); reportItem('${item.id}', '${item.name}')">🚩 Report</button>
                         <div class="product-img" style="background-image:url('${item.image}')"></div>
                         <div class="product-info">
                             <div class="seller-identity">
-                                <div class="mini-avatar">${initial}</div>
+                                ${sellerAvatarHtml}
                                 <span class="seller-name">${item.sellerName || "User"}</span>
                             </div>
                             <span class="loc-tag">📍 ${item.region} | ${item.location}</span>
                             <strong>${item.name}</strong>
                             <p style="color:#2ecc71; font-weight:bold;">₵ ${item.price}</p>
                             <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}" class="btn-wa" onclick="event.stopPropagation()">Chat</a>
-                            ${isAdmin ? `<button class="admin-del-btn" onclick="event.stopPropagation(); deleteItem('${item.id}')">DELETE AS ADMIN</button>` : ''}
                         </div>
                     </div>`;
             });
@@ -290,44 +297,29 @@
             e.preventDefault();
             signInWithEmailAndPassword(auth, document.getElementById('lEmail').value, document.getElementById('lPass').value).then(() => location.reload());
         };
+        
         document.getElementById('signupForm').onsubmit = async (e) => {
             e.preventDefault();
             const res = await createUserWithEmailAndPassword(auth, document.getElementById('rEmail').value, document.getElementById('rPass').value);
-            await setDoc(doc(db, "users", res.user.uid), { name: document.getElementById('rName').value, phone: document.getElementById('rPhone').value });
+            await setDoc(doc(db, "users", res.user.uid), { name: document.getElementById('rName').value, phone: document.getElementById('rPhone').value, photo: "" });
             location.reload();
         };
+
         window.signOutUser = () => signOut(auth).then(() => location.reload());
 
         document.getElementById('sellForm').onsubmit = async (e) => {
             e.preventDefault();
             if(!userData) return alert("Please login first.");
             const fd = new FormData(); fd.append("image", document.getElementById('pImage').files[0]);
-            const res = await fetch("https://api.imgbb.com/1/upload?key=f6f1d931d2c5da11833752754cf2dfcd", { method: "POST", body: fd });
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API}`, { method: "POST", body: fd });
             const img = await res.json();
             await addDoc(collection(db, "listings"), {
                 name: document.getElementById('pName').value, price: document.getElementById('pPrice').value,
                 region: document.getElementById('pRegion').value, location: document.getElementById('pCustomLoc').value,
-                image: img.data.url, sellerName: userData.name, sellerPhone: userData.phone, views: 0, createdAt: new Date()
+                image: img.data.url, sellerName: userData.name, sellerPhone: userData.phone, 
+                sellerPhoto: userData.photo || "", views: 0, createdAt: new Date()
             });
             location.reload();
-        };
-
-        function loadReports() {
-            onSnapshot(collection(db, "reports"), (snap) => {
-                const list = document.getElementById('reportList');
-                list.innerHTML = "<strong>Recent Reports:</strong><br>";
-                snap.forEach(d => {
-                    const r = d.data();
-                    list.innerHTML += `• ${r.itemName} reported by ${r.reportedBy} <button onclick="deleteReport('${d.id}')" style="color:red; border:none; background:none; cursor:pointer;">[Clear Report]</button><br>`;
-                });
-            });
-        }
-        window.deleteItem = async (id) => { if(confirm("Delete item?")) await deleteDoc(doc(db, "listings", id)); };
-        window.deleteReport = async (id) => { await deleteDoc(doc(db, "reports", id)); };
-        window.reportItem = async (itemId, itemName) => {
-            if(!userData) return alert("Login to report.");
-            await addDoc(collection(db, "reports"), { itemId, itemName, reportedBy: userData.name, timestamp: new Date() });
-            alert("Reported.");
         };
     </script>
 
