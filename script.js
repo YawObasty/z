@@ -31,3 +31,13 @@ function handleSearch() {
 
 searchInput.addEventListener('keyup', handleSearch);
 categorySelect.addEventListener('change', handleSearch);
+const navItems = document.querySelectorAll('.nav-item');
+
+navItems.forEach(item => {
+    item.addEventListener('click', function() {
+        // Remove active class from all
+        navItems.forEach(i => i.classList.remove('active'));
+        // Add to clicked item
+        this.classList.add('active');
+    });
+});
