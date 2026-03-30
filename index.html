@@ -20,36 +20,33 @@
         /* --- HERO --- */
         header { 
             background: linear-gradient(rgba(26, 42, 58, 0.75), rgba(26, 42, 58, 0.75)), url('photo_10_2026-02-26_13-58-16.jpg');
-            background-size: cover; background-position: center; height: 45vh; color: #fff; 
+            background-size: cover; background-position: center; height: 40vh; color: #fff; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; 
         }
 
         /* --- FILTER SECTION --- */
-        .filter-container { padding: 20px 10%; background: #fff; border-bottom: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
-        .search-bar { flex: 2; min-width: 250px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
-        .price-filter { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 5px; }
-        .cat-filter { flex: 1; min-width: 150px; }
-        .cat-filter select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
+        .filter-container { padding: 20px 10%; background: #fff; border-bottom: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
+        .search-bar { flex: 2; min-width: 200px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
+        .price-filter { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 5px; font-size: 0.85rem; }
+        .cat-filter select { padding: 10px; border-radius: 8px; border: 1px solid #ddd; min-width: 140px; }
 
         .marketplace { padding: 40px 10%; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
-        .product-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
-        .product-card:hover { transform: translateY(-5px); }
+        .product-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; }
         .product-img { height: 180px; background-size: cover; background-position: center; background-color: #eee; }
+        .view-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: #fff; padding: 3px 8px; border-radius: 12px; font-size: 0.7rem; }
         .product-info { padding: 15px; }
 
         /* --- UI ELEMENTS --- */
-        .btn { background: #4db8ff; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; display: inline-block; transition: 0.3s; }
-        .btn:hover { background: #35a2eb; }
-        .btn-wa { background: #25D366; width: 100%; margin-top: 10px; text-align: center; border-radius: 8px; }
+        .btn { background: #4db8ff; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; display: inline-block; text-align: center; }
+        .btn-wa { background: #25D366; width: 100%; margin-top: 10px; border-radius: 8px; }
         
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: #fff; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%; text-align: center; }
 
-        /* --- MOBILE NAV --- */
         .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; border-top: 1px solid #eee; z-index: 2000; justify-content: space-around; padding: 10px 0; }
-        @media (max-width: 768px) { .bottom-nav { display: flex; } .nav-links { display: none; } body { padding-bottom: 70px; } header h1 { font-size: 2rem; } }
+        @media (max-width: 768px) { .bottom-nav { display: flex; } .nav-links { display: none; } body { padding-bottom: 70px; } }
     </style>
 </head>
 <body>
@@ -65,13 +62,12 @@
 
     <header>
         <h1>NanaObasty Marketplace</h1>
-        <p>Koforidua's Local Hub for Deals.</p>
-        <button id="shareBtnMain" class="btn" style="background: #25D366; margin-top: 15px;">📲 Share on WhatsApp</button>
+        <p>Real-time local deals in Koforidua.</p>
+        <button id="shareBtnMain" class="btn" style="background: #25D366; margin-top: 15px;">📲 Share Market</button>
     </header>
 
     <div class="filter-container">
-        <input type="text" id="searchInput" class="search-bar" placeholder="Search for items...">
-        
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search...">
         <div class="cat-filter">
             <select id="catSelect">
                 <option value="All">All Categories</option>
@@ -80,17 +76,14 @@
                 <option value="Home">Home</option>
             </select>
         </div>
-
         <div class="price-filter">
-            <label>Max Price: <span id="priceLabel">₵5000+</span></label>
-            <input type="range" id="priceRange" min="0" max="5000" step="50" value="5000">
+            <label>Max: <span id="priceLabel">₵5000</span></label>
+            <input type="range" id="priceRange" min="0" max="5000" step="100" value="5000">
         </div>
     </div>
 
     <section class="marketplace" id="buy">
-        <div id="publicListingGrid" class="product-grid">
-            <p style="text-align: center; grid-column: 1/-1;">Loading deals...</p>
-        </div>
+        <div id="publicListingGrid" class="product-grid"></div>
     </section>
 
     <section style="padding: 60px 10%; background: #fff;" id="sell">
@@ -100,18 +93,18 @@
             <input type="number" id="itemPrice" placeholder="Price (GHS)" required style="padding:10px; border:1px solid #ddd; border-radius:5px;">
             <select id="itemCat" style="padding:10px; border:1px solid #ddd; border-radius:5px;"><option>Electronics</option><option>Fashion</option><option>Home</option></select>
             <input type="file" id="itemImage" accept="image/*" required>
-            <textarea id="itemDesc" placeholder="Brief description + Your WhatsApp number" rows="3" style="padding:10px; border:1px solid #ddd; border-radius:5px;"></textarea>
+            <textarea id="itemDesc" placeholder="Description + Phone Number" rows="3" style="padding:10px; border:1px solid #ddd; border-radius:5px;"></textarea>
             <button type="submit" id="publishBtn" class="btn">Publish Now</button>
         </form>
     </section>
 
     <div id="authModal" class="modal-overlay">
         <div class="modal-content">
-            <h3 id="authTitle">Welcome to NanaObasty</h3>
+            <h3 id="authTitle">Welcome</h3>
             <div id="authFields">
                 <form id="registerForm" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-                    <input type="text" id="rName" placeholder="Your Full Name" required style="padding:10px; border:1px solid #ddd; border-radius:5px;">
-                    <button type="submit" class="btn">Create Account</button>
+                    <input type="text" id="rName" placeholder="Name" required style="padding:10px; border:1px solid #ddd; border-radius:5px;">
+                    <button type="submit" class="btn">Start Selling</button>
                 </form>
             </div>
             <div id="logoutSection" style="display:none;">
@@ -123,14 +116,14 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="#buy" style="color:gray; font-size:0.8rem; text-align:center;">🛒<br>Buy</a>
-        <a href="#sell" style="color:gray; font-size:0.8rem; text-align:center;">➕<br>Sell</a>
-        <a href="javascript:void(0)" onclick="openAuth()" style="color:gray; font-size:0.8rem; text-align:center;">👤<br>Account</a>
+        <a href="#buy">🛒 Buy</a>
+        <a href="#sell">➕ Sell</a>
+        <a href="javascript:void(0)" onclick="openAuth()">👤 Account</a>
     </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I",
@@ -143,43 +136,37 @@
         const db = getFirestore(app);
         const colRef = collection(db, "listings");
 
-        // --- UNIVERSAL WHATSAPP SHARE (MOBILE & PC) ---
-        document.getElementById('shareBtnMain').onclick = async () => {
-            const shareTitle = "NanaObasty Marketplace";
-            const shareText = "Check out the best deals in Koforidua on NanaObasty! 🛒🚀";
-            const shareUrl = window.location.href;
+        // --- NEW: TRACK VIEW ---
+        window.trackView = async (id, name) => {
+            const docRef = doc(db, "listings", id);
+            await updateDoc(docRef, { views: increment(1) });
+            const waUrl = `https://api.whatsapp.com/send?phone=233539547368&text=${encodeURIComponent("Hi, I saw " + name + " on NanaObasty!")}`;
+            window.open(waUrl, '_blank');
+        };
 
+        // --- UNIVERSAL SHARE ---
+        document.getElementById('shareBtnMain').onclick = async () => {
             if (navigator.share) {
-                try {
-                    await navigator.share({ title: shareTitle, text: shareText, url: shareUrl });
-                } catch (err) { console.log("Share cancelled"); }
+                await navigator.share({ title: 'NanaObasty', text: 'Best deals in Koforidua!', url: window.location.href });
             } else {
-                const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + " " + shareUrl)}`;
-                window.open(waUrl, '_blank');
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent("Check this: " + window.location.href)}`, '_blank');
             }
         };
 
-        // --- GLOBAL DELETE ---
-        window.deleteItem = async (id) => {
-            if(confirm("Mark as sold/remove?")) await deleteDoc(doc(db, "listings", id));
-        };
+        window.deleteItem = async (id) => { if(confirm("Delete item?")) await deleteDoc(doc(db, "listings", id)); };
 
-        // --- IMGBB UPLOAD ---
         async function uploadImg(file) {
             const fd = new FormData(); fd.append("image", file);
             const res = await fetch("https://api.imgbb.com/1/upload?key=f6f1d931d2c5da11833752754cf2dfcd", { method: "POST", body: fd });
             const d = await res.json(); return d.data.url;
         }
 
-        // --- LISTING SUBMIT ---
         document.getElementById('sellForm').onsubmit = async (e) => {
             e.preventDefault();
             const user = JSON.parse(localStorage.getItem('nana_user'));
             if(!user) return openAuth();
-
             const btn = document.getElementById('publishBtn');
             btn.innerText = "Listing..."; btn.disabled = true;
-
             try {
                 const img = await uploadImg(document.getElementById('itemImage').files[0]);
                 await addDoc(colRef, {
@@ -189,13 +176,13 @@
                     desc: document.getElementById('itemDesc').value,
                     image: img,
                     seller: user.name,
+                    views: 0,
                     createdAt: new Date()
                 });
-                alert("Success!"); location.reload();
-            } catch(e) { alert("Error uploading"); btn.disabled = false; }
+                location.reload();
+            } catch(e) { alert("Error"); btn.disabled = false; }
         };
 
-        // --- FILTERING ENGINE ---
         let masterList = [];
         onSnapshot(query(colRef, orderBy("createdAt", "desc")), (snap) => {
             masterList = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -203,44 +190,36 @@
         });
 
         function applyFilters() {
-            const searchVal = document.getElementById('searchInput').value.toLowerCase();
-            const maxPrice = parseFloat(document.getElementById('priceRange').value);
-            const selectedCat = document.getElementById('catSelect').value;
-            
-            const filtered = masterList.filter(item => {
-                const matchesSearch = item.name.toLowerCase().includes(searchVal);
-                const matchesPrice = item.price <= maxPrice;
-                const matchesCat = selectedCat === "All" || item.category === selectedCat;
-                return matchesSearch && matchesPrice && matchesCat;
-            });
-            
+            const s = document.getElementById('searchInput').value.toLowerCase();
+            const p = parseFloat(document.getElementById('priceRange').value);
+            const c = document.getElementById('catSelect').value;
+            const filtered = masterList.filter(i => i.name.toLowerCase().includes(s) && i.price <= p && (c === "All" || i.category === c));
             render(filtered);
         }
 
         function render(items) {
             const grid = document.getElementById('publicListingGrid');
             const user = JSON.parse(localStorage.getItem('nana_user'));
-            grid.innerHTML = items.length ? '' : '<p style="grid-column: 1/-1; text-align:center;">No items found.</p>';
-            
+            grid.innerHTML = items.length ? '' : '<p style="grid-column:1/-1;text-align:center;">No items found.</p>';
             items.forEach(item => {
                 const isOwner = user && (user.name === item.seller || user.name === "Admin");
                 grid.innerHTML += `
                     <div class="product-card">
+                        <div class="view-badge">🔥 ${item.views || 0} clicks</div>
                         <div class="product-img" style="background-image:url('${item.image}')"></div>
                         <div class="product-info">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <strong style="font-size:1.1rem;">${item.name}</strong>
-                                ${isOwner ? `<button onclick="deleteItem('${item.id}')" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🗑️</button>` : ''}
+                            <div style="display:flex; justify-content:space-between;">
+                                <strong>${item.name}</strong>
+                                ${isOwner ? `<button onclick="deleteItem('${item.id}')" style="background:none;border:none;cursor:pointer;">🗑️</button>` : ''}
                             </div>
-                            <p style="color:#2ecc71; font-weight:bold; font-size:1.2rem; margin:5px 0;">₵ ${item.price}</p>
-                            <p style="font-size:0.75rem; color:gray; margin-bottom:5px;">Category: ${item.category || 'General'}</p>
-                            <a href="https://api.whatsapp.com/send?phone=233539547368&text=${encodeURIComponent("Hi, I'm interested in the " + item.name + " listed on NanaObasty!")}" target="_blank" class="btn btn-wa">Chat Seller</a>
+                            <p style="color:#2ecc71; font-weight:bold; font-size:1.1rem; margin:5px 0;">₵ ${item.price}</p>
+                            <p style="font-size:0.7rem; color:gray;">${item.category}</p>
+                            <button onclick="trackView('${item.id}', '${item.name}')" class="btn btn-wa">Contact Seller</button>
                         </div>
                     </div>`;
             });
         }
 
-        // Listen for filter changes
         document.getElementById('searchInput').addEventListener('input', applyFilters);
         document.getElementById('catSelect').addEventListener('change', applyFilters);
         document.getElementById('priceRange').addEventListener('input', (e) => {
@@ -261,10 +240,9 @@
         window.onload = () => {
             const u = JSON.parse(localStorage.getItem('nana_user'));
             if(u) {
-                document.getElementById('authFields').style.display = 'none';
                 document.getElementById('logoutSection').style.display = 'block';
-                document.getElementById('userWelcome').innerText = "Account: " + u.name;
-                document.querySelector('.login-trigger').innerText = u.name.split(' ')[0];
+                document.getElementById('authFields').style.display = 'none';
+                document.getElementById('userWelcome').innerText = "Hi, " + u.name;
             }
         };
     </script>
