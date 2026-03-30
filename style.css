@@ -81,3 +81,20 @@
 }
 
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#messageList { height: 300px; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+
+.msg-wrapper { display: flex; width: 100%; }
+.msg-wrapper.me { justify-content: flex-end; }
+.msg-wrapper.them { justify-content: flex-start; }
+
+.msg-bubble { 
+    max-width: 70%; padding: 10px 15px; border-radius: 18px; 
+    font-size: 0.9rem; line-height: 1.4;
+}
+.me .msg-bubble { background: var(--primary); color: white; border-bottom-right-radius: 2px; }
+.them .msg-bubble { background: #e2e8f0; color: var(--text); border-bottom-left-radius: 2px; }
+
+.chat-input-area { 
+    padding: 10px; border-top: 1px solid var(--border); 
+    display: flex; gap: 10px; background: var(--glass);
+}
