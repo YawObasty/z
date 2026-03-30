@@ -238,15 +238,36 @@
             } else { alert("User not found!"); }
         });
 
-        function updateUI() {
-            const user = JSON.parse(localStorage.getItem('nana_user'));
-            if(user && user.loggedIn) {
-                const firstName = user.name.split(' ')[0];
-                document.querySelector('.login-trigger').innerText = firstName;
-                document.getElementById('mobileUser').innerText = firstName;
-                renderMyListings();
-            }
-        }
+       function updateUI() {
+    const user = JSON.parse(localStorage.getItem('nana_user'));
+    const loginForm = document.getElementById('loginForm');
+    const regForm = document.getElementById('registerForm');
+    const logoutSection = document.getElementById('logoutSection');
+    const tabs = document.querySelector('.auth-tabs');
+
+    if(user && user.loggedIn) {
+        const firstName = user.name.split(' ')[0];
+        
+        // Update Nav Text
+        document.querySelector('.login-trigger').innerText = firstName;
+        document.getElementById('mobileUser').innerText = firstName;
+        
+        // Hide Forms, Show Logout inside the modal
+        loginForm.style.display = 'none';
+        regForm.style.display = 'none';
+        tabs.style.display = 'none';
+        
+        logoutSection.style.display = 'block';
+        document.getElementById('userWelcome').innerText = `Logged in as ${user.name}`;
+        
+        renderMyListings();
+    } else {
+        // Reset to default if logged out
+        logoutSection.style.display = 'none';
+        tabs.style.display = 'flex';
+        loginForm.style.display = 'flex';
+    }
+}
 
         // --- LISTING LOGIC ---
         document.getElementById('sellForm').addEventListener('submit', (e) => {
