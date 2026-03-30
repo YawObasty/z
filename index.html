@@ -53,8 +53,14 @@
         /* --- PROFILE STYLES --- */
         .profile-pic-large { width: 100px; height: 100px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; margin: 0 auto 15px; background-size: cover; background-position: center; border: 4px solid var(--card-bg); box-shadow: 0 5px 15px rgba(0,0,0,0.2); position: relative; }
         .edit-profile-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--accent); }
-        #editProfileForm { display: none; flex-direction: column; gap: 10px; margin-top: 20px; padding: 15px; background: var(--bg); border-radius: 12px; }
-        #editProfileForm.active { display: flex; }
+        
+        /* Customized Edit Form Section */
+        #editProfileForm { display: none; flex-direction: column; gap: 12px; margin-top: 20px; padding: 20px; background: var(--bg); border-radius: 16px; border: 1px solid var(--accent); position: relative; }
+        #editProfileForm.active { display: flex; animation: slideDown 0.3s ease-out; }
+        #editProfileForm input { padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); }
+        .edit-actions { display: flex; gap: 10px; margin-top: 5px; }
+        
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 2000; }
         .bottom-nav a { color: var(--text); text-decoration: none; font-size: 0.85rem; display: flex; flex-direction: column; align-items: center; gap: 4px; }
@@ -131,12 +137,21 @@
                     </div>
 
                     <form id="editProfileForm">
-                        <h4 style="margin-bottom: 10px;">Update Profile</h4>
-                        <input type="text" id="editName" placeholder="Your Name" style="padding:10px; border-radius:8px; border:1px solid var(--border);">
-                        <input type="text" id="editPhone" placeholder="WhatsApp Number" style="padding:10px; border-radius:8px; border:1px solid var(--border);">
-                        <label style="font-size: 0.7rem;">Profile Photo (Optional)</label>
-                        <input type="file" id="editPicFile" accept="image/*" style="font-size: 0.8rem;">
-                        <button type="submit" class="btn" style="padding:10px; font-size: 0.9rem;">Save Changes</button>
+                        <h4 style="margin-bottom: 5px; color: var(--accent);">Personalize Profile</h4>
+                        <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 5px;">Update your details below:</p>
+                        
+                        <input type="text" id="editName" placeholder="Full Name" oninput="document.getElementById('profName').innerText = this.value || '...'">
+                        <input type="text" id="editPhone" placeholder="WhatsApp Number" oninput="document.getElementById('profPhone').innerText = this.value || '...'">
+                        
+                        <div style="background: var(--card-bg); padding: 8px; border-radius: 10px; border: 1px solid var(--border);">
+                            <label style="font-size: 0.65rem; display: block; margin-bottom: 4px;">Profile Picture</label>
+                            <input type="file" id="editPicFile" accept="image/*" style="font-size: 0.75rem; border: none; padding: 0;">
+                        </div>
+
+                        <div class="edit-actions">
+                            <button type="submit" class="btn" style="flex: 2;">Save</button>
+                            <button type="button" onclick="toggleEditProfile()" class="btn" style="flex: 1; background: #95a5a6;">Cancel</button>
+                        </div>
                     </form>
                     
                     <div class="my-listings-container">
@@ -202,7 +217,7 @@
         // EDIT PROFILE LOGIC
         document.getElementById('editProfileForm').onsubmit = async (e) => {
             e.preventDefault();
-            const btn = e.target.querySelector('button');
+            const btn = e.target.querySelector('button[type="submit"]');
             btn.innerText = "Saving...";
             
             let photoUrl = userData.profilePic || "";
@@ -222,7 +237,7 @@
             }, { merge: true });
 
             alert("Profile Updated!");
-            btn.innerText = "Save Changes";
+            btn.innerText = "Save";
             toggleEditProfile();
         };
 
@@ -232,6 +247,9 @@
             if(form.classList.contains('active')) {
                 document.getElementById('editName').value = userData.name || "";
                 document.getElementById('editPhone').value = userData.phone || "";
+            } else {
+                // Revert live preview if canceled
+                updateProfileUI();
             }
         };
 
@@ -250,7 +268,7 @@
             }
         }
 
-        // --- Keep previous listing/auth logic below ---
+        // --- Maintain previous logic ---
         document.getElementById('loginForm').onsubmit = async (e) => {
             e.preventDefault();
             try {
