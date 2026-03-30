@@ -3,219 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yaw Obasty Marketplace</title>
+    <title>NanaObasty Marketplace | Buy & Sell in Winneba</title>
     <style>
-        /* Basic Reset */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { line-height: 1.6; color: #333; background-color: #f4f7f6; }
+        /* --- GLOBAL STYLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { line-height: 1.6; color: #333; background-color: #f4f7f6; scroll-behavior: smooth; }
+        a { text-decoration: none; }
 
-        /* Navigation */
-        nav { background: #1a2a3a; color: #fff; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: 1px; }
+        /* --- NAVIGATION --- */
+        nav.top-nav { background: #1a2a3a; color: #fff; padding: 1rem 10%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 1.4rem; font-weight: bold; color: #4db8ff; letter-spacing: 1px; }
         .nav-links { list-style: none; display: flex; }
         .nav-links li { margin-left: 20px; }
-        .nav-links a { color: #fff; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a { color: #fff; font-size: 0.9rem; transition: 0.3s; }
         .nav-links a:hover { color: #4db8ff; }
 
-        /* Hero Section */
-        header { background: linear-gradient(rgba(26, 42, 58, 0.8), rgba(26, 42, 58, 0.8)), url('photo_10_2026-02-26_13-58-16.jpg'); background-size: cover; background-position: center; height: 80vh; color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
-        header h1 { font-size: 3rem; margin-bottom: 10px; }
-        header p { font-size: 1.2rem; margin-bottom: 20px; max-width: 600px; }
-        .btn { background: #4db8ff; color: #fff; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: 0.3s; }
-        .btn:hover { background: #35a2eb; transform: translateY(-2px); }
+        /* --- HERO SECTION --- */
+        header { 
+            background: linear-gradient(rgba(26, 42, 58, 0.75), rgba(26, 42, 58, 0.75)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200');
+            background-size: cover; background-position: center; height: 65vh; color: #fff; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; 
+        }
+        header h1 { font-size: 3.2rem; margin-bottom: 10px; }
+        header p { font-size: 1.2rem; margin-bottom: 25px; opacity: 0.9; max-width: 600px; }
 
-        /* Features Section */
-        .features { padding: 50px 10%; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; background: #fff; }
-        .feature-card { text-align: center; padding: 30px; border: 1px solid #eee; border-radius: 10px; transition: 0.3s; }
-        .feature-card:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .feature-card h3 { margin-bottom: 15px; color: #1a2a3a; }
+        /* --- BUTTONS & TITLES --- */
+        .btn { background: #4db8ff; color: #fff; padding: 12px 30px; border-radius: 5px; font-weight: bold; transition: 0.3s; border: none; cursor: pointer; display: inline-block; }
+        .btn:hover { background: #35a2eb; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(77, 184, 255, 0.3); }
+        .section-title { text-align: center; margin-bottom: 40px; }
+        .underline { width: 50px; height: 4px; background: #4db8ff; margin: 10px auto; }
 
-        /* Footer */
-        footer { background: #1a2a3a; color: #ccc; text-align: center; padding: 20px; font-size: 0.8rem; }
+        /* --- ABOUT NANAOBASTY --- */
+        .about-section { padding: 80px 10%; background: #fff; }
+        .about-container { display: flex; align-items: center; justify-content: space-between; gap: 50px; flex-wrap: wrap; }
+        .about-text { flex: 1; min-width: 300px; }
+        .about-image { flex: 1; min-width: 300px; max-width: 500px; }
+        .team-photo { width: 100%; border-radius: 15px; box-shadow: 15px 15px 0px #4db8ff; }
+
+        /* --- MARKETPLACE & SEARCH --- */
+        .marketplace { padding: 80px 10%; background: #f4f7f6; }
+        .search-filter-container { background: #fff; padding: 20px; border-radius: 12px; display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .search-wrapper { flex: 2; display: flex; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; min-width: 250px; }
+        .search-wrapper input { flex: 1; padding: 12px; border: none; outline: none; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; }
+        .product-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; transition: 0.3s; }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-img { height: 200px; background: #e0e7ff; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+        .product-info { padding: 20px; }
+        .price { color: #2ecc71; font-weight: bold; font-size: 1.3rem; margin: 5px 0; }
+
+        /* --- SELLER PROFILE --- */
+        .seller-profile-card { background: #fff; border-radius: 15px; padding: 25px; max-width: 350px; margin: 40px auto; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .seller-avatar { width: 70px; height: 70px; background: #1a2a3a; color: #4db8ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-weight: bold; font-size: 1.5rem; }
+        .whatsapp-btn { background: #25D366; color: #fff; padding: 12px; border-radius: 8px; display: block; margin-top: 15px; font-weight: bold; transition: 0.3s; }
+        .whatsapp-btn:hover { background: #128C7E; }
+
+        /* --- SELL FORM --- */
+        .sell-section { padding: 80px 10%; background: #fff; }
+        .sell-form { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
+        .sell-form input, .sell-form select, .sell-form textarea { padding: 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; width: 100%; }
+
+        /* --- SUCCESS MODAL --- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 42, 58, 0.9); z-index: 3000; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: #fff; padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; width: 90%; }
+        .success-icon { font-size: 3.5rem; color: #2ecc71; margin-bottom: 15px; }
+
+        /* --- MOBILE BOTTOM NAV --- */
+        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; border-top: 1px solid #eee; z-index: 2000; justify-content: space-around; padding: 12px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+        .nav-item { color: #888; display: flex; flex-direction: column; align-items: center; font-size: 0.75rem; font-weight: 600; }
+        .nav-item.active { color: #4db8ff; }
+        .nav-item span:first-child { font-size: 1.3rem; margin-bottom: 2px; }
+
+        /* --- SCROLL TO TOP --- */
+        #scrollToTop { display: none; position: fixed; bottom: 90px; right: 20px; background: #4db8ff; color: #fff; border: none; padding: 12px 16px; border-radius: 50%; cursor: pointer; z-index: 1001; font-weight: bold; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .top-nav .nav-links { display: none; }
+            .bottom-nav { display: flex; }
+            body { padding-bottom: 80px; }
+            header h1 { font-size: 2.2rem; }
+            .about-container { flex-direction: column; text-align: center; }
+            .about-text .underline { margin: 10px auto; }
+            .about-image { max-width: 100%; }
+        }
     </style>
 </head>
 <body>
-<div id="successModal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="success-icon">✔️</div>
-        <h2>Listing Posted!</h2>
-        <p>Your item is now live in the NanaObasty Marketplace. Good luck with your sale!</p>
-        <button id="closeModal" class="btn">View My Ad</button>
-    </div>
-</div>
-    <nav>
-        <div class="logo">OBASTY MARKETPLACE</div>
-       <li><a href="#about">About</a></li>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
+
+    <nav class="top-nav">
+        <div class="logo">NANAOBASTY</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#buy">Explore</a></li>
+            <li><a href="#sell">Sell Item</a></li>
+            <li><a href="#about">About</a></li>
         </ul>
     </nav>
 
-    <header>
-       <div class="about-text">
-    <div class="section-title" style="text-align: left;">
-        <h2>NanaObasty Marketplace Partner</h2>
-        <div class="underline" style="margin-left: 0;"></div>
-    </div>
-    <p>We don't just sell; we sell <strong>quality and affordable products</strong>. Based in the heart of Koforidua and Ghana as well, our team combines local insight with world-class tech to put your business on the map.</p>
-    
-    <p>From sleek landing pages to full-scale digital strategies, we Ghana brands compete globally. TEAM ATANFOANTUMI</p>
-    
-    <a href="#contact" class="btn" style="display: inline-block; margin-top: 10px;">Let’s Talk Strategy</a>
-</div>
-</section
-  
-  <div class="search-filter-container">
-    <div class="search-wrapper">
-        <input type="text" id="productSearch" placeholder="Search for items (e.g. iPhone, Laptop)...">
-        <button class="search-btn">🔍</button>
-    </div>
-    <div class="filter-wrapper">
-        <select id="categoryFilter">
-            <option value="all">All Categories</option>
-            <option value="electronics">Electronics</option>
-            <option value="fashion">Fashion</option>
-            <option value="vehicles">Vehicles</option>
-            <option value="property">Property</option>
-        </select>
-        <select id="priceFilter">
-            <option value="any">Any Price</option>
-            <option value="low">Under ₵ 500</option>
-            <option value="mid">₵ 500 - ₵ 5,000</option>
-            <option value="high">Over ₵ 5,000</option>
-        </select>
-    </div>
-</div>
-<section class="marketplace" id="buy">
-    <div class="section-title">
-        <h2>Local Marketplace</h2>
-        <div class="underline"></div>
-    </div>
-    <div class="product-grid">
-        <div class="product-card">
-            <div class="product-tag">New</div>
-            <div class="product-img-placeholder">💻</div>
-            <div class="product-info">
-                <h3>MacBook Pro 2022</h3>
-                <p class="price">₵ 12,500</p>
-                <p class="location">📍 Koforidua Tafo</p>
-                <button class="buy-btn">Contact Seller</button>
-            </div>
-        </div>
-        <div class="product-card">
-            <div class="product-tag">Used</div>
-            <div class="product-img-placeholder">🚲</div>
-            <div class="product-info">
-                <h3>Mountain Bike</h3>
-                <p class="price">₵ 850</p>
-                <p class="location">📍 Old tafo</p>
-                <button class="buy-btn">Contact Seller</button>
-            </div>
-        </div>
-        <div class="product-card">
-            <div class="product-tag">New</div>
-            <div class="product-img-placeholder">📱</div>
-            <div class="product-info">
-                <h3>iPhone 15 Pro</h3>
-                <p class="price">₵ 15,000</p>
-                <p class="location">📍 New Tafo</p>
-                <button class="buy-btn">Contact Seller</button>
-            </div>
-        </div>
-    </div>
-</section>
-        <section class="sell-section" id="sell">
-    <div class="sell-container">
-        <div class="section-title">
-            <h2>Turn Your Items into Cash</h2>
-            <p>Fill in the details to list your item in Koforidua.</p>
-        </div>
-        <form class="sell-form">
-            <div class="form-group">
-                <input type="text" placeholder="Item Name (e.g. Samsung S23)" required>
-                <input type="number" placeholder="Price (GHS)" required>
-            </div>
-            <select required>
-                <option value="">Select Category</option>
-                <option value="electronics">Electronics</option>
-                <option value="fashion">Fashion</option>
-                <option value="vehicles">Vehicles</option>
-                <option value="home">Home & Garden</option>
-            </select>
-            <textarea placeholder="Describe your item... (Condition, features, etc.)" rows="4"></textarea>
-            <button type="submit" class="btn">Post Item Now</button>
-        </form>
-    </div>
-</section>
-        <h1>Modern Solutions for You</h1>
-        <p>Helping you build the future with clean code, sleek designs, and meaningful content.</p>
-        <a href="#" class="btn">Get Started Now</a>
+    <header id="home">
+        <h1>NanaObasty Marketplace</h1>
+        <p>Your trusted community hub to buy local and sell fast in the heart of Winneba.</p>
+        <a href="#buy" class="btn">Start Browsing</a>
     </header>
-    <section class="features">
-        <div class="feature-card">
-            <h3>Fast Performance</h3>
-            <p>Optimized for speed to ensure your users never have to wait.</p>
-        </div>
-        <div class="feature-card">
-            <h3>Responsive Design</h3>
-            <p>Looks beautiful on mobile, tablet, and desktop screens.</p>
-        </div>
-        <div class="feature-card">
-            <h3>Modern SEO</h3>
-            <p>Built with best practices to help you climb the search rankings.</p>
+
+    <section class="about-section" id="about">
+        <div class="about-container">
+            <div class="about-text">
+                <div class="section-title" style="text-align: left;">
+                    <h2>About NanaObasty</h2>
+                    <div class="underline" style="margin-left: 0;"></div>
+                </div>
+                <p>Welcome to <strong>NanaObasty Marketplace</strong>. We’ve built more than just a website; we’ve built a community. Our mission is to make local commerce safe, fast, and easy for everyone.</p>
+                <p>From electronics to fashion, find exactly what you need at prices that make sense.</p>
+                <a href="#sell" class="btn" style="margin-top: 15px;">Post Your First Ad</a>
+            </div>
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800" alt="NanaObasty Team" class="team-photo">
+            </div>
         </div>
     </section>
-<section class="contact-section">
-    <h2>Get In Touch</h2>
-    <p>Have a question or want to work together? Drop us a message!</p>
-    <form class="contact-form">
-        <input type="text" placeholder="Your Name" required>
-        <input type="email" placeholder="Your Email" required>
-        <textarea rows="5" placeholder="How can we help?"></textarea>
-        <button type="submit" class="btn">Send Message</button>
-    </form>
-</section>
-    <section class="newsletter-bar">
-    <div class="newsletter-content">
-        <h3>Stay in the Loop</h3>
-        <p>Get the latest goods from NanaObasty to your inbox.</p>
-        <form class="newsletter-form">
-            <input type="email" placeholder="Enter your email" required>
-            <button type="submit" class="btn-alt">Subscribe</button>
+
+    <section class="marketplace" id="buy">
+        <div class="section-title">
+            <h2>Local Marketplace</h2>
+            <div class="underline"></div>
+        </div>
+
+        <div class="search-filter-container">
+            <div class="search-wrapper">
+                <input type="text" id="pSearch" placeholder="What are you looking for today?">
+                <button style="background:none; border:none; padding:10px;">🔍</button>
+            </div>
+            <select style="padding:10px; border-radius:8px; border:1px solid #ddd; outline: none; cursor: pointer;">
+                <option>All Categories</option>
+                <option>Electronics</option>
+                <option>Vehicles</option>
+                <option>Fashion</option>
+            </select>
+        </div>
+
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-img">💻</div>
+                <div class="product-info">
+                    <h3>MacBook Air M1</h3>
+                    <p class="price">₵ 6,800</p>
+                    <p style="font-size: 0.8rem; color: #888;">📍 Winneba Junction</p>
+                    <button class="btn" style="width:100%; margin-top:15px; font-size: 0.9rem;">Contact Seller</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img">📱</div>
+                <div class="product-info">
+                    <h3>iPhone 13 Pro</h3>
+                    <p class="price">₵ 4,200</p>
+                    <p style="font-size: 0.8rem; color: #888;">📍 North Campus</p>
+                    <button class="btn" style="width:100%; margin-top:15px; font-size: 0.9rem;">Contact Seller</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img">🚲</div>
+                <div class="product-info">
+                    <h3>Sport Bicycle</h3>
+                    <p class="price">₵ 950</p>
+                    <p style="font-size: 0.8rem; color: #888;">📍 Low Cost</p>
+                    <button class="btn" style="width:100%; margin-top:15px; font-size: 0.9rem;">Contact Seller</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="seller-profile-card">
+            <div class="seller-avatar">NO</div>
+            <h4>Nana Obasty</h4>
+            <p>⭐⭐⭐⭐⭐ (Verified Seller)</p>
+            <a href="https://wa.me/233000000000" class="whatsapp-btn">💬 Chat on WhatsApp</a>
+        </div>
+    </section>
+
+    <section class="sell-section" id="sell">
+        <div class="section-title">
+            <h2>Post an Item</h2>
+            <p>Quickly reach thousands of buyers in Winneba.</p>
+            <div class="underline"></div>
+        </div>
+        <form class="sell-form" id="sellForm">
+            <input type="text" placeholder="Item Name (e.g. Sony Headphones)" required>
+            <input type="number" placeholder="Price (GHS)" required>
+            <select required>
+                <option value="">Choose Category</option>
+                <option>Electronics</option>
+                <option>Fashion</option>
+                <option>Home & Living</option>
+            </select>
+            <textarea placeholder="Describe your item... (Condition, flaws, features)" rows="4"></textarea>
+            <button type="submit" class="btn">Publish Ad Now</button>
         </form>
-    </div>
-</section>
-       <footer>
-    <div class="footer-content">
-        <p>&copy; 2026 NanaObasty Marketplace. All rights reserved.</p>
-        <div class="social-links">
-            <a href="#" class="social-icon" aria-label="Facebook">FB</a>
-            <a href="#" class="social-icon" aria-label="Instagram">IG</a>
-            <a href="#" class="social-icon" aria-label="LinkedIn">IN</a>
-            <a href="#" class="social-icon" aria-label="Twitter">TW</a>
+    </section>
+
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="success-icon">✔️</div>
+            <h2>Success!</h2>
+            <p>Your listing is being reviewed and will be live on NanaObasty Marketplace shortly.</p>
+            <button id="closeModal" class="btn">Got it</button>
         </div>
     </div>
-    </footer>
-<button id="scrollToTop" title="Go to top">↑</button>
+
+    <button id="scrollToTop" title="Go to top">↑</button>
+
     <nav class="bottom-nav">
-    <a href="#home" class="nav-item active">
-        <span class="icon">🏠</span>
-        <span class="text">Home</span>
-    </a>
-    <a href="#buy" class="nav-item">
-        <span class="icon">🛒</span>
-        <span class="text">Explore</span>
-    </a>
-    <a href="#sell" class="nav-item">
-        <span class="icon">➕</span>
-        <span class="text">Sell</span>
-    </a>
-    <a href="#contact" class="nav-item">
-        <span class="icon">💬</span>
-        <span class="text">Inbox</span>
-    </a>
-</nav>
+        <a href="#home" class="nav-item active"><span>🏠</span><span>Home</span></a>
+        <a href="#buy" class="nav-item"><span>🛒</span><span>Buy</span></a>
+        <a href="#sell" class="nav-item"><span>➕</span><span>Sell</span></a>
+        <a href="#about" class="nav-item"><span>👤</span><span>Profile</span></a>
+    </nav>
+
+    <script>
+        // Modal & Form Logic
+        const sForm = document.getElementById('sellForm');
+        const modal = document.getElementById('successModal');
+        const cModal = document.getElementById('closeModal');
+
+        if(sForm) {
+            sForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                modal.classList.add('active');
+                sForm.reset();
+            });
+        }
+
+        cModal.addEventListener('click', () => modal.classList.remove('active'));
+
+        // Smooth Active States for Bottom Nav
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        // Scroll to Top Logic
+        const topBtn = document.getElementById("scrollToTop");
+        window.onscroll = () => {
+            if (window.scrollY > 500) topBtn.style.display = "block";
+            else topBtn.style.display = "none";
+        };
+        topBtn.onclick = () => window.scrollTo({top: 0, behavior: 'smooth'});
+    </script>
 </body>
 </html>
