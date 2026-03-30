@@ -41,3 +41,24 @@ navItems.forEach(item => {
         this.classList.add('active');
     });
 });
+// Target the "Sell" form
+const sellForm = document.querySelector('.sell-form');
+const modal = document.getElementById('successModal');
+const closeModal = document.getElementById('closeModal');
+
+if (sellForm) {
+    sellForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Stop the page from reloading
+        
+        // Show the success message
+        modal.classList.add('active');
+        
+        // Optional: Clear the form
+        sellForm.reset();
+    });
+}
+
+// Close the modal when button is clicked
+closeModal.addEventListener('click', () => {
+    modal.classList.remove('active');
+});
