@@ -393,6 +393,7 @@ footer {
     border-color: #4db8ff;
 }
 
+
 @media (max-width: 600px) {
     .search-filter-container { flex-direction: column; }
     .search-wrapper, .filter-wrapper { width: 100%; }
