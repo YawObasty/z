@@ -20,7 +20,7 @@
         /* --- HERO --- */
         header { 
             background: linear-gradient(rgba(26, 42, 58, 0.75), rgba(26, 42, 58, 0.75)), url('photo_10_2026-02-26_13-58-16.jpg');
-            background-size: cover; background-position: center; height: 50vh; color: #fff; 
+            background-size: cover; background-position: center; height: 45vh; color: #fff; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; 
         }
 
@@ -28,7 +28,8 @@
         .filter-container { padding: 20px 10%; background: #fff; border-bottom: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
         .search-bar { flex: 2; min-width: 250px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
         .price-filter { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 5px; }
-        .price-filter input { cursor: pointer; accent-color: #4db8ff; }
+        .cat-filter { flex: 1; min-width: 150px; }
+        .cat-filter select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
 
         .marketplace { padding: 40px 10%; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
@@ -40,7 +41,7 @@
         /* --- UI ELEMENTS --- */
         .btn { background: #4db8ff; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; display: inline-block; transition: 0.3s; }
         .btn:hover { background: #35a2eb; }
-        .btn-wa { background: #25D366; width: 100%; margin-top: 10px; text-align: center; }
+        .btn-wa { background: #25D366; width: 100%; margin-top: 10px; text-align: center; border-radius: 8px; }
         
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
@@ -69,7 +70,17 @@
     </header>
 
     <div class="filter-container">
-        <input type="text" id="searchInput" class="search-bar" placeholder="Search items...">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search for items...">
+        
+        <div class="cat-filter">
+            <select id="catSelect">
+                <option value="All">All Categories</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Home">Home</option>
+            </select>
+        </div>
+
         <div class="price-filter">
             <label>Max Price: <span id="priceLabel">₵5000+</span></label>
             <input type="range" id="priceRange" min="0" max="5000" step="50" value="5000">
@@ -132,10 +143,20 @@
         const db = getFirestore(app);
         const colRef = collection(db, "listings");
 
-        // --- WHATSAPP SHARE ---
-        document.getElementById('shareBtnMain').onclick = () => {
-            const text = encodeURIComponent("Check out the best deals in Koforidua on NanaObasty Marketplace! 🛒🚀\n\nVisit: " + window.location.href);
-            window.open(`https://wa.me/?text=${text}`, '_blank');
+        // --- UNIVERSAL WHATSAPP SHARE (MOBILE & PC) ---
+        document.getElementById('shareBtnMain').onclick = async () => {
+            const shareTitle = "NanaObasty Marketplace";
+            const shareText = "Check out the best deals in Koforidua on NanaObasty! 🛒🚀";
+            const shareUrl = window.location.href;
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: shareTitle, text: shareText, url: shareUrl });
+                } catch (err) { console.log("Share cancelled"); }
+            } else {
+                const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + " " + shareUrl)}`;
+                window.open(waUrl, '_blank');
+            }
         };
 
         // --- GLOBAL DELETE ---
@@ -164,6 +185,7 @@
                 await addDoc(colRef, {
                     name: document.getElementById('itemName').value,
                     price: parseFloat(document.getElementById('itemPrice').value),
+                    category: document.getElementById('itemCat').value,
                     desc: document.getElementById('itemDesc').value,
                     image: img,
                     seller: user.name,
@@ -173,7 +195,7 @@
             } catch(e) { alert("Error uploading"); btn.disabled = false; }
         };
 
-        // --- REAL-TIME ENGINE ---
+        // --- FILTERING ENGINE ---
         let masterList = [];
         onSnapshot(query(colRef, orderBy("createdAt", "desc")), (snap) => {
             masterList = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -183,11 +205,13 @@
         function applyFilters() {
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
             const maxPrice = parseFloat(document.getElementById('priceRange').value);
+            const selectedCat = document.getElementById('catSelect').value;
             
             const filtered = masterList.filter(item => {
                 const matchesSearch = item.name.toLowerCase().includes(searchVal);
                 const matchesPrice = item.price <= maxPrice;
-                return matchesSearch && matchesPrice;
+                const matchesCat = selectedCat === "All" || item.category === selectedCat;
+                return matchesSearch && matchesPrice && matchesCat;
             });
             
             render(filtered);
@@ -196,7 +220,7 @@
         function render(items) {
             const grid = document.getElementById('publicListingGrid');
             const user = JSON.parse(localStorage.getItem('nana_user'));
-            grid.innerHTML = items.length ? '' : '<p style="grid-column: 1/-1; text-align:center;">No items found matching your filters.</p>';
+            grid.innerHTML = items.length ? '' : '<p style="grid-column: 1/-1; text-align:center;">No items found.</p>';
             
             items.forEach(item => {
                 const isOwner = user && (user.name === item.seller || user.name === "Admin");
@@ -209,8 +233,8 @@
                                 ${isOwner ? `<button onclick="deleteItem('${item.id}')" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🗑️</button>` : ''}
                             </div>
                             <p style="color:#2ecc71; font-weight:bold; font-size:1.2rem; margin:5px 0;">₵ ${item.price}</p>
-                            <p style="font-size:0.75rem; color:gray; height:35px; overflow:hidden;">${item.desc}</p>
-                            <a href="https://wa.me/233539547368?text=I'm interested in the ${item.name}!" target="_blank" class="btn btn-wa">Chat Seller</a>
+                            <p style="font-size:0.75rem; color:gray; margin-bottom:5px;">Category: ${item.category || 'General'}</p>
+                            <a href="https://api.whatsapp.com/send?phone=233539547368&text=${encodeURIComponent("Hi, I'm interested in the " + item.name + " listed on NanaObasty!")}" target="_blank" class="btn btn-wa">Chat Seller</a>
                         </div>
                     </div>`;
             });
@@ -218,6 +242,7 @@
 
         // Listen for filter changes
         document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('catSelect').addEventListener('change', applyFilters);
         document.getElementById('priceRange').addEventListener('input', (e) => {
             document.getElementById('priceLabel').innerText = `₵${e.target.value}`;
             applyFilters();
@@ -238,7 +263,7 @@
             if(u) {
                 document.getElementById('authFields').style.display = 'none';
                 document.getElementById('logoutSection').style.display = 'block';
-                document.getElementById('userWelcome').innerText = "Logged in as: " + u.name;
+                document.getElementById('userWelcome').innerText = "Account: " + u.name;
                 document.querySelector('.login-trigger').innerText = u.name.split(' ')[0];
             }
         };
