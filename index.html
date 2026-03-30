@@ -160,6 +160,10 @@
 
     <div id="authModal" class="modal-overlay">
         <div class="modal-content">
+            <div id="logoutSection" style="display: none; padding: 20px 0;">
+    <p id="userWelcome" style="margin-bottom: 15px; font-weight: bold;"></p>
+    <button onclick="logout()" class="btn" style="background: #ff4d4d; width: 100%;">Sign Out</button>
+</div>
             <button onclick="closeAuth()" class="close-x">✕</button>
             <div class="auth-tabs">
                 <button class="auth-tab active" id="tabLogin" onclick="switchAuth('login')">Login</button>
