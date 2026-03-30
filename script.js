@@ -17,3 +17,17 @@ topBtn.addEventListener("click", () => {
         behavior: 'smooth'
     });
 });
+// Simple Filter Logic (Front-end Demo)
+const searchInput = document.getElementById('productSearch');
+const categorySelect = document.getElementById('categoryFilter');
+
+function handleSearch() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const selectedCategory = categorySelect.value;
+    
+    console.log(`Searching for ${searchTerm} in ${selectedCategory}`);
+    // In a real app, this would filter your product list array!
+}
+
+searchInput.addEventListener('keyup', handleSearch);
+categorySelect.addEventListener('change', handleSearch);
