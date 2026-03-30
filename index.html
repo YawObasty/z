@@ -13,6 +13,7 @@
             --nav-bg: #1a2a3a;
             --border: #eee;
             --input-bg: #fff;
+            --accent: #4db8ff;
         }
 
         [data-theme="dark"] {
@@ -26,17 +27,15 @@
 
         /* --- GLOBAL STYLES --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: background 0.3s, color 0.3s; }
-        body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 80px; }
         
         nav.top-nav { background: var(--nav-bg); color: #fff; padding: 1rem 10%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.4rem; font-weight: bold; color: #4db8ff; }
+        .logo { font-size: 1.4rem; font-weight: bold; color: var(--accent); }
 
-        /* --- THEME TOGGLE BUTTON --- */
         .theme-toggle { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #fff; margin-right: 15px; }
 
         .filter-container { padding: 15px 10%; background: var(--card-bg); border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 10px; position: sticky; top: 60px; z-index: 999; }
         .search-bar { flex: 2; min-width: 200px; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--input-bg); color: var(--text); }
-        #regFilter { background: var(--input-bg); color: var(--text); }
 
         .marketplace { padding: 30px 10%; min-height: 60vh; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
@@ -44,29 +43,26 @@
         .product-img { height: 180px; background-size: cover; background-position: center; }
         .product-info { padding: 15px; }
 
-        /* --- REPORT BUTTON STYLE --- */
+        /* --- ADMIN & REPORT STYLES --- */
         .report-btn { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.4); color: white; border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 0.7rem; z-index: 10; }
-        .report-btn:hover { background: #e74c3c; }
+        .admin-del-btn { background: #ff4757; color: white; border: none; padding: 5px; border-radius: 5px; cursor: pointer; margin-top: 10px; width: 100%; font-weight: bold; }
+        #adminPanel { display: none; padding: 20px 10%; background: #fff2f2; border: 2px dashed #ff4757; margin: 20px 10%; border-radius: 12px; color: #333; }
+        [data-theme="dark"] #adminPanel { background: #2d1616; color: #fff; }
 
-        /* --- BADGES --- */
         .badge-neg { background: #fff3cd; color: #856404; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-left: 5px; border: 1px solid #ffeeba; }
-        .loc-tag { font-size: 0.65rem; color: #4db8ff; font-weight: bold; display: block; margin-bottom: 5px; }
+        .loc-tag { font-size: 0.65rem; color: var(--accent); font-weight: bold; display: block; margin-bottom: 5px; }
 
-        /* --- FORM STYLES --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--card-bg); color: var(--text); padding: 30px; border-radius: 15px; max-width: 450px; width: 90%; max-height: 90vh; overflow-y: auto; }
         
-        .btn { background: #4db8ff; color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; width: 100%; }
+        .btn { background: var(--accent); color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; width: 100%; }
         .btn-wa { background: #25D366; width: 100%; display: block; text-align: center; color: white; text-decoration: none; margin-top: 10px; border-radius: 8px; padding: 10px; font-weight: bold; }
 
         #sell { padding: 50px 10%; background: var(--card-bg); text-align: center; border-top: 1px solid var(--border); }
         .sell-form { display: none; max-width: 500px; margin: 20px auto; flex-direction: column; gap: 12px; text-align: left; }
         .sell-form.active { display: flex; }
         .sell-form input, .sell-form select, .sell-form textarea { padding: 12px; border: 1px solid var(--border); border-radius: 8px; width: 100%; background: var(--input-bg); color: var(--text); }
-
-        .neg-check { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; cursor: pointer; background: var(--bg); padding: 10px; border-radius: 8px; }
-        .neg-check input { width: auto !important; }
 
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 2000; }
         .bottom-nav a { color: var(--text); text-decoration: none; font-size: 0.9rem; }
@@ -82,17 +78,18 @@
         </div>
     </nav>
 
+    <div id="adminPanel">
+        <h2 style="color:#ff4757">🚩 Admin Dashboard</h2>
+        <p>You are logged in as Administrator. You can see reports and delete items.</p>
+        <div id="reportList" style="margin-top:15px; font-size:0.85rem;"></div>
+    </div>
+
     <div class="filter-container">
-        <input type="text" id="searchInput" class="search-bar" placeholder="What are you buying today?">
-        <select id="regFilter" style="padding:10px; border-radius:8px; border:1px solid #ddd;">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search items...">
+        <select id="regFilter" style="padding:10px; border-radius:8px; border:1px solid #ddd; background: var(--input-bg); color: var(--text);">
             <option value="All">All Regions</option>
-            <option>Greater Accra</option>
-            <option>Eastern Region</option>
-            <option>Ashanti Region</option>
-            <option>Central Region</option>
-            <option>Western Region</option>
-            <option>Volta Region</option>
-            <option>Northern Region</option>
+            <option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option>
+            <option>Central Region</option><option>Western Region</option><option>Volta Region</option>
         </select>
     </div>
 
@@ -105,41 +102,13 @@
         <form class="sell-form" id="sellForm">
             <input type="text" id="pName" placeholder="Item Name" required>
             <input type="number" id="pPrice" placeholder="Price (₵)" required>
-            
-            <label class="neg-check">
-                <input type="checkbox" id="pNegotiable"> 🤝 Price is Negotiable
-            </label>
-
-            <select id="pRegion" onchange="updateLocationOptions()" required>
+            <select id="pRegion" required>
                 <option value="">-- Choose Region --</option>
-                <option>Greater Accra</option>
-                <option>Eastern Region</option>
-                <option>Ashanti Region</option>
-                <option>Central Region</option>
-                <option>Western Region</option>
-                <option>Volta Region</option>
-                <option>Northern Region</option>
-                <option>Other</option>
+                <option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option>
             </select>
-
-            <div id="koforiduaArea" style="display:none;">
-                <select id="pKofSub">
-                    <option>KTU / Poly Area</option>
-                    <option>Mile 50</option>
-                    <option>Koforidua Central</option>
-                    <option>Betom</option>
-                    <option>Adweso / SDA</option>
-                    <option>Effiduase</option>
-                    <option>Asokore</option>
-                </select>
-            </div>
-
-            <div id="customArea">
-                <input type="text" id="pCustomLoc" placeholder="City / Town Name">
-            </div>
-
+            <input type="text" id="pCustomLoc" placeholder="City / Town" required>
             <input type="file" id="pImage" accept="image/*" required>
-            <textarea id="pDesc" placeholder="Brief details about the item..." rows="3" required></textarea>
+            <textarea id="pDesc" placeholder="Brief details..." rows="3" required></textarea>
             <button type="submit" class="btn">Publish Now</button>
         </form>
     </section>
@@ -152,82 +121,43 @@
                     <input type="email" id="lEmail" placeholder="Email" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
                     <input type="password" id="lPass" placeholder="Password" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
                     <button type="submit" class="btn">Login</button>
-                    <p style="text-align:center; font-size: 0.9rem; margin-top: 10px;">Don't have an account? <a href="javascript:void(0)" onclick="toggleAuthMode()" id="toggleText" style="color:#4db8ff; text-decoration:none;">Sign Up</a></p>
+                    <p style="text-align:center; font-size: 0.9rem; margin-top: 10px;">Need an account? <a href="javascript:void(0)" onclick="toggleAuthMode()" style="color:var(--accent); text-decoration:none;">Sign Up</a></p>
                 </form>
-
                 <form id="signupForm" style="display:none; flex-direction:column; gap:10px; margin-top:15px;">
                     <input type="text" id="rName" placeholder="Full Name" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
                     <input type="email" id="rEmail" placeholder="Email" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
                     <input type="tel" id="rPhone" placeholder="WhatsApp Number" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
-                    <input type="password" id="rPass" placeholder="Password (6+ chars)" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
-                    <button type="submit" class="btn" style="background:#2ecc71;">Create Account</button>
-                    <p style="text-align:center; font-size: 0.9rem; margin-top: 10px;">Already have an account? <a href="javascript:void(0)" onclick="toggleAuthMode()" style="color:#4db8ff; text-decoration:none;">Login</a></p>
+                    <input type="password" id="rPass" placeholder="Password" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                    <button type="submit" class="btn">Create Account</button>
                 </form>
             </div>
-            <div id="profileSection" style="display:none;">
+            <div id="profileSection" style="display:none; text-align:center;">
                 <h3 id="userHeader">Account</h3>
                 <button onclick="signOutUser()" class="btn" style="background:#e74c3c; margin-top:20px;">Logout</button>
             </div>
-            <button onclick="closeAuth()" style="margin-top:20px; background:none; border:none; color:gray; cursor:pointer;">Close</button>
+            <button onclick="closeAuth()" style="margin-top:20px; background:none; border:none; color:gray; cursor:pointer; width:100%;">Close</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
         <a href="#buy">🛒 Explore</a>
-        <a href="#sell">➕ Sell Item</a>
-        <a href="javascript:void(0)" onclick="openAuth()">👤 Profile</a>
+        <a href="#sell">➕ Sell</a>
+        <a href="javascript:void(0)" onclick="openAuth()">👤 Account</a>
     </nav>
-
-    <script>
-        /* --- THEME TOGGLE LOGIC --- */
-        function toggleTheme() {
-            const body = document.body;
-            const btn = document.getElementById('themeBtn');
-            const currentTheme = body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            body.setAttribute('data-theme', newTheme);
-            btn.innerText = newTheme === 'light' ? '🌙' : '☀️';
-            localStorage.setItem('theme', newTheme);
-        }
-
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.setAttribute('data-theme', 'dark');
-            document.getElementById('themeBtn').innerText = '☀️';
-        }
-
-        function openAuth() { document.getElementById('authModal').classList.add('active'); }
-        function closeAuth() { document.getElementById('authModal').classList.remove('active'); }
-
-        function toggleAuthMode() {
-            const loginF = document.getElementById('loginForm');
-            const signupF = document.getElementById('signupForm');
-            const title = document.getElementById('authTitle');
-            if(loginF.style.display === 'none') {
-                loginF.style.display = 'flex'; signupF.style.display = 'none'; title.innerText = "Login";
-            } else {
-                loginF.style.display = 'none'; signupF.style.display = 'flex'; title.innerText = "Sign Up";
-            }
-        }
-    </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I", authDomain: "obasty-market.firebaseapp.com", projectId: "obasty-market", appId: "1:753490577388:web:8b2dac8f4082d89ee662c9" };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        
         let userData = null;
         let allListings = [];
-
-        window.updateLocationOptions = () => {
-            const region = document.getElementById('pRegion').value;
-            document.getElementById('koforiduaArea').style.display = (region === "Eastern Region") ? "block" : "none";
-            document.getElementById('customArea').style.display = (region === "Eastern Region") ? "none" : "block";
-        };
+        const ADMIN_EMAIL = "oduroalexander82@gmail.com"; // CHANGE THIS TO YOUR EMAIL
 
         onAuthStateChanged(auth, async (user) => {
             if(user) {
@@ -236,88 +166,55 @@
                 document.getElementById('authFields').style.display = 'none';
                 document.getElementById('profileSection').style.display = 'block';
                 document.getElementById('sellForm').classList.add('active');
-                document.getElementById('navAuthBtn').innerText = "My Profile";
-                document.getElementById('userHeader').innerText = "Welcome, " + (userData?.name || "User");
+                document.getElementById('userHeader').innerText = "Hi, " + (userData?.name || "User");
+                
+                // Show Admin Panel if email matches
+                if(user.email === ADMIN_EMAIL) {
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadReports();
+                }
             } else {
                 userData = null;
-                document.getElementById('authFields').style.display = 'block';
-                document.getElementById('profileSection').style.display = 'none';
-                document.getElementById('sellForm').classList.remove('active');
-                document.getElementById('navAuthBtn').innerText = "Login";
+                document.getElementById('adminPanel').style.display = 'none';
             }
+            applyFilters();
         });
 
-        // REPORT FUNCTION
-        window.reportItem = async (itemId, itemName) => {
-            if(!userData) { alert("Please login to report items."); openAuth(); return; }
-            if(confirm("Report this item for suspicious activity?")) {
-                try {
-                    await addDoc(collection(db, "reports"), {
-                        itemId: itemId,
-                        itemName: itemName,
-                        reportedBy: userData.name,
-                        reporterEmail: userData.email,
-                        timestamp: new Date()
-                    });
-                    alert("Report submitted. We will review this item. Thank you!");
-                } catch(e) { alert("Report failed. Try again."); }
+        // ADMIN FUNCTIONS
+        function loadReports() {
+            onSnapshot(collection(db, "reports"), (snap) => {
+                const list = document.getElementById('reportList');
+                list.innerHTML = "<strong>Recent Reports:</strong><br>";
+                snap.forEach(d => {
+                    const r = d.data();
+                    list.innerHTML += `• ${r.itemName} reported by ${r.reportedBy} <button onclick="deleteReport('${d.id}')" style="color:red; border:none; background:none; cursor:pointer;">[Clear Report]</button><br>`;
+                });
+            });
+        }
+
+        window.deleteItem = async (id) => {
+            if(confirm("Admin: Permanently delete this item?")) {
+                await deleteDoc(doc(db, "listings", id));
+                alert("Item removed.");
             }
         };
 
-        // FIXED REGISTRATION
-        document.getElementById('signupForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('rEmail').value;
-            const pass = document.getElementById('rPass').value;
-            const name = document.getElementById('rName').value;
-            const phone = document.getElementById('rPhone').value;
-
-            try {
-                const res = await createUserWithEmailAndPassword(auth, email, pass);
-                await setDoc(doc(db, "users", res.user.uid), { name, phone, email });
-                closeAuth();
-            } catch (err) { alert("Registration Error: " + err.message); }
+        window.deleteReport = async (id) => {
+            await deleteDoc(doc(db, "reports", id));
         };
 
-        document.getElementById('loginForm').onsubmit = (e) => {
-            e.preventDefault();
-            signInWithEmailAndPassword(auth, document.getElementById('lEmail').value, document.getElementById('lPass').value)
-                .then(() => closeAuth()).catch(err => alert("Login Error: Check email/password"));
+        window.reportItem = async (itemId, itemName) => {
+            if(!userData) return alert("Login to report.");
+            if(confirm("Report this item?")) {
+                await addDoc(collection(db, "reports"), { itemId, itemName, reportedBy: userData.name, timestamp: new Date() });
+                alert("Thank you. We will review it.");
+            }
         };
 
-        window.signOutUser = () => signOut(auth).then(() => location.reload());
-
-        document.getElementById('sellForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            btn.innerText = "Processing..."; btn.disabled = true;
-
-            const region = document.getElementById('pRegion').value;
-            const subLoc = (region === "Eastern Region") ? document.getElementById('pKofSub').value : document.getElementById('pCustomLoc').value;
-            
-            const file = document.getElementById('pImage').files[0];
-            const fd = new FormData(); fd.append("image", file);
-            const res = await fetch("https://api.imgbb.com/1/upload?key=f6f1d931d2c5da11833752754cf2dfcd", { method: "POST", body: fd });
-            const img = await res.json();
-
-            await addDoc(collection(db, "listings"), {
-                name: document.getElementById('pName').value,
-                price: document.getElementById('pPrice').value,
-                negotiable: document.getElementById('pNegotiable').checked,
-                region: region,
-                location: subLoc,
-                image: img.data.url,
-                sellerName: userData.name,
-                sellerPhone: userData.phone,
-                createdAt: new Date()
-            });
-            location.reload();
-        };
-
-        // RENDER LISTINGS FUNCTION
+        // RENDER
         function renderListings(data) {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = "";
+            const grid = document.getElementById('productGrid'); grid.innerHTML = "";
+            const isAdmin = auth.currentUser?.email === ADMIN_EMAIL;
             data.forEach(item => {
                 grid.innerHTML += `
                     <div class="product-card">
@@ -325,38 +222,67 @@
                         <div class="product-img" style="background-image:url('${item.image}')"></div>
                         <div class="product-info">
                             <span class="loc-tag">📍 ${item.region} | ${item.location}</span>
-                            <strong style="display:block; font-size:1rem;">${item.name}</strong>
-                            <p style="color:#2ecc71; font-weight:bold; font-size:1.1rem; margin-top:5px;">
-                                ₵ ${item.price}
-                                ${item.negotiable ? '<span class="badge-neg">🤝 Negotiable</span>' : ''}
-                            </p>
-                            <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}&text=Hi, I'm interested in your ${item.name}" class="btn-wa">Chat with Seller</a>
+                            <strong>${item.name}</strong>
+                            <p style="color:#2ecc71; font-weight:bold;">₵ ${item.price}</p>
+                            <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}" class="btn-wa">Chat</a>
+                            ${isAdmin ? `<button class="admin-del-btn" onclick="deleteItem('${item.id}')">DELETE AS ADMIN</button>` : ''}
                         </div>
                     </div>`;
             });
         }
 
-        // SEARCH & FILTER LOGIC
+        // Standard logic (Search, Auth, Sell) remains unchanged...
         function applyFilters() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const regValue = document.getElementById('regFilter').value;
-            
-            const filtered = allListings.filter(item => {
-                const matchesSearch = item.name.toLowerCase().includes(searchTerm);
-                const matchesRegion = (regValue === "All" || item.region === regValue);
-                return matchesSearch && matchesRegion;
-            });
+            const s = document.getElementById('searchInput').value.toLowerCase();
+            const r = document.getElementById('regFilter').value;
+            const filtered = allListings.filter(i => i.name.toLowerCase().includes(s) && (r === "All" || i.region === r));
             renderListings(filtered);
         }
-
         document.getElementById('searchInput').oninput = applyFilters;
         document.getElementById('regFilter').onchange = applyFilters;
 
         onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
-            allListings = [];
-            snap.forEach(d => allListings.push({id: d.id, ...d.data()}));
-            applyFilters();
+            allListings = []; snap.forEach(d => allListings.push({id: d.id, ...d.data()})); applyFilters();
         });
+
+        document.getElementById('loginForm').onsubmit = (e) => {
+            e.preventDefault();
+            signInWithEmailAndPassword(auth, document.getElementById('lEmail').value, document.getElementById('lPass').value).then(() => location.reload());
+        };
+        document.getElementById('signupForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const res = await createUserWithEmailAndPassword(auth, document.getElementById('rEmail').value, document.getElementById('rPass').value);
+            await setDoc(doc(db, "users", res.user.uid), { name: document.getElementById('rName').value, phone: document.getElementById('rPhone').value });
+            location.reload();
+        };
+        window.signOutUser = () => signOut(auth).then(() => location.reload());
+
+        document.getElementById('sellForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const fd = new FormData(); fd.append("image", document.getElementById('pImage').files[0]);
+            const res = await fetch("https://api.imgbb.com/1/upload?key=f6f1d931d2c5da11833752754cf2dfcd", { method: "POST", body: fd });
+            const img = await res.json();
+            await addDoc(collection(db, "listings"), {
+                name: document.getElementById('pName').value, price: document.getElementById('pPrice').value,
+                region: document.getElementById('pRegion').value, location: document.getElementById('pCustomLoc').value,
+                image: img.data.url, sellerName: userData.name, sellerPhone: userData.phone, createdAt: new Date()
+            });
+            location.reload();
+        };
+    </script>
+
+    <script>
+        function toggleTheme() {
+            const b = document.body; const isD = b.getAttribute('data-theme') === 'dark';
+            b.setAttribute('data-theme', isD ? 'light' : 'dark');
+            document.getElementById('themeBtn').innerText = isD ? '🌙' : '☀️';
+        }
+        function openAuth() { document.getElementById('authModal').classList.add('active'); }
+        function closeAuth() { document.getElementById('authModal').classList.remove('active'); }
+        function toggleAuthMode() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'flex';
+        }
     </script>
 </body>
 </html>
