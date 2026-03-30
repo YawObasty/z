@@ -5,154 +5,284 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NanaObasty Marketplace | Ghana</title>
     <style>
-        :root { --bg: #f4f7f6; --card-bg: #fff; --text: #333; --nav-bg: #1a2a3a; --border: #eee; --accent: #4db8ff; --star: #f1c40f; }
-        [data-theme="dark"] { --bg: #0f172a; --card-bg: #1e293b; --text: #f1f5f9; --nav-bg: #020617; --border: #334155; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding-bottom: 80px; }
+        /* --- DARK MODE VARIABLES --- */
+        :root {
+            --bg: #f4f7f6;
+            --card-bg: #fff;
+            --text: #333;
+            --nav-bg: #1a2a3a;
+            --border: #eee;
+            --input-bg: #fff;
+            --accent: #4db8ff;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f1f5f9;
+            --nav-bg: #020617;
+            --border: #334155;
+            --input-bg: #334155;
+        }
+
+        /* --- GLOBAL STYLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: background 0.3s, color 0.3s; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 80px; }
         
         nav.top-nav { background: var(--nav-bg); color: #fff; padding: 1rem 10%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; padding: 30px 10%; }
-        .product-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .logo { font-size: 1.4rem; font-weight: bold; color: var(--accent); }
+
+        .theme-toggle { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #fff; margin-right: 15px; }
+
+        .filter-container { padding: 15px 10%; background: var(--card-bg); border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 10px; position: sticky; top: 60px; z-index: 999; }
+        .search-bar { flex: 2; min-width: 200px; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--input-bg); color: var(--text); }
+
+        .marketplace { padding: 30px 10%; min-height: 60vh; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .product-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border); }
         .product-img { height: 180px; background-size: cover; background-position: center; }
         .product-info { padding: 15px; }
 
-        /* --- RATING STYLES --- */
-        .seller-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer; }
-        .seller-avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
-        .rating-badge { background: #fff9db; color: #856404; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: flex; align-items: center; gap: 3px; }
-        
-        .star-input { font-size: 1.5rem; color: #ddd; cursor: pointer; display: inline-block; }
-        .star-input.active { color: var(--star); }
-        
-        .review-card { border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 0.85rem; }
+        /* --- ADMIN & REPORT STYLES --- */
+        .report-btn { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.4); color: white; border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 0.7rem; z-index: 10; }
+        .admin-del-btn { background: #ff4757; color: white; border: none; padding: 5px; border-radius: 5px; cursor: pointer; margin-top: 10px; width: 100%; font-weight: bold; }
+        #adminPanel { display: none; padding: 20px 10%; background: #fff2f2; border: 2px dashed #ff4757; margin: 20px 10%; border-radius: 12px; color: #333; }
+        [data-theme="dark"] #adminPanel { background: #2d1616; color: #fff; }
 
-        .btn { background: var(--accent); color: #fff; padding: 10px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; width: 100%; margin-top: 10px; }
-        .btn-wa { background: #25D366; width: 100%; display: block; text-align: center; color: white; text-decoration: none; border-radius: 8px; padding: 10px; font-weight: bold; margin-top: 10px; }
-        
+        .badge-neg { background: #fff3cd; color: #856404; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-left: 5px; border: 1px solid #ffeeba; }
+        .loc-tag { font-size: 0.65rem; color: var(--accent); font-weight: bold; display: block; margin-bottom: 5px; }
+
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: var(--card-bg); color: var(--text); padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; max-height: 80vh; overflow-y: auto; }
+        .modal-content { background: var(--card-bg); color: var(--text); padding: 30px; border-radius: 15px; max-width: 450px; width: 90%; max-height: 90vh; overflow-y: auto; }
         
+        .btn { background: var(--accent); color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; width: 100%; }
+        .btn-wa { background: #25D366; width: 100%; display: block; text-align: center; color: white; text-decoration: none; margin-top: 10px; border-radius: 8px; padding: 10px; font-weight: bold; }
+
+        #sell { padding: 50px 10%; background: var(--card-bg); text-align: center; border-top: 1px solid var(--border); }
+        .sell-form { display: none; max-width: 500px; margin: 20px auto; flex-direction: column; gap: 12px; text-align: left; }
+        .sell-form.active { display: flex; }
+        .sell-form input, .sell-form select, .sell-form textarea { padding: 12px; border: 1px solid var(--border); border-radius: 8px; width: 100%; background: var(--input-bg); color: var(--text); }
+
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 2000; }
+        .bottom-nav a { color: var(--text); text-decoration: none; font-size: 0.9rem; }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
     <nav class="top-nav">
         <div class="logo">NANAOBASTY</div>
-        <button class="btn" style="width:auto; margin:0;" onclick="openAuth()">Login</button>
+        <div style="display: flex; align-items: center;">
+            <button onclick="toggleTheme()" class="theme-toggle" id="themeBtn">🌙</button>
+            <button onclick="openAuth()" class="btn" id="navAuthBtn" style="width:auto; padding: 8px 15px;">Account</button>
+        </div>
     </nav>
 
-    <div id="productGrid" class="product-grid"></div>
+    <div id="adminPanel">
+        <h2 style="color:#ff4757">🚩 Admin Dashboard</h2>
+        <p>You are logged in as Administrator. You can see reports and delete items.</p>
+        <div id="reportList" style="margin-top:15px; font-size:0.85rem;"></div>
+    </div>
 
-    <div id="reviewModal" class="modal-overlay">
+    <div class="filter-container">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search items...">
+        <select id="regFilter" style="padding:10px; border-radius:8px; border:1px solid #ddd; background: var(--input-bg); color: var(--text);">
+            <option value="All">All Regions</option>
+            <option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option>
+            <option>Central Region</option><option>Western Region</option><option>Volta Region</option>
+        </select>
+    </div>
+
+    <section class="marketplace" id="buy">
+        <div id="productGrid" class="product-grid"></div>
+    </section>
+
+    <section id="sell">
+        <h2>Post Your Item</h2>
+        <form class="sell-form" id="sellForm">
+            <input type="text" id="pName" placeholder="Item Name" required>
+            <input type="number" id="pPrice" placeholder="Price (₵)" required>
+            <select id="pRegion" required>
+                <option value="">-- Choose Region --</option>
+                <option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option>
+            </select>
+            <input type="text" id="pCustomLoc" placeholder="City / Town" required>
+            <input type="file" id="pImage" accept="image/*" required>
+            <textarea id="pDesc" placeholder="Brief details..." rows="3" required></textarea>
+            <button type="submit" class="btn">Publish Now</button>
+        </form>
+    </section>
+
+    <div id="authModal" class="modal-overlay">
         <div class="modal-content">
-            <h3 id="modalSellerName">Seller Profile</h3>
-            <div id="sellerAvgRating" style="margin: 10px 0; font-weight: bold; color: var(--star);"></div>
-            <hr style="margin: 15px 0; opacity: 0.2;">
-            
-            <h4>Leave a Review</h4>
-            <div id="starContainer" style="margin: 10px 0;">
-                <span class="star-input" onclick="setRating(1)">★</span>
-                <span class="star-input" onclick="setRating(2)">★</span>
-                <span class="star-input" onclick="setRating(3)">★</span>
-                <span class="star-input" onclick="setRating(4)">★</span>
-                <span class="star-input" onclick="setRating(5)">★</span>
+            <div id="authFields">
+                <h3 id="authTitle">Login</h3>
+                <form id="loginForm" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+                    <input type="email" id="lEmail" placeholder="Email" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                    <input type="password" id="lPass" placeholder="Password" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                    <button type="submit" class="btn">Login</button>
+                    <p style="text-align:center; font-size: 0.9rem; margin-top: 10px;">Need an account? <a href="javascript:void(0)" onclick="toggleAuthMode()" style="color:var(--accent); text-decoration:none;">Sign Up</a></p>
+                </form>
+                <form id="signupForm" style="display:none; flex-direction:column; gap:10px; margin-top:15px;">
+                    <input type="text" id="rName" placeholder="Full Name" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                    <input type="email" id="rEmail" placeholder="Email" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                    <input type="tel" id="rPhone" placeholder="WhatsApp Number" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                    <input type="password" id="rPass" placeholder="Password" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                    <button type="submit" class="btn">Create Account</button>
+                </form>
             </div>
-            <textarea id="reviewText" placeholder="How was your experience?" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
-            <button class="btn" onclick="submitReview()">Submit Review</button>
-            
-            <h4 style="margin-top: 25px;">Recent Reviews</h4>
-            <div id="reviewList"></div>
-            <button class="btn" style="background:gray;" onclick="closeReview()">Close</button>
+            <div id="profileSection" style="display:none; text-align:center;">
+                <h3 id="userHeader">Account</h3>
+                <button onclick="signOutUser()" class="btn" style="background:#e74c3c; margin-top:20px;">Logout</button>
+            </div>
+            <button onclick="closeAuth()" style="margin-top:20px; background:none; border:none; color:gray; cursor:pointer; width:100%;">Close</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="#">Explore</a>
-        <a href="#sell">Sell</a>
-        <a href="#">Profile</a>
+        <a href="#buy">🛒 Explore</a>
+        <a href="#sell">➕ Sell</a>
+        <a href="javascript:void(0)" onclick="openAuth()">👤 Account</a>
     </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query, orderBy, addDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I", authDomain: "obasty-market.firebaseapp.com", projectId: "obasty-market", appId: "1:753490577388:web:8b2dac8f4082d89ee662c9" };
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
+        
+        let userData = null;
+        let allListings = [];
+        const ADMIN_EMAIL = "admin@nanaobasty.com"; // CHANGE THIS TO YOUR EMAIL
 
-        let selectedSellerId = null;
-        let currentRating = 0;
+        onAuthStateChanged(auth, async (user) => {
+            if(user) {
+                const s = await getDoc(doc(db, "users", user.uid));
+                userData = s.data();
+                document.getElementById('authFields').style.display = 'none';
+                document.getElementById('profileSection').style.display = 'block';
+                document.getElementById('sellForm').classList.add('active');
+                document.getElementById('userHeader').innerText = "Hi, " + (userData?.name || "User");
+                
+                // Show Admin Panel if email matches
+                if(user.email === ADMIN_EMAIL) {
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadReports();
+                }
+            } else {
+                userData = null;
+                document.getElementById('adminPanel').style.display = 'none';
+            }
+            applyFilters();
+        });
 
-        // RENDER LISTINGS
-        onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = "";
-            snap.forEach(d => {
-                const item = d.data();
+        // ADMIN FUNCTIONS
+        function loadReports() {
+            onSnapshot(collection(db, "reports"), (snap) => {
+                const list = document.getElementById('reportList');
+                list.innerHTML = "<strong>Recent Reports:</strong><br>";
+                snap.forEach(d => {
+                    const r = d.data();
+                    list.innerHTML += `• ${r.itemName} reported by ${r.reportedBy} <button onclick="deleteReport('${d.id}')" style="color:red; border:none; background:none; cursor:pointer;">[Clear Report]</button><br>`;
+                });
+            });
+        }
+
+        window.deleteItem = async (id) => {
+            if(confirm("Admin: Permanently delete this item?")) {
+                await deleteDoc(doc(db, "listings", id));
+                alert("Item removed.");
+            }
+        };
+
+        window.deleteReport = async (id) => {
+            await deleteDoc(doc(db, "reports", id));
+        };
+
+        window.reportItem = async (itemId, itemName) => {
+            if(!userData) return alert("Login to report.");
+            if(confirm("Report this item?")) {
+                await addDoc(collection(db, "reports"), { itemId, itemName, reportedBy: userData.name, timestamp: new Date() });
+                alert("Thank you. We will review it.");
+            }
+        };
+
+        // RENDER
+        function renderListings(data) {
+            const grid = document.getElementById('productGrid'); grid.innerHTML = "";
+            const isAdmin = auth.currentUser?.email === ADMIN_EMAIL;
+            data.forEach(item => {
                 grid.innerHTML += `
                     <div class="product-card">
+                        <button class="report-btn" onclick="reportItem('${item.id}', '${item.name}')">🚩 Report</button>
                         <div class="product-img" style="background-image:url('${item.image}')"></div>
                         <div class="product-info">
-                            <div class="seller-meta" onclick="openReview('${item.sellerId}', '${item.sellerName}')">
-                                <img src="${item.sellerPhoto || 'https://via.placeholder.com/30'}" class="seller-avatar">
-                                <span style="font-size:0.85rem; font-weight:bold;">${item.sellerName}</span>
-                                <div class="rating-badge">⭐ ${item.sellerRating || 'New'}</div>
-                            </div>
-                            <strong style="display:block; margin-top:5px;">${item.name}</strong>
+                            <span class="loc-tag">📍 ${item.region} | ${item.location}</span>
+                            <strong>${item.name}</strong>
                             <p style="color:#2ecc71; font-weight:bold;">₵ ${item.price}</p>
-                            <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}" class="btn-wa">Chat Now</a>
+                            <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}" class="btn-wa">Chat</a>
+                            ${isAdmin ? `<button class="admin-del-btn" onclick="deleteItem('${item.id}')">DELETE AS ADMIN</button>` : ''}
                         </div>
                     </div>`;
             });
+        }
+
+        // Standard logic (Search, Auth, Sell) remains unchanged...
+        function applyFilters() {
+            const s = document.getElementById('searchInput').value.toLowerCase();
+            const r = document.getElementById('regFilter').value;
+            const filtered = allListings.filter(i => i.name.toLowerCase().includes(s) && (r === "All" || i.region === r));
+            renderListings(filtered);
+        }
+        document.getElementById('searchInput').oninput = applyFilters;
+        document.getElementById('regFilter').onchange = applyFilters;
+
+        onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
+            allListings = []; snap.forEach(d => allListings.push({id: d.id, ...d.data()})); applyFilters();
         });
 
-        // REVIEW LOGIC
-        window.openReview = async (id, name) => {
-            selectedSellerId = id;
-            document.getElementById('modalSellerName').innerText = name;
-            document.getElementById('reviewModal').classList.add('active');
-            
-            // Load existing reviews
-            const q = query(collection(db, "reviews"), where("sellerId", "==", id), orderBy("createdAt", "desc"));
-            const snap = await getDocs(q);
-            const list = document.getElementById('reviewList');
-            list.innerHTML = "";
-            let total = 0;
-            snap.forEach(d => {
-                const r = d.data();
-                total += r.stars;
-                list.innerHTML += `<div class="review-card"><strong>${"⭐".repeat(r.stars)}</strong><p>${r.text}</p></div>`;
+        document.getElementById('loginForm').onsubmit = (e) => {
+            e.preventDefault();
+            signInWithEmailAndPassword(auth, document.getElementById('lEmail').value, document.getElementById('lPass').value).then(() => location.reload());
+        };
+        document.getElementById('signupForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const res = await createUserWithEmailAndPassword(auth, document.getElementById('rEmail').value, document.getElementById('rPass').value);
+            await setDoc(doc(db, "users", res.user.uid), { name: document.getElementById('rName').value, phone: document.getElementById('rPhone').value });
+            location.reload();
+        };
+        window.signOutUser = () => signOut(auth).then(() => location.reload());
+
+        document.getElementById('sellForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const fd = new FormData(); fd.append("image", document.getElementById('pImage').files[0]);
+            const res = await fetch("https://api.imgbb.com/1/upload?key=f6f1d931d2c5da11833752754cf2dfcd", { method: "POST", body: fd });
+            const img = await res.json();
+            await addDoc(collection(db, "listings"), {
+                name: document.getElementById('pName').value, price: document.getElementById('pPrice').value,
+                region: document.getElementById('pRegion').value, location: document.getElementById('pCustomLoc').value,
+                image: img.data.url, sellerName: userData.name, sellerPhone: userData.phone, createdAt: new Date()
             });
-            const avg = snap.size > 0 ? (total / snap.size).toFixed(1) : "No ratings yet";
-            document.getElementById('sellerAvgRating').innerText = "Average Score: " + avg;
+            location.reload();
         };
+    </script>
 
-        window.setRating = (n) => {
-            currentRating = n;
-            const stars = document.querySelectorAll('.star-input');
-            stars.forEach((s, i) => s.classList.toggle('active', i < n));
-        };
-
-        window.submitReview = async () => {
-            if(currentRating === 0) return alert("Please select a star rating.");
-            await addDoc(collection(db, "reviews"), {
-                sellerId: selectedSellerId,
-                stars: currentRating,
-                text: document.getElementById('reviewText').value,
-                createdAt: new Date()
-            });
-            alert("Review posted!");
-            closeReview();
-        };
-
-        window.closeReview = () => {
-            document.getElementById('reviewModal').classList.remove('active');
-            currentRating = 0;
-            document.getElementById('reviewText').value = "";
-            document.querySelectorAll('.star-input').forEach(s => s.classList.remove('active'));
-        };
+    <script>
+        function toggleTheme() {
+            const b = document.body; const isD = b.getAttribute('data-theme') === 'dark';
+            b.setAttribute('data-theme', isD ? 'light' : 'dark');
+            document.getElementById('themeBtn').innerText = isD ? '🌙' : '☀️';
+        }
+        function openAuth() { document.getElementById('authModal').classList.add('active'); }
+        function closeAuth() { document.getElementById('authModal').classList.remove('active'); }
+        function toggleAuthMode() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'flex';
+        }
     </script>
 </body>
 </html>
