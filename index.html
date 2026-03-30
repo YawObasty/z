@@ -17,21 +17,29 @@
 
         .marketplace { padding: 30px 10%; min-height: 60vh; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .product-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .product-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; }
         .product-img { height: 180px; background-size: cover; background-position: center; }
         .product-info { padding: 15px; }
 
+        /* --- BADGES --- */
+        .badge-neg { background: #fff3cd; color: #856404; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-left: 5px; border: 1px solid #ffeeba; }
+        .loc-tag { font-size: 0.65rem; color: #4db8ff; font-weight: bold; display: block; margin-bottom: 5px; }
+
+        /* --- FORM STYLES --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: #fff; padding: 30px; border-radius: 15px; max-width: 450px; width: 90%; max-height: 90vh; overflow-y: auto; }
         
         .btn { background: #4db8ff; color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; width: 100%; }
-        .btn-wa { background: #25D366; width: 100%; display: block; text-align: center; color: white; text-decoration: none; margin-top: 10px; border-radius: 8px; padding: 10px; }
+        .btn-wa { background: #25D366; width: 100%; display: block; text-align: center; color: white; text-decoration: none; margin-top: 10px; border-radius: 8px; padding: 10px; font-weight: bold; }
 
         #sell { padding: 50px 10%; background: #fff; text-align: center; }
         .sell-form { display: none; max-width: 500px; margin: 20px auto; flex-direction: column; gap: 12px; text-align: left; }
         .sell-form.active { display: flex; }
         .sell-form input, .sell-form select, .sell-form textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; width: 100%; }
+
+        .neg-check { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; cursor: pointer; background: #f9f9f9; padding: 10px; border-radius: 8px; }
+        .neg-check input { width: auto !important; }
 
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #eee; z-index: 2000; }
     </style>
@@ -44,7 +52,7 @@
     </nav>
 
     <div class="filter-container">
-        <input type="text" id="searchInput" class="search-bar" placeholder="What are you looking for?">
+        <input type="text" id="searchInput" class="search-bar" placeholder="What are you buying today?">
         <select id="regFilter" style="padding:10px; border-radius:8px; border:1px solid #ddd;">
             <option value="All">All Regions</option>
             <option>Greater Accra</option>
@@ -54,9 +62,6 @@
             <option>Western Region</option>
             <option>Volta Region</option>
             <option>Northern Region</option>
-            <option>Bono Region</option>
-            <option>Upper East</option>
-            <option>Upper West</option>
         </select>
     </div>
 
@@ -65,12 +70,15 @@
     </section>
 
     <section id="sell">
-        <h2>Post an Item</h2>
+        <h2>Post Your Item</h2>
         <form class="sell-form" id="sellForm">
             <input type="text" id="pName" placeholder="Item Name" required>
             <input type="number" id="pPrice" placeholder="Price (₵)" required>
             
-            <label>Select Region:</label>
+            <label class="neg-check">
+                <input type="checkbox" id="pNegotiable"> 🤝 Price is Negotiable
+            </label>
+
             <select id="pRegion" onchange="updateLocationOptions()" required>
                 <option value="">-- Choose Region --</option>
                 <option>Greater Accra</option>
@@ -80,35 +88,28 @@
                 <option>Western Region</option>
                 <option>Volta Region</option>
                 <option>Northern Region</option>
-                <option>Bono Region</option>
                 <option>Other</option>
             </select>
 
             <div id="koforiduaArea" style="display:none;">
-                <label>Koforidua Neighborhood:</label>
                 <select id="pKofSub">
-                    <option>Mile 50</option>
                     <option>KTU / Poly Area</option>
+                    <option>Mile 50</option>
                     <option>Koforidua Central</option>
                     <option>Betom</option>
-                    <option>Srodae</option>
                     <option>Adweso / SDA</option>
                     <option>Effiduase</option>
                     <option>Asokore</option>
-                    <option>Oyoko</option>
-                    <option>Two Streams</option>
-                    <option>Nkubem</option>
                 </select>
             </div>
 
             <div id="customArea">
-                <label>Specific Town / City:</label>
-                <input type="text" id="pCustomLoc" placeholder="e.g. East Legon, Kumasi, Winneba">
+                <input type="text" id="pCustomLoc" placeholder="City / Town Name">
             </div>
 
             <input type="file" id="pImage" accept="image/*" required>
-            <textarea id="pDesc" placeholder="Description..." rows="3" required></textarea>
-            <button type="submit" class="btn">Publish Listing</button>
+            <textarea id="pDesc" placeholder="Brief details about the item..." rows="3" required></textarea>
+            <button type="submit" class="btn">Publish Now</button>
         </form>
     </section>
 
@@ -122,7 +123,7 @@
                     <button type="submit" class="btn">Login</button>
                 </form>
                 <hr style="margin:15px 0;">
-                <button onclick="handleSignup()" class="btn" style="background:#2ecc71;">New? Create Account</button>
+                <button onclick="handleSignup()" class="btn" style="background:#2ecc71;">Create New Account</button>
             </div>
             <div id="profileSection" style="display:none;">
                 <h3 id="userHeader">Account</h3>
@@ -133,9 +134,9 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="#buy">🛒 Buy</a>
-        <a href="#sell">➕ Sell</a>
-        <a href="javascript:void(0)" onclick="openAuth()">👤 Account</a>
+        <a href="#buy">🛒 Explore</a>
+        <a href="#sell">➕ Sell Item</a>
+        <a href="javascript:void(0)" onclick="openAuth()">👤 Profile</a>
     </nav>
 
     <script type="module">
@@ -149,28 +150,18 @@
         const db = getFirestore(app);
         let userData = null;
 
-        // --- LOCATION LOGIC ---
         window.updateLocationOptions = () => {
             const region = document.getElementById('pRegion').value;
-            const kofBox = document.getElementById('koforiduaArea');
-            const customBox = document.getElementById('customArea');
-            
-            if(region === "Eastern Region") {
-                kofBox.style.display = "block";
-                customBox.style.display = "none";
-            } else {
-                kofBox.style.display = "none";
-                customBox.style.display = "block";
-            }
+            document.getElementById('koforiduaArea').style.display = (region === "Eastern Region") ? "block" : "none";
+            document.getElementById('customArea').style.display = (region === "Eastern Region") ? "none" : "block";
         };
 
-        // --- AUTH ---
         onAuthStateChanged(auth, async (user) => {
             if(user) {
                 const s = await getDoc(doc(db, "users", user.uid));
                 userData = s.data();
                 document.getElementById('sellForm').classList.add('active');
-                document.getElementById('navAuthBtn').innerText = "Profile";
+                document.getElementById('navAuthBtn').innerText = "My Profile";
             } else {
                 userData = null;
                 document.getElementById('sellForm').classList.remove('active');
@@ -181,15 +172,15 @@
         document.getElementById('loginForm').onsubmit = (e) => {
             e.preventDefault();
             signInWithEmailAndPassword(auth, document.getElementById('lEmail').value, document.getElementById('lPass').value)
-                .then(() => closeAuth()).catch(err => alert(err.message));
+                .then(() => closeAuth()).catch(err => alert("Login Error: Check email/password"));
         };
 
         window.handleSignup = () => {
-            const email = prompt("Enter Email:");
-            const pass = prompt("Enter Password (min 6):");
-            const name = prompt("Enter Full Name:");
-            const phone = prompt("WhatsApp Number:");
-            if(email && pass) {
+            const email = prompt("Email:");
+            const pass = prompt("Password (6+ chars):");
+            const name = prompt("Full Name:");
+            const phone = prompt("WhatsApp (e.g. 0541234567):");
+            if(email && pass && name && phone) {
                 createUserWithEmailAndPassword(auth, email, pass).then(async (res) => {
                     await setDoc(doc(db, "users", res.user.uid), { name, phone, email });
                     location.reload();
@@ -199,11 +190,14 @@
 
         window.signOutUser = () => signOut(auth).then(() => location.reload());
 
-        // --- POSTING ---
         document.getElementById('sellForm').onsubmit = async (e) => {
             e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.innerText = "Processing..."; btn.disabled = true;
+
             const region = document.getElementById('pRegion').value;
             const subLoc = (region === "Eastern Region") ? document.getElementById('pKofSub').value : document.getElementById('pCustomLoc').value;
+            const negotiable = document.getElementById('pNegotiable').checked;
             
             const file = document.getElementById('pImage').files[0];
             const fd = new FormData(); fd.append("image", file);
@@ -213,6 +207,7 @@
             await addDoc(collection(db, "listings"), {
                 name: document.getElementById('pName').value,
                 price: document.getElementById('pPrice').value,
+                negotiable: negotiable,
                 region: region,
                 location: subLoc,
                 image: img.data.url,
@@ -220,11 +215,9 @@
                 sellerPhone: userData.phone,
                 createdAt: new Date()
             });
-            alert("Posted!");
             location.reload();
         };
 
-        // --- RENDER ---
         onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = "";
@@ -234,10 +227,13 @@
                     <div class="product-card">
                         <div class="product-img" style="background-image:url('${item.image}')"></div>
                         <div class="product-info">
-                            <span style="font-size:0.65rem; color:#4db8ff; font-weight:bold;">📍 ${item.region} | ${item.location}</span>
-                            <strong style="display:block; font-size:1rem; margin:5px 0;">${item.name}</strong>
-                            <p style="color:#2ecc71; font-weight:bold;">₵ ${item.price}</p>
-                            <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}&text=Hi, I want to buy ${item.name}" class="btn-wa">Chat Seller</a>
+                            <span class="loc-tag">📍 ${item.region} | ${item.location}</span>
+                            <strong style="display:block; font-size:1rem;">${item.name}</strong>
+                            <p style="color:#2ecc71; font-weight:bold; font-size:1.1rem; margin-top:5px;">
+                                ₵ ${item.price}
+                                ${item.negotiable ? '<span class="badge-neg">🤝 Negotiable</span>' : ''}
+                            </p>
+                            <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}&text=Hi, I'm interested in your ${item.name} posted on NanaObasty" class="btn-wa">Chat with Seller</a>
                         </div>
                     </div>`;
             });
