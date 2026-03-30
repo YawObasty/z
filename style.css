@@ -1,10 +1,48 @@
-<section class="contact-section">
-    <h2>Get In Touch</h2>
-    <p>Have a question or want to work together? Drop us a message!</p>
-    <form class="contact-form">
-        <input type="text" placeholder="Your Name" required>
-        <input type="email" placeholder="Your Email" required>
-        <textarea rows="5" placeholder="How can we help?"></textarea>
-        <button type="submit" class="btn">Send Message</button>
-    </form>
-</section>
+/* Contact Section Styles */
+.contact-section {
+    padding: 80px 10%;
+    background-color: #f4f7f6;
+    text-align: center;
+}
+
+.contact-section h2 {
+    font-size: 2.5rem;
+    color: #1a2a3a;
+    margin-bottom: 10px;
+}
+
+.contact-section p {
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-form input, 
+.contact-form textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.contact-form input:focus, 
+.contact-form textarea:focus {
+    border-color: #4db8ff;
+}
+
+.contact-form .btn {
+    border: none;
+    cursor: pointer;
+    align-self: center;
+    width: 200px;
+}
