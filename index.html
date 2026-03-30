@@ -43,19 +43,23 @@
         .product-img { height: 180px; background-size: cover; background-position: center; }
         .product-info { padding: 15px; }
 
-        /* --- VIEW COUNTER STYLES --- */
         .view-count { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem; display: flex; align-items: center; gap: 4px; z-index: 10; }
 
+        /* --- PROFILE & EDIT STYLES --- */
         .profile-card { text-align: center; padding: 10px 0; }
         .profile-pic-large { width: 80px; height: 80px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; margin: 0 auto 15px; }
-        .profile-info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        .profile-info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
         
+        .edit-profile-form { display: none; flex-direction: column; gap: 10px; margin-top: 15px; text-align: left; }
+        .edit-profile-form.active { display: flex; }
+
         .seller-identity { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
         .mini-avatar { width: 30px; height: 30px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; }
         .seller-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
 
         .report-btn { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.4); color: white; border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 0.7rem; z-index: 10; }
         .admin-del-btn { background: #ff4757; color: white; border: none; padding: 5px; border-radius: 5px; cursor: pointer; margin-top: 10px; width: 100%; font-weight: bold; }
+        
         #adminPanel { display: none; padding: 20px 10%; background: #fff2f2; border: 2px dashed #ff4757; margin: 20px 10%; border-radius: 12px; color: #333; }
         [data-theme="dark"] #adminPanel { background: #2d1616; color: #fff; }
 
@@ -66,6 +70,7 @@
         .modal-content { background: var(--card-bg); color: var(--text); padding: 30px; border-radius: 15px; max-width: 450px; width: 90%; max-height: 90vh; overflow-y: auto; }
         
         .btn { background: var(--accent); color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; width: 100%; }
+        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); margin-top: 10px; }
         .btn-wa { background: #25D366; width: 100%; display: block; text-align: center; color: white; text-decoration: none; margin-top: 10px; border-radius: 8px; padding: 10px; font-weight: bold; }
 
         #sell { padding: 50px 10%; background: var(--card-bg); text-align: center; border-top: 1px solid var(--border); }
@@ -140,15 +145,27 @@
                     <button type="submit" class="btn">Create Account</button>
                 </form>
             </div>
+            
             <div id="profileSection" style="display:none;">
-                <div class="profile-card">
-                    <div id="profilePic" class="profile-pic-large">?</div>
-                    <h3 id="userHeader">Account</h3>
-                    <p style="font-size:0.8rem; color:gray; margin-bottom:20px;">Marketplace Member</p>
-                    <div class="profile-info-row"><span>Phone:</span><b id="profPhone">...</b></div>
-                    <div class="profile-info-row"><span>Account Type:</span><b id="profType">Standard</b></div>
+                <div id="profileDisplay">
+                    <div class="profile-card">
+                        <div id="profilePic" class="profile-pic-large">?</div>
+                        <h3 id="userHeader">Account</h3>
+                        <p style="font-size:0.8rem; color:gray; margin-bottom:20px;">Marketplace Member</p>
+                        <div class="profile-info-row"><span>Name:</span><b id="profName">...</b></div>
+                        <div class="profile-info-row"><span>Phone:</span><b id="profPhone">...</b></div>
+                    </div>
+                    <button onclick="showEditForm()" class="btn btn-outline">Edit Profile</button>
+                    <button onclick="signOutUser()" class="btn" style="background:#e74c3c; margin-top:10px;">Logout</button>
                 </div>
-                <button onclick="signOutUser()" class="btn" style="background:#e74c3c; margin-top:20px;">Logout</button>
+
+                <form id="editProfileForm" class="edit-profile-form">
+                    <h3>Update Profile</h3>
+                    <input type="text" id="editName" placeholder="New Full Name" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                    <input type="tel" id="editPhone" placeholder="New WhatsApp Number" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                    <button type="submit" class="btn">Save Changes</button>
+                    <button type="button" onclick="hideEditForm()" style="background:none; border:none; color:gray; cursor:pointer;">Cancel</button>
+                </form>
             </div>
             <button onclick="closeAuth()" style="margin-top:20px; background:none; border:none; color:gray; cursor:pointer; width:100%;">Close</button>
         </div>
@@ -182,11 +199,16 @@
                 document.getElementById('profileSection').style.display = 'block';
                 document.getElementById('sellForm').classList.add('active');
                 
+                // Set UI values
                 const userName = userData?.name || "User";
                 document.getElementById('userHeader').innerText = userName;
+                document.getElementById('profName').innerText = userName;
                 document.getElementById('profilePic').innerText = userName[0].toUpperCase();
                 document.getElementById('profPhone').innerText = userData?.phone || "N/A";
-                document.getElementById('profType').innerText = user.email === ADMIN_EMAIL ? "Administrator" : "Standard";
+                
+                // Pre-fill edit form
+                document.getElementById('editName').value = userName;
+                document.getElementById('editPhone').value = userData?.phone || "";
 
                 if(user.email === ADMIN_EMAIL) {
                     document.getElementById('adminPanel').style.display = 'block';
@@ -201,7 +223,25 @@
             applyFilters();
         });
 
-        // VIEW INCREMENT FUNCTION
+        // EDIT PROFILE LOGIC
+        document.getElementById('editProfileForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const user = auth.currentUser;
+            const newName = document.getElementById('editName').value;
+            const newPhone = document.getElementById('editPhone').value;
+
+            try {
+                await updateDoc(doc(db, "users", user.uid), {
+                    name: newName,
+                    phone: newPhone
+                });
+                alert("Profile Updated!");
+                location.reload();
+            } catch (err) {
+                alert("Error updating profile: " + err.message);
+            }
+        };
+
         window.logView = async (id) => {
             const docRef = doc(db, "listings", id);
             await updateDoc(docRef, { views: increment(1) });
@@ -272,7 +312,6 @@
             location.reload();
         };
 
-        // Standard helpers
         function loadReports() {
             onSnapshot(collection(db, "reports"), (snap) => {
                 const list = document.getElementById('reportList');
@@ -299,11 +338,22 @@
             document.getElementById('themeBtn').innerText = isD ? '🌙' : '☀️';
         }
         function openAuth() { document.getElementById('authModal').classList.add('active'); }
-        function closeAuth() { document.getElementById('authModal').classList.remove('active'); }
+        function closeAuth() { 
+            document.getElementById('authModal').classList.remove('active'); 
+            hideEditForm();
+        }
         function toggleAuthMode() {
             document.getElementById('loginForm').style.display = 'none';
             document.getElementById('signupForm').style.display = 'flex';
             document.getElementById('authTitle').innerText = "Sign Up";
+        }
+        function showEditForm() {
+            document.getElementById('profileDisplay').style.display = 'none';
+            document.getElementById('editProfileForm').classList.add('active');
+        }
+        function hideEditForm() {
+            document.getElementById('profileDisplay').style.display = 'block';
+            document.getElementById('editProfileForm').classList.remove('active');
         }
     </script>
 </body>
