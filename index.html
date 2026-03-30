@@ -20,32 +20,35 @@
         /* --- HERO --- */
         header { 
             background: linear-gradient(rgba(26, 42, 58, 0.75), rgba(26, 42, 58, 0.75)), url('photo_10_2026-02-26_13-58-16.jpg');
-            background-size: cover; background-position: center; height: 60vh; color: #fff; 
+            background-size: cover; background-position: center; height: 50vh; color: #fff; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; 
         }
-        header h1 { font-size: 2.8rem; margin-bottom: 10px; }
 
-        /* --- SEARCH & MARKET --- */
-        .search-container { padding: 20px 10%; background: #fff; border-bottom: 1px solid #eee; }
-        .search-bar { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
+        /* --- FILTER SECTION --- */
+        .filter-container { padding: 20px 10%; background: #fff; border-bottom: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+        .search-bar { flex: 2; min-width: 250px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
+        .price-filter { flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 5px; }
+        .price-filter input { cursor: pointer; accent-color: #4db8ff; }
+
         .marketplace { padding: 40px 10%; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
-        .product-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .product-img { height: 180px; background-size: cover; background-position: center; }
+        .product-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-img { height: 180px; background-size: cover; background-position: center; background-color: #eee; }
         .product-info { padding: 15px; }
 
         /* --- UI ELEMENTS --- */
-        .btn { background: #4db8ff; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; display: inline-block; }
-        .btn-wa { background: #25D366; margin-top: 15px; }
+        .btn { background: #4db8ff; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; display: inline-block; transition: 0.3s; }
+        .btn:hover { background: #35a2eb; }
+        .btn-wa { background: #25D366; width: 100%; margin-top: 10px; text-align: center; }
+        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: #fff; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%; text-align: center; }
-        .auth-form { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-        .auth-form input, .sell-form input, .sell-form textarea, .sell-form select { padding: 10px; width: 100%; border: 1px solid #ddd; border-radius: 5px; }
 
         /* --- MOBILE NAV --- */
         .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; border-top: 1px solid #eee; z-index: 2000; justify-content: space-around; padding: 10px 0; }
-        @media (max-width: 768px) { .bottom-nav { display: flex; } .nav-links { display: none; } body { padding-bottom: 70px; } }
+        @media (max-width: 768px) { .bottom-nav { display: flex; } .nav-links { display: none; } body { padding-bottom: 70px; } header h1 { font-size: 2rem; } }
     </style>
 </head>
 <body>
@@ -61,36 +64,42 @@
 
     <header>
         <h1>NanaObasty Marketplace</h1>
-        <p>The #1 site for deals in Koforidua.</p>
-        <button id="shareBtnMain" class="btn btn-wa">📲 Share Marketplace on WhatsApp</button>
+        <p>Koforidua's Local Hub for Deals.</p>
+        <button id="shareBtnMain" class="btn" style="background: #25D366; margin-top: 15px;">📲 Share on WhatsApp</button>
     </header>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-bar" placeholder="What are you looking for?">
+    <div class="filter-container">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search items...">
+        <div class="price-filter">
+            <label>Max Price: <span id="priceLabel">₵5000+</span></label>
+            <input type="range" id="priceRange" min="0" max="5000" step="50" value="5000">
+        </div>
     </div>
 
     <section class="marketplace" id="buy">
-        <div id="publicListingGrid" class="product-grid"></div>
+        <div id="publicListingGrid" class="product-grid">
+            <p style="text-align: center; grid-column: 1/-1;">Loading deals...</p>
+        </div>
     </section>
 
     <section style="padding: 60px 10%; background: #fff;" id="sell">
         <h2 style="text-align: center; margin-bottom: 20px;">Post an Item</h2>
-        <form class="sell-form" id="sellForm" style="max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
-            <input type="text" id="itemName" placeholder="Item Name" required>
-            <input type="number" id="itemPrice" placeholder="Price (GHS)" required>
-            <select id="itemCat"><option>Electronics</option><option>Fashion</option><option>Home</option></select>
+        <form class="sell-form" id="sellForm" style="max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px;">
+            <input type="text" id="itemName" placeholder="Item Name" required style="padding:10px; border:1px solid #ddd; border-radius:5px;">
+            <input type="number" id="itemPrice" placeholder="Price (GHS)" required style="padding:10px; border:1px solid #ddd; border-radius:5px;">
+            <select id="itemCat" style="padding:10px; border:1px solid #ddd; border-radius:5px;"><option>Electronics</option><option>Fashion</option><option>Home</option></select>
             <input type="file" id="itemImage" accept="image/*" required>
-            <textarea id="itemDesc" placeholder="Brief description + Your WhatsApp number" rows="3"></textarea>
+            <textarea id="itemDesc" placeholder="Brief description + Your WhatsApp number" rows="3" style="padding:10px; border:1px solid #ddd; border-radius:5px;"></textarea>
             <button type="submit" id="publishBtn" class="btn">Publish Now</button>
         </form>
     </section>
 
     <div id="authModal" class="modal-overlay">
         <div class="modal-content">
-            <h3 id="authTitle">Join Marketplace</h3>
+            <h3 id="authTitle">Welcome to NanaObasty</h3>
             <div id="authFields">
-                <form id="registerForm" class="auth-form">
-                    <input type="text" id="rName" placeholder="Your Name" required>
+                <form id="registerForm" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+                    <input type="text" id="rName" placeholder="Your Full Name" required style="padding:10px; border:1px solid #ddd; border-radius:5px;">
                     <button type="submit" class="btn">Create Account</button>
                 </form>
             </div>
@@ -103,9 +112,9 @@
     </div>
 
     <nav class="bottom-nav">
-        <a href="#buy" style="color:gray;">🛒 Buy</a>
-        <a href="#sell" style="color:gray;">➕ Sell</a>
-        <a href="javascript:void(0)" onclick="openAuth()" style="color:gray;">👤 Profile</a>
+        <a href="#buy" style="color:gray; font-size:0.8rem; text-align:center;">🛒<br>Buy</a>
+        <a href="#sell" style="color:gray; font-size:0.8rem; text-align:center;">➕<br>Sell</a>
+        <a href="javascript:void(0)" onclick="openAuth()" style="color:gray; font-size:0.8rem; text-align:center;">👤<br>Account</a>
     </nav>
 
     <script type="module">
@@ -123,15 +132,15 @@
         const db = getFirestore(app);
         const colRef = collection(db, "listings");
 
-        // --- FIXED WHATSAPP SHARE ---
+        // --- WHATSAPP SHARE ---
         document.getElementById('shareBtnMain').onclick = () => {
-            const text = encodeURIComponent("Check out the latest deals in Koforidua on NanaObasty Marketplace! 🛒🚀\n\nVisit here: " + window.location.href);
+            const text = encodeURIComponent("Check out the best deals in Koforidua on NanaObasty Marketplace! 🛒🚀\n\nVisit: " + window.location.href);
             window.open(`https://wa.me/?text=${text}`, '_blank');
         };
 
-        // --- DELETE FUNCTION ---
+        // --- GLOBAL DELETE ---
         window.deleteItem = async (id) => {
-            if(confirm("Mark as sold?")) await deleteDoc(doc(db, "listings", id));
+            if(confirm("Mark as sold/remove?")) await deleteDoc(doc(db, "listings", id));
         };
 
         // --- IMGBB UPLOAD ---
@@ -141,63 +150,78 @@
             const d = await res.json(); return d.data.url;
         }
 
-        // --- SUBMIT ---
+        // --- LISTING SUBMIT ---
         document.getElementById('sellForm').onsubmit = async (e) => {
             e.preventDefault();
             const user = JSON.parse(localStorage.getItem('nana_user'));
             if(!user) return openAuth();
 
             const btn = document.getElementById('publishBtn');
-            btn.innerText = "Uploading..."; btn.disabled = true;
+            btn.innerText = "Listing..."; btn.disabled = true;
 
             try {
                 const img = await uploadImg(document.getElementById('itemImage').files[0]);
                 await addDoc(colRef, {
                     name: document.getElementById('itemName').value,
-                    price: document.getElementById('itemPrice').value,
+                    price: parseFloat(document.getElementById('itemPrice').value),
                     desc: document.getElementById('itemDesc').value,
                     image: img,
                     seller: user.name,
                     createdAt: new Date()
                 });
-                alert("Listed successfully!");
-                location.reload();
-            } catch(e) { alert("Error uploading"); }
+                alert("Success!"); location.reload();
+            } catch(e) { alert("Error uploading"); btn.disabled = false; }
         };
 
-        // --- RENDER ---
+        // --- REAL-TIME ENGINE ---
         let masterList = [];
         onSnapshot(query(colRef, orderBy("createdAt", "desc")), (snap) => {
             masterList = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            render(masterList);
+            applyFilters();
         });
+
+        function applyFilters() {
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            const maxPrice = parseFloat(document.getElementById('priceRange').value);
+            
+            const filtered = masterList.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(searchVal);
+                const matchesPrice = item.price <= maxPrice;
+                return matchesSearch && matchesPrice;
+            });
+            
+            render(filtered);
+        }
 
         function render(items) {
             const grid = document.getElementById('publicListingGrid');
             const user = JSON.parse(localStorage.getItem('nana_user'));
-            grid.innerHTML = '';
+            grid.innerHTML = items.length ? '' : '<p style="grid-column: 1/-1; text-align:center;">No items found matching your filters.</p>';
+            
             items.forEach(item => {
                 const isOwner = user && (user.name === item.seller || user.name === "Admin");
                 grid.innerHTML += `
                     <div class="product-card">
                         <div class="product-img" style="background-image:url('${item.image}')"></div>
                         <div class="product-info">
-                            <div style="display:flex; justify-content:space-between;">
-                                <strong>${item.name}</strong>
-                                ${isOwner ? `<button onclick="deleteItem('${item.id}')">🗑️</button>` : ''}
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <strong style="font-size:1.1rem;">${item.name}</strong>
+                                ${isOwner ? `<button onclick="deleteItem('${item.id}')" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🗑️</button>` : ''}
                             </div>
-                            <p style="color:green; font-weight:bold;">₵ ${item.price}</p>
-                            <p style="font-size:0.7rem; color:gray;">Seller: ${item.seller}</p>
-                            <a href="https://wa.me/233539547368?text=Hi, I want to buy the ${item.name}" class="btn btn-wa" style="display:block; text-align:center;">Chat Seller</a>
+                            <p style="color:#2ecc71; font-weight:bold; font-size:1.2rem; margin:5px 0;">₵ ${item.price}</p>
+                            <p style="font-size:0.75rem; color:gray; height:35px; overflow:hidden;">${item.desc}</p>
+                            <a href="https://wa.me/233539547368?text=I'm interested in the ${item.name}!" target="_blank" class="btn btn-wa">Chat Seller</a>
                         </div>
                     </div>`;
             });
         }
 
-        document.getElementById('searchInput').oninput = (e) => {
-            const val = e.target.value.toLowerCase();
-            render(masterList.filter(i => i.name.toLowerCase().includes(val)));
-        };
+        // Listen for filter changes
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('priceRange').addEventListener('input', (e) => {
+            document.getElementById('priceLabel').innerText = `₵${e.target.value}`;
+            applyFilters();
+        });
     </script>
 
     <script>
@@ -214,8 +238,8 @@
             if(u) {
                 document.getElementById('authFields').style.display = 'none';
                 document.getElementById('logoutSection').style.display = 'block';
-                document.getElementById('userWelcome').innerText = "Hi, " + u.name;
-                document.querySelector('.login-trigger').innerText = u.name;
+                document.getElementById('userWelcome').innerText = "Logged in as: " + u.name;
+                document.querySelector('.login-trigger').innerText = u.name.split(' ')[0];
             }
         };
     </script>
