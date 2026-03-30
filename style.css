@@ -1,0 +1,10 @@
+<section class="contact-section">
+    <h2>Get In Touch</h2>
+    <p>Have a question or want to work together? Drop us a message!</p>
+    <form class="contact-form">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea rows="5" placeholder="How can we help?"></textarea>
+        <button type="submit" class="btn">Send Message</button>
+    </form>
+</section>
