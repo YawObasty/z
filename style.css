@@ -326,3 +326,74 @@ footer {
 .sell-form input, .sell-form select, .sell-form textarea {
     padding: 15px; border: 1px solid #ddd; border-radius: 5px; width: 100%;
 }
+/* Search and Filter Styles */
+.search-filter-container {
+    max-width: 900px;
+    margin: 0 auto 50px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+
+.search-wrapper {
+    flex: 2;
+    display: flex;
+    min-width: 300px;
+    border: 2px solid #f1f1f1;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.search-wrapper:focus-within {
+    border-color: #4db8ff;
+}
+
+.search-wrapper input {
+    flex: 1;
+    border: none;
+    padding: 12px 15px;
+    outline: none;
+    font-size: 1rem;
+}
+
+.search-btn {
+    background: #f8f9fa;
+    border: none;
+    padding: 0 20px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.filter-wrapper {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    min-width: 300px;
+}
+
+.filter-wrapper select {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #f1f1f1;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #555;
+    transition: 0.3s;
+}
+
+.filter-wrapper select:hover {
+    border-color: #4db8ff;
+}
+
+@media (max-width: 600px) {
+    .search-filter-container { flex-direction: column; }
+    .search-wrapper, .filter-wrapper { width: 100%; }
+}
