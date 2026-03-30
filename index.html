@@ -30,7 +30,6 @@
         .price-filter { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 5px; font-size: 0.85rem; }
         .cat-filter select { padding: 10px; border-radius: 8px; border: 1px solid #ddd; min-width: 140px; }
 
-        /* --- MARKETPLACE --- */
         .marketplace { padding: 40px 10%; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
         .product-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; }
@@ -38,18 +37,16 @@
         .view-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 3px 8px; border-radius: 12px; font-size: 0.7rem; }
         .product-info { padding: 15px; }
 
-        /* --- SELL SECTION & LOCK --- */
+        /* --- SELL SECTION --- */
         #sell { padding: 60px 10%; background: #fff; text-align: center; }
-        .sell-lock-msg { padding: 40px; border: 2px dashed #ddd; border-radius: 15px; background: #fafafa; }
         .sell-form { display: none; max-width: 500px; margin: 0 auto; flex-direction: column; gap: 12px; text-align: left; }
         .sell-form.active { display: flex; }
         .sell-form input, .sell-form select, .sell-form textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; width: 100%; }
 
-        /* --- UI ELEMENTS --- */
         .btn { background: #4db8ff; color: #fff; padding: 10px 20px; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; display: inline-block; text-align: center; }
         .btn-wa { background: #25D366; width: 100%; margin-top: 10px; border-radius: 8px; }
-        
-        /* --- MODAL --- */
+        .btn-edit { background: #f39c12; color: white; padding: 4px 8px; font-size: 0.7rem; border-radius: 4px; margin-right: 5px; }
+
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: #fff; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%; text-align: center; }
@@ -71,20 +68,18 @@
 
     <header>
         <h1>NanaObasty Marketplace</h1>
-        <p>Real-time local deals in Koforidua.</p>
+        <p>Your items, your price, your way.</p>
         <button id="shareBtnMain" class="btn" style="background: #25D366; margin-top: 15px;">📲 Share Market</button>
     </header>
 
     <div class="filter-container">
-        <input type="text" id="searchInput" class="search-bar" placeholder="Search for items...">
-        <div class="cat-filter">
-            <select id="catSelect">
-                <option value="All">All Categories</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Fashion">Fashion</option>
-                <option value="Home">Home</option>
-            </select>
-        </div>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search...">
+        <select id="catSelect" style="padding:10px; border-radius:8px; border:1px solid #ddd;">
+            <option value="All">All Categories</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Home">Home</option>
+        </select>
         <div class="price-filter">
             <label>Max: <span id="priceLabel">₵5000</span></label>
             <input type="range" id="priceRange" min="0" max="5000" step="100" value="5000">
@@ -96,75 +91,81 @@
     </section>
 
     <section id="sell">
-        <h2 style="margin-bottom: 20px;">Post an Item</h2>
-        
-        <div id="loginReminder" class="sell-lock-msg">
-            <p style="margin-bottom: 15px; color: #666;">You must be logged in to post an item for sale.</p>
-            <button onclick="openAuth()" class="btn">Login to Post</button>
+        <h2 id="formTitle">Post an Item</h2>
+        <div id="loginReminder" style="padding:20px; border:1px dashed #ccc;">
+            <p>Login to post or edit items.</p>
+            <button onclick="openAuth()" class="btn" style="margin-top:10px;">Login</button>
         </div>
 
         <form class="sell-form" id="sellForm">
+            <input type="hidden" id="editId">
             <input type="text" id="itemName" placeholder="Item Name" required>
             <input type="number" id="itemPrice" placeholder="Price (GHS)" required>
             <select id="itemCat"><option>Electronics</option><option>Fashion</option><option>Home</option></select>
-            <input type="file" id="itemImage" accept="image/*" required>
-            <textarea id="itemDesc" placeholder="Description + Your WhatsApp Number" rows="3" required></textarea>
+            <input type="file" id="itemImage" accept="image/*">
+            <p style="font-size: 0.7rem; color: gray;">(Leave image empty if editing and keeping the same photo)</p>
+            <textarea id="itemDesc" placeholder="Description + Phone" rows="3" required></textarea>
             <button type="submit" id="publishBtn" class="btn">Publish Listing</button>
+            <button type="button" id="cancelEdit" class="btn" style="background:gray; display:none; margin-top:5px;">Cancel Edit</button>
         </form>
     </section>
 
     <div id="authModal" class="modal-overlay">
         <div class="modal-content">
-            <h3 id="authTitle">Welcome</h3>
+            <h3>Login</h3>
             <div id="authFields">
                 <form id="registerForm" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-                    <input type="text" id="rName" placeholder="Enter Your Name" required style="padding:12px; border:1px solid #ddd; border-radius:8px;">
-                    <button type="submit" class="btn">Login Now</button>
+                    <input type="text" id="rName" placeholder="Name" required style="padding:12px; border:1px solid #ddd; border-radius:8px;">
+                    <button type="submit" class="btn">Login</button>
                 </form>
             </div>
             <div id="logoutSection" style="display:none;">
-                <p id="userWelcome" style="font-weight: bold; font-size: 1.1rem;"></p>
+                <p id="userWelcome"></p>
                 <button onclick="logout()" class="btn" style="background:red; margin-top:15px; width: 100%;">Logout</button>
             </div>
-            <button onclick="closeAuth()" style="margin-top:20px; background:none; border:none; color:gray; cursor:pointer;">Close</button>
+            <button onclick="closeAuth()" style="margin-top:15px; background:none; border:none; color:gray; cursor:pointer;">Close</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="#buy" style="color:gray;">🛒 Buy</a>
-        <a href="#sell" style="color:gray;">➕ Sell</a>
-        <a href="javascript:void(0)" onclick="openAuth()" style="color:gray;">👤 Account</a>
+        <a href="#buy">🛒 Buy</a>
+        <a href="#sell">➕ Sell</a>
+        <a href="javascript:void(0)" onclick="openAuth()">👤 Account</a>
     </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, updateDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I",
-            authDomain: "obasty-market.firebaseapp.com",
-            projectId: "obasty-market",
-            appId: "1:753490577388:web:8b2dac8f4082d89ee662c9"
-        };
-
+        const firebaseConfig = { apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I", authDomain: "obasty-market.firebaseapp.com", projectId: "obasty-market", appId: "1:753490577388:web:8b2dac8f4082d89ee662c9" };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const colRef = collection(db, "listings");
 
-        // --- TRACK VIEW ---
+        // --- EDIT LOGIC ---
+        window.startEdit = (id, name, price, cat, desc) => {
+            document.getElementById('editId').value = id;
+            document.getElementById('itemName').value = name;
+            document.getElementById('itemPrice').value = price;
+            document.getElementById('itemCat').value = cat;
+            document.getElementById('itemDesc').value = desc;
+            
+            document.getElementById('formTitle').innerText = "Edit Your Item";
+            document.getElementById('publishBtn').innerText = "Update Changes";
+            document.getElementById('cancelEdit').style.display = "block";
+            document.getElementById('itemImage').required = false;
+            
+            window.location.href = "#sell";
+        };
+
+        document.getElementById('cancelEdit').onclick = () => location.reload();
+
         window.trackView = async (id, name) => {
             await updateDoc(doc(db, "listings", id), { views: increment(1) });
-            const waUrl = `https://api.whatsapp.com/send?phone=233539547368&text=${encodeURIComponent("Hi, I saw " + name + " on NanaObasty!")}`;
-            window.open(waUrl, '_blank');
+            window.open(`https://api.whatsapp.com/send?phone=233539547368&text=Interested in ${name}`, '_blank');
         };
 
-        // --- SHARE ---
-        document.getElementById('shareBtnMain').onclick = async () => {
-            if (navigator.share) { await navigator.share({ title: 'NanaObasty', text: 'Check out Koforidua deals!', url: window.location.href }); }
-            else { window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(window.location.href)}`, '_blank'); }
-        };
-
-        window.deleteItem = async (id) => { if(confirm("Delete item?")) await deleteDoc(doc(db, "listings", id)); };
+        window.deleteItem = async (id) => { if(confirm("Delete this?")) await deleteDoc(doc(db, "listings", id)); };
 
         async function uploadImg(file) {
             const fd = new FormData(); fd.append("image", file);
@@ -172,29 +173,35 @@
             const d = await res.json(); return d.data.url;
         }
 
-        // --- SECURE SUBMIT ---
         document.getElementById('sellForm').onsubmit = async (e) => {
             e.preventDefault();
             const user = JSON.parse(localStorage.getItem('nana_user'));
-            if(!user) { alert("Please login first!"); return openAuth(); }
-
+            const editId = document.getElementById('editId').value;
             const btn = document.getElementById('publishBtn');
-            btn.innerText = "Publishing..."; btn.disabled = true;
+            btn.disabled = true; btn.innerText = "Processing...";
 
             try {
-                const img = await uploadImg(document.getElementById('itemImage').files[0]);
-                await addDoc(colRef, {
+                let imgUrl = null;
+                const file = document.getElementById('itemImage').files[0];
+                if(file) imgUrl = await uploadImg(file);
+
+                const data = {
                     name: document.getElementById('itemName').value,
                     price: parseFloat(document.getElementById('itemPrice').value),
                     category: document.getElementById('itemCat').value,
-                    desc: document.getElementById('itemDesc').value,
-                    image: img,
-                    seller: user.name,
-                    views: 0,
-                    createdAt: new Date()
-                });
+                    desc: document.getElementById('itemDesc').value
+                };
+                if(imgUrl) data.image = imgUrl;
+
+                if(editId) {
+                    await updateDoc(doc(db, "listings", editId), data);
+                    alert("Updated!");
+                } else {
+                    await addDoc(colRef, { ...data, image: imgUrl, seller: user.name, views: 0, createdAt: new Date() });
+                    alert("Posted!");
+                }
                 location.reload();
-            } catch(e) { alert("Error uploading"); btn.disabled = false; }
+            } catch(e) { alert("Error!"); btn.disabled = false; }
         };
 
         let masterList = [];
@@ -207,8 +214,7 @@
             const s = document.getElementById('searchInput').value.toLowerCase();
             const p = parseFloat(document.getElementById('priceRange').value);
             const c = document.getElementById('catSelect').value;
-            const filtered = masterList.filter(i => i.name.toLowerCase().includes(s) && i.price <= p && (c === "All" || i.category === c));
-            render(filtered);
+            render(masterList.filter(i => i.name.toLowerCase().includes(s) && i.price <= p && (c === "All" || i.category === c)));
         }
 
         function render(items) {
@@ -222,48 +228,41 @@
                         <div class="view-badge">🔥 ${item.views || 0}</div>
                         <div class="product-img" style="background-image:url('${item.image}')"></div>
                         <div class="product-info">
-                            <div style="display:flex; justify-content:space-between;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
                                 <strong>${item.name}</strong>
-                                ${isOwner ? `<button onclick="deleteItem('${item.id}')" style="background:none;border:none;cursor:pointer;">🗑️</button>` : ''}
+                                <div>
+                                    ${isOwner ? `<button class="btn-edit" onclick="startEdit('${item.id}', '${item.name}', ${item.price}, '${item.category}', '${item.desc}')">✏️</button>` : ''}
+                                    ${isOwner ? `<button onclick="deleteItem('${item.id}')" style="background:none;border:none;cursor:pointer;">🗑️</button>` : ''}
+                                </div>
                             </div>
                             <p style="color:#2ecc71; font-weight:bold; font-size:1.1rem; margin:5px 0;">₵ ${item.price}</p>
-                            <p style="font-size:0.7rem; color:gray; margin-bottom: 8px;">Seller: ${item.seller}</p>
+                            <p style="font-size:0.7rem; color:gray;">Seller: ${item.seller}</p>
                             <button onclick="trackView('${item.id}', '${item.name}')" class="btn btn-wa">Contact Seller</button>
                         </div>
                     </div>`;
             });
         }
 
-        document.getElementById('searchInput').addEventListener('input', applyFilters);
-        document.getElementById('catSelect').addEventListener('change', applyFilters);
-        document.getElementById('priceRange').addEventListener('input', (e) => {
-            document.getElementById('priceLabel').innerText = `₵${e.target.value}`;
-            applyFilters();
-        });
+        document.getElementById('searchInput').oninput = applyFilters;
+        document.getElementById('catSelect').onchange = applyFilters;
+        document.getElementById('priceRange').oninput = (e) => { document.getElementById('priceLabel').innerText = `₵${e.target.value}`; applyFilters(); };
     </script>
 
     <script>
         function openAuth() { document.getElementById('authModal').classList.add('active'); }
         function closeAuth() { document.getElementById('authModal').classList.remove('active'); }
-        
         document.getElementById('registerForm').onsubmit = (e) => {
             e.preventDefault();
             localStorage.setItem('nana_user', JSON.stringify({ name: document.getElementById('rName').value }));
             location.reload();
         };
-
         function logout() { localStorage.removeItem('nana_user'); location.reload(); }
-
         window.onload = () => {
             const u = JSON.parse(localStorage.getItem('nana_user'));
             if(u) {
-                // UI changes for Logged in user
                 document.getElementById('logoutSection').style.display = 'block';
                 document.getElementById('authFields').style.display = 'none';
-                document.getElementById('userWelcome').innerText = "Logged in as: " + u.name;
-                document.querySelector('.login-trigger').innerText = u.name.split(' ')[0];
-                
-                // SHOW the sell form and HIDE the reminder
+                document.getElementById('userWelcome').innerText = "Hi, " + u.name;
                 document.getElementById('sellForm').classList.add('active');
                 document.getElementById('loginReminder').style.display = 'none';
             }
