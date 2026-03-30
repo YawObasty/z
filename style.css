@@ -281,3 +281,48 @@ footer {
     .newsletter-form { flex-direction: column; }
     .btn-alt { width: 100%; }
 }
+/* Marketplace Styles */
+.marketplace { padding: 60px 10%; background: #f4f7f6; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+
+.product-card {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    position: relative;
+}
+
+.product-card:hover { transform: translateY(-5px); }
+
+.product-tag {
+    position: absolute; top: 10px; left: 10px; background: #4db8ff;
+    color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold;
+}
+
+.product-img-placeholder {
+    height: 180px; background: #e0e7ff; display: flex;
+    align-items: center; justify-content: center; font-size: 4rem;
+}
+
+.product-info { padding: 20px; }
+.product-info h3 { font-size: 1.1rem; margin-bottom: 5px; color: #1a2a3a; }
+.price { color: #2ecc71; font-weight: bold; font-size: 1.2rem; margin-bottom: 5px; }
+.location { font-size: 0.8rem; color: #888; margin-bottom: 15px; }
+
+.buy-btn {
+    width: 100%; padding: 10px; background: #1a2a3a; color: #fff;
+    border: none; border-radius: 5px; cursor: pointer; transition: 0.3s;
+}
+
+.buy-btn:hover { background: #4db8ff; }
+
+/* Sell Section Styles */
+.sell-section { padding: 80px 10%; background: #fff; }
+.sell-container { max-width: 700px; margin: 0 auto; }
+.sell-form { display: flex; flex-direction: column; gap: 15px; }
+.form-group { display: flex; gap: 15px; }
+.sell-form input, .sell-form select, .sell-form textarea {
+    padding: 15px; border: 1px solid #ddd; border-radius: 5px; width: 100%;
+}
