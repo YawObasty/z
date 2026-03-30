@@ -31,7 +31,6 @@
         nav.top-nav { background: var(--nav-bg); color: #fff; padding: 1rem 10%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 1.4rem; font-weight: bold; color: #4db8ff; }
 
-        /* --- THEME TOGGLE BUTTON --- */
         .theme-toggle { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #fff; margin-right: 15px; }
 
         .filter-container { padding: 15px 10%; background: var(--card-bg); border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 10px; position: sticky; top: 60px; z-index: 999; }
@@ -44,11 +43,9 @@
         .product-img { height: 180px; background-size: cover; background-position: center; }
         .product-info { padding: 15px; }
 
-        /* --- BADGES --- */
         .badge-neg { background: #fff3cd; color: #856404; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-left: 5px; border: 1px solid #ffeeba; }
         .loc-tag { font-size: 0.65rem; color: #4db8ff; font-weight: bold; display: block; margin-bottom: 5px; }
 
-        /* --- FORM STYLES --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--card-bg); color: var(--text); padding: 30px; border-radius: 15px; max-width: 450px; width: 90%; max-height: 90vh; overflow-y: auto; }
@@ -63,6 +60,14 @@
 
         .neg-check { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; cursor: pointer; background: var(--bg); padding: 10px; border-radius: 8px; }
         .neg-check input { width: auto !important; }
+
+        /* Tabs for Account */
+        .tab-nav { display: flex; gap: 10px; border-bottom: 1px solid var(--border); margin-bottom: 15px; }
+        .tab-link { padding: 10px; cursor: pointer; opacity: 0.6; font-size: 0.9rem; }
+        .tab-link.active { opacity: 1; border-bottom: 2px solid #4db8ff; font-weight: bold; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .my-listing-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
 
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 2000; }
         .bottom-nav a { color: var(--text); text-decoration: none; font-size: 0.9rem; }
@@ -82,12 +87,8 @@
         <input type="text" id="searchInput" class="search-bar" placeholder="What are you buying today?">
         <select id="regFilter" style="padding:10px; border-radius:8px; border:1px solid #ddd;">
             <option value="All">All Regions</option>
-            <option>Greater Accra</option>
-            <option>Eastern Region</option>
-            <option>Ashanti Region</option>
-            <option>Central Region</option>
-            <option>Western Region</option>
-            <option>Volta Region</option>
+            <option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option>
+            <option>Central Region</option><option>Western Region</option><option>Volta Region</option>
             <option>Northern Region</option>
         </select>
     </div>
@@ -98,42 +99,23 @@
 
     <section id="sell">
         <h2>Post Your Item</h2>
+        <p id="loginPrompt">Please login to post an item.</p>
         <form class="sell-form" id="sellForm">
             <input type="text" id="pName" placeholder="Item Name" required>
             <input type="number" id="pPrice" placeholder="Price (₵)" required>
-            
-            <label class="neg-check">
-                <input type="checkbox" id="pNegotiable"> 🤝 Price is Negotiable
-            </label>
-
+            <label class="neg-check"><input type="checkbox" id="pNegotiable"> 🤝 Price is Negotiable</label>
             <select id="pRegion" onchange="updateLocationOptions()" required>
                 <option value="">-- Choose Region --</option>
-                <option>Greater Accra</option>
-                <option>Eastern Region</option>
-                <option>Ashanti Region</option>
-                <option>Central Region</option>
-                <option>Western Region</option>
-                <option>Volta Region</option>
-                <option>Northern Region</option>
-                <option>Other</option>
+                <option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option>
+                <option>Central Region</option><option>Western Region</option><option>Volta Region</option>
+                <option>Northern Region</option><option>Other</option>
             </select>
-
             <div id="koforiduaArea" style="display:none;">
                 <select id="pKofSub">
-                    <option>KTU / Poly Area</option>
-                    <option>Mile 50</option>
-                    <option>Koforidua Central</option>
-                    <option>Betom</option>
-                    <option>Adweso / SDA</option>
-                    <option>Effiduase</option>
-                    <option>Asokore</option>
+                    <option>KTU / Poly Area</option><option>Mile 50</option><option>Koforidua Central</option>
                 </select>
             </div>
-
-            <div id="customArea">
-                <input type="text" id="pCustomLoc" placeholder="City / Town Name">
-            </div>
-
+            <div id="customArea"><input type="text" id="pCustomLoc" placeholder="City / Town Name"></div>
             <input type="file" id="pImage" accept="image/*" required>
             <textarea id="pDesc" placeholder="Brief details about the item..." rows="3" required></textarea>
             <button type="submit" class="btn">Publish Now</button>
@@ -143,20 +125,45 @@
     <div id="authModal" class="modal-overlay">
         <div class="modal-content">
             <div id="authFields">
-                <h3>Login / Signup</h3>
-                <form id="loginForm" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-                    <input type="email" id="lEmail" placeholder="Email" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
-                    <input type="password" id="lPass" placeholder="Password" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
-                    <button type="submit" class="btn">Login</button>
-                </form>
-                <hr style="margin:15px 0;">
-                <button onclick="handleSignup()" class="btn" style="background:#2ecc71;">Create New Account</button>
+                <div class="tab-nav">
+                    <div id="tab-login" class="tab-link active" onclick="switchAuthTab('login')">Login</div>
+                    <div id="tab-signup" class="tab-link" onclick="switchAuthTab('signup')">Sign Up</div>
+                </div>
+
+                <div id="loginGroup" class="tab-content active">
+                    <form id="loginForm" style="display:flex; flex-direction:column; gap:10px;">
+                        <input type="email" id="lEmail" placeholder="Email" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                        <input type="password" id="lPass" placeholder="Password" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+                </div>
+
+                <div id="signupGroup" class="tab-content">
+                    <form id="signupForm" style="display:flex; flex-direction:column; gap:10px;">
+                        <input type="text" id="rName" placeholder="Full Name" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                        <input type="email" id="rEmail" placeholder="Email" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                        <input type="tel" id="rPhone" placeholder="WhatsApp Number" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                        <input type="password" id="rPass" placeholder="Password (6+ chars)" required style="padding:12px; border:1px solid #ddd; border-radius:8px; background: var(--input-bg); color: var(--text);">
+                        <button type="submit" class="btn" style="background:#2ecc71;">Create Account</button>
+                    </form>
+                </div>
             </div>
+
             <div id="profileSection" style="display:none;">
-                <h3 id="userHeader">Account</h3>
-                <button onclick="signOutUser()" class="btn" style="background:#e74c3c; margin-top:20px;">Logout</button>
+                <div class="tab-nav">
+                    <div id="tab-settings" class="tab-link active" onclick="switchProfileTab('settings')">Settings</div>
+                    <div id="tab-listings" class="tab-link" onclick="switchProfileTab('listings')">My Listings</div>
+                </div>
+                <div id="settingsContent" class="tab-content active">
+                    <h4 id="userHeader">Account</h4>
+                    <button onclick="signOutUser()" class="btn" style="background:#e74c3c; margin-top:20px;">Logout</button>
+                </div>
+                <div id="listingsContent" class="tab-content">
+                    <div id="myListingsList">Loading your items...</div>
+                </div>
             </div>
-            <button onclick="closeAuth()" style="margin-top:20px; background:none; border:none; color:gray; cursor:pointer;">Close</button>
+            
+            <button onclick="closeAuth()" style="margin-top:20px; background:none; border:none; color:gray; cursor:pointer; width:100%;">Close</button>
         </div>
     </div>
 
@@ -166,33 +173,10 @@
         <a href="javascript:void(0)" onclick="openAuth()">👤 Profile</a>
     </nav>
 
-    <script>
-        /* --- THEME TOGGLE LOGIC --- */
-        function toggleTheme() {
-            const body = document.body;
-            const btn = document.getElementById('themeBtn');
-            const currentTheme = body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            body.setAttribute('data-theme', newTheme);
-            btn.innerText = newTheme === 'light' ? '🌙' : '☀️';
-            localStorage.setItem('theme', newTheme);
-        }
-
-        // Keep theme after refresh
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.setAttribute('data-theme', 'dark');
-            document.getElementById('themeBtn').innerText = '☀️';
-        }
-
-        function openAuth() { document.getElementById('authModal').classList.add('active'); }
-        function closeAuth() { document.getElementById('authModal').classList.remove('active'); }
-    </script>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc, where, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I", authDomain: "obasty-market.firebaseapp.com", projectId: "obasty-market", appId: "1:753490577388:web:8b2dac8f4082d89ee662c9" };
         const app = initializeApp(firebaseConfig);
@@ -200,54 +184,80 @@
         const db = getFirestore(app);
         let userData = null;
 
-        window.updateLocationOptions = () => {
-            const region = document.getElementById('pRegion').value;
-            document.getElementById('koforiduaArea').style.display = (region === "Eastern Region") ? "block" : "none";
-            document.getElementById('customArea').style.display = (region === "Eastern Region") ? "none" : "block";
-        };
-
+        // AUTH TRACKING
         onAuthStateChanged(auth, async (user) => {
             if(user) {
                 const s = await getDoc(doc(db, "users", user.uid));
                 userData = s.data();
+                document.getElementById('authFields').style.display = 'none';
+                document.getElementById('profileSection').style.display = 'block';
                 document.getElementById('sellForm').classList.add('active');
-                document.getElementById('navAuthBtn').innerText = "My Profile";
+                document.getElementById('loginPrompt').style.display = 'none';
+                document.getElementById('navAuthBtn').innerText = "My Account";
+                fetchMyListings(user.uid);
             } else {
-                userData = null;
+                document.getElementById('authFields').style.display = 'block';
+                document.getElementById('profileSection').style.display = 'none';
                 document.getElementById('sellForm').classList.remove('active');
+                document.getElementById('loginPrompt').style.display = 'block';
                 document.getElementById('navAuthBtn').innerText = "Login";
             }
         });
 
+        // REGISTRATION FIX
+        document.getElementById('signupForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('rEmail').value;
+            const pass = document.getElementById('rPass').value;
+            const name = document.getElementById('rName').value;
+            const phone = document.getElementById('rPhone').value;
+
+            try {
+                const res = await createUserWithEmailAndPassword(auth, email, pass);
+                await setDoc(doc(db, "users", res.user.uid), { name, phone, email });
+                location.reload();
+            } catch (err) { alert(err.message); }
+        };
+
+        // LOGIN
         document.getElementById('loginForm').onsubmit = (e) => {
             e.preventDefault();
             signInWithEmailAndPassword(auth, document.getElementById('lEmail').value, document.getElementById('lPass').value)
-                .then(() => closeAuth()).catch(err => alert("Login Error: Check email/password"));
+                .then(() => closeAuth()).catch(err => alert("Login Error: Check credentials"));
         };
 
-        window.handleSignup = () => {
-            const email = prompt("Email:");
-            const pass = prompt("Password (6+ chars):");
-            const name = prompt("Full Name:");
-            const phone = prompt("WhatsApp (e.g. 0541234567):");
-            if(email && pass && name && phone) {
-                createUserWithEmailAndPassword(auth, email, pass).then(async (res) => {
-                    await setDoc(doc(db, "users", res.user.uid), { name, phone, email });
-                    location.reload();
+        // FETCH USER LISTINGS
+        function fetchMyListings(uid) {
+            const q = query(collection(db, "listings"), where("sellerId", "==", uid));
+            onSnapshot(q, (snap) => {
+                const list = document.getElementById('myListingsList');
+                list.innerHTML = snap.empty ? "You haven't posted any items yet." : "";
+                snap.forEach(d => {
+                    const item = d.data();
+                    list.innerHTML += `
+                        <div class="my-listing-item">
+                            <img src="${item.image}" width="40" height="40" style="border-radius:4px; object-fit:cover;">
+                            <div style="flex:1;">
+                                <div style="font-size:0.85rem; font-weight:bold;">${item.name}</div>
+                                <div style="font-size:0.75rem; color:#2ecc71;">₵${item.price}</div>
+                            </div>
+                            <button onclick="deleteItem('${d.id}')" style="background:none; border:none; color:#e74c3c; cursor:pointer;">🗑️</button>
+                        </div>`;
                 });
-            }
+            });
+        }
+
+        window.deleteItem = async (id) => {
+            if(confirm("Delete this listing?")) await deleteDoc(doc(db, "listings", id));
         };
 
-        window.signOutUser = () => signOut(auth).then(() => location.reload());
-
+        // PUBLISH
         document.getElementById('sellForm').onsubmit = async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button');
-            btn.innerText = "Processing..."; btn.disabled = true;
-
+            btn.innerText = "Publishing..."; btn.disabled = true;
             const region = document.getElementById('pRegion').value;
             const subLoc = (region === "Eastern Region") ? document.getElementById('pKofSub').value : document.getElementById('pCustomLoc').value;
-            const negotiable = document.getElementById('pNegotiable').checked;
             
             const file = document.getElementById('pImage').files[0];
             const fd = new FormData(); fd.append("image", file);
@@ -257,10 +267,11 @@
             await addDoc(collection(db, "listings"), {
                 name: document.getElementById('pName').value,
                 price: document.getElementById('pPrice').value,
-                negotiable: negotiable,
+                negotiable: document.getElementById('pNegotiable').checked,
                 region: region,
                 location: subLoc,
                 image: img.data.url,
+                sellerId: auth.currentUser.uid, // Track ownership
                 sellerName: userData.name,
                 sellerPhone: userData.phone,
                 createdAt: new Date()
@@ -268,6 +279,7 @@
             location.reload();
         };
 
+        // FEED
         onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = "";
@@ -278,16 +290,53 @@
                         <div class="product-img" style="background-image:url('${item.image}')"></div>
                         <div class="product-info">
                             <span class="loc-tag">📍 ${item.region} | ${item.location}</span>
-                            <strong style="display:block; font-size:1rem;">${item.name}</strong>
-                            <p style="color:#2ecc71; font-weight:bold; font-size:1.1rem; margin-top:5px;">
-                                ₵ ${item.price}
-                                ${item.negotiable ? '<span class="badge-neg">🤝 Negotiable</span>' : ''}
-                            </p>
-                            <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}&text=Hi, I'm interested in your ${item.name} posted on NanaObasty" class="btn-wa">Chat with Seller</a>
+                            <strong>${item.name}</strong>
+                            <p style="color:#2ecc71; font-weight:bold;">₵ ${item.price} ${item.negotiable ? '<span class="badge-neg">🤝</span>' : ''}</p>
+                            <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}" class="btn-wa">Chat</a>
                         </div>
                     </div>`;
             });
         });
+
+        window.signOutUser = () => signOut(auth).then(() => location.reload());
+    </script>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const newTheme = body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            document.getElementById('themeBtn').innerText = newTheme === 'light' ? '🌙' : '☀️';
+            localStorage.setItem('theme', newTheme);
+        }
+
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            document.getElementById('themeBtn').innerText = '☀️';
+        }
+
+        function openAuth() { document.getElementById('authModal').classList.add('active'); }
+        function closeAuth() { document.getElementById('authModal').classList.remove('active'); }
+
+        function switchAuthTab(type) {
+            document.querySelectorAll('#authFields .tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('#authFields .tab-link').forEach(l => l.classList.remove('active'));
+            document.getElementById(type + 'Group').classList.add('active');
+            document.getElementById('tab-' + type).classList.add('active');
+        }
+
+        function switchProfileTab(type) {
+            document.querySelectorAll('#profileSection .tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('#profileSection .tab-link').forEach(l => l.classList.remove('active'));
+            document.getElementById(type + 'Content').classList.add('active');
+            document.getElementById('tab-' + type).classList.add('active');
+        }
+
+        window.updateLocationOptions = () => {
+            const region = document.getElementById('pRegion').value;
+            document.getElementById('koforiduaArea').style.display = (region === "Eastern Region") ? "block" : "none";
+            document.getElementById('customArea').style.display = (region === "Eastern Region") ? "none" : "block";
+        };
     </script>
 </body>
 </html>
