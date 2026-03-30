@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NanaObasty Marketplace | Ghana</title>
     <style>
-        /* --- PREVIOUS STYLES REMAIN --- */
+        /* --- PREVIOUS STYLES --- */
         :root { --bg: #f4f7f6; --card-bg: #fff; --text: #333; --nav-bg: #1a2a3a; --border: #eee; --input-bg: #fff; --accent: #4db8ff; }
         [data-theme="dark"] { --bg: #0f172a; --card-bg: #1e293b; --text: #f1f5f9; --nav-bg: #020617; --border: #334155; --input-bg: #334155; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: background 0.3s, color 0.3s; }
@@ -18,24 +18,40 @@
         .marketplace { padding: 30px 10%; min-height: 60vh; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
         .product-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border); cursor: pointer; }
-        .product-img { height: 180px; background-size: cover; background-position: center; }
+        .product-img { height: 180px; background-size: cover; background-position: center; position: relative; }
         .product-info { padding: 15px; }
         .view-count { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem; display: flex; align-items: center; gap: 4px; z-index: 10; }
         
-        /* --- NEW: MY LISTINGS STYLES --- */
+        /* --- AVATAR STYLE --- */
+        .seller-identity { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+        .mini-avatar { 
+            width: 32px; 
+            height: 32px; 
+            background: var(--accent); 
+            color: white; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 0.8rem; 
+            font-weight: bold; 
+            background-size: cover; 
+            background-position: center;
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .seller-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+
+        /* --- MY LISTINGS STYLES --- */
         .my-listings-container { margin-top: 20px; text-align: left; border-top: 2px solid var(--border); padding-top: 15px; }
         .manage-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg); border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); }
         .manage-item img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; }
         .manage-item-info { flex: 1; font-size: 0.85rem; }
-        
-        /* New Buttons for Editing/Sold status */
         .manage-actions { display: flex; gap: 5px; flex-wrap: wrap; }
         .del-mini-btn { background: #ff4757; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; }
         .edit-mini-btn { background: var(--accent); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; }
         .sold-mini-btn { background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; }
         .sold-badge { background: #ff4757; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
-
-        /* Edit Form Styling */
         .edit-listing-form { display: none; flex-direction: column; gap: 10px; margin-top: 15px; padding: 15px; background: var(--bg); border-radius: 10px; border: 1px solid var(--accent); }
 
         .profile-pic-large { width: 90px; height: 90px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: bold; margin: 0 auto 15px; background-size: cover; background-position: center; border: 3px solid var(--accent); }
@@ -176,7 +192,6 @@
                 document.getElementById('authFields').style.display = 'none';
                 document.getElementById('profileSection').style.display = 'block';
                 document.getElementById('sellForm').classList.add('active');
-                
                 updateProfileUI();
                 loadMyListings(user.uid);
             } else {
@@ -197,11 +212,11 @@
                 picDiv.style.backgroundImage = `url('${userData.photo}')`;
                 picDiv.innerText = "";
             } else {
+                picDiv.style.backgroundImage = "none";
                 picDiv.innerText = userName[0].toUpperCase();
             }
         }
 
-        // LOAD USER-SPECIFIC LISTINGS
         function loadMyListings(userId) {
             const q = query(collection(db, "listings"), where("sellerId", "==", userId));
             onSnapshot(q, (snap) => {
@@ -231,7 +246,6 @@
             });
         }
 
-        // --- EDIT & SOLD LOGIC ---
         window.startEditListing = async (id) => {
             const docRef = doc(db, "listings", id);
             const snap = await getDoc(docRef);
@@ -264,7 +278,7 @@
         };
 
         window.markAsSold = async (id) => {
-            if(confirm("Mark this item as sold? It will still be visible but tagged 'SOLD'.")) {
+            if(confirm("Mark this item as sold?")) {
                 await updateDoc(doc(db, "listings", id), { status: "sold" });
             }
         };
@@ -284,8 +298,13 @@
             data.forEach(item => {
                 const views = item.views || 0;
                 const isSold = item.status === "sold";
+                
+                // USER AVATAR LOGIC
                 const sellerInitial = (item.sellerName || "U")[0].toUpperCase();
-                const avatar = item.sellerPhoto ? `<div class="mini-avatar" style="background-image:url('${item.sellerPhoto}')"></div>` : `<div class="mini-avatar">${sellerInitial}</div>`;
+                const avatarHtml = item.sellerPhoto 
+                    ? `<div class="mini-avatar" style="background-image:url('${item.sellerPhoto}')"></div>` 
+                    : `<div class="mini-avatar">${sellerInitial}</div>`;
+
                 grid.innerHTML += `
                     <div class="product-card" onclick="logView('${item.id}')">
                         <div class="view-count">👁️ ${views}</div>
@@ -293,7 +312,10 @@
                              ${isSold ? '<div style="background:rgba(255,71,87,0.8); color:white; padding:5px; font-weight:bold; position:absolute; bottom:0; width:100%; text-align:center;">SOLD</div>' : ''}
                         </div>
                         <div class="product-info">
-                            <div class="seller-identity">${avatar}<span class="seller-name">${item.sellerName}</span></div>
+                            <div class="seller-identity">
+                                ${avatarHtml}
+                                <span class="seller-name">${item.sellerName}</span>
+                            </div>
                             <span class="loc-tag">📍 ${item.region}</span>
                             <strong>${item.name}</strong>
                             <p style="color:#2ecc71; font-weight:bold;">${isSold ? '<span style="text-decoration:line-through; color:gray;">₵ '+item.price+'</span> Sold' : '₵ '+item.price}</p>
@@ -317,7 +339,6 @@
             alert("Listing Posted!"); location.reload();
         };
 
-        // Standard Boilerplate (Filters/Auth)
         onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
             allListings = []; snap.forEach(d => allListings.push({id: d.id, ...d.data()})); applyFilters();
         });
