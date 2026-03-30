@@ -58,6 +58,11 @@
         
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 2000; }
         .bottom-nav a { color: var(--text); text-decoration: none; font-size: 0.85rem; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+
+        /* --- SOLD MANAGEMENT STYLES --- */
+        .my-item-card { display: flex; align-items: center; gap: 15px; padding: 10px; background: var(--bg); border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border); }
+        .my-item-card img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+        .btn-sold { background: #ff4757; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; margin-left: auto; font-weight: bold; }
     </style>
 </head>
 <body data-theme="light">
@@ -127,7 +132,7 @@
                         <div class="profile-info-row" style="display: flex; justify-content: space-between; padding: 10px 0;"><span>Phone:</span><b id="profPhone">...</b></div>
                     </div>
                     
-                    <button onclick="showEditForm()" class="btn btn-outline">✏️ Edit Profile</button>
+                    <button onclick="showEditForm()" class="btn btn-outline" style="margin-top:10px;">✏️ Edit Profile</button>
                     
                     <div class="my-listings-container">
                         <h4 style="margin: 15px 0 10px; color: var(--heart);">Wishlist</h4>
@@ -135,7 +140,7 @@
                     </div>
 
                     <div class="my-listings-container">
-                        <h4 style="margin: 15px 0 10px;">Your Listings</h4>
+                        <h4 style="margin: 25px 0 10px;">Your Active Listings</h4>
                         <div id="myItemsList"></div>
                     </div>
 
@@ -196,7 +201,7 @@
                 document.getElementById('editName').value = userData?.name || "";
                 document.getElementById('editPhone').value = userData?.phone || "";
                 updateProfileUI();
-                // loadMyListings(user.uid); // Ensure this function exists or is defined
+                loadMyListings(user.uid); 
             } else {
                 userData = null;
                 likedIds = [];
@@ -205,6 +210,41 @@
             }
             applyFilters();
         });
+
+        // NEW: Load items specifically for the logged-in seller
+        async function loadMyListings(uid) {
+            const container = document.getElementById('myItemsList');
+            const q = query(collection(db, "listings"), where("sellerId", "==", uid));
+            
+            onSnapshot(q, (snap) => {
+                container.innerHTML = "";
+                if (snap.empty) container.innerHTML = "<p style='font-size:0.8rem; opacity:0.6;'>No active listings.</p>";
+                
+                snap.forEach(d => {
+                    const item = d.data();
+                    container.innerHTML += `
+                        <div class="my-item-card">
+                            <img src="${item.image}">
+                            <div>
+                                <span style="display:block; font-size:0.9rem; font-weight:bold;">${item.name}</span>
+                                <span style="font-size:0.8rem; color:var(--success);">₵ ${item.price}</span>
+                            </div>
+                            <button class="btn-sold" onclick="markAsSold('${d.id}')">Mark Sold</button>
+                        </div>`;
+                });
+            });
+        }
+
+        // NEW: Function to remove the item (Mark as Sold)
+        window.markAsSold = async (id) => {
+            if(confirm("Mark this item as sold? It will be permanently removed from the marketplace.")) {
+                try {
+                    await deleteDoc(doc(db, "listings", id));
+                } catch(err) {
+                    alert("Error removing item.");
+                }
+            }
+        };
 
         // Listing Submission
         document.getElementById('sellForm').onsubmit = async (e) => {
@@ -292,7 +332,6 @@
             document.getElementById('sellForm').classList.toggle('active');
         };
 
-        // NEW: Function to switch between marketplace and sell view
         window.toggleSellView = (view) => {
             const sellSection = document.getElementById('sell');
             const buySection = document.getElementById('buy');
