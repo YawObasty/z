@@ -11,3 +11,31 @@ shareBtn.addEventListener('click', () => {
     // Opens WhatsApp
     window.open(whatsappUrl, '_blank');
 });
+const authModal = document.getElementById('authModal');
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const tabs = document.querySelectorAll('.auth-tab');
+
+// Open Modal
+function openAuth() { authModal.classList.add('active'); }
+
+// Close Modal
+function closeAuth() { authModal.classList.add('active'); authModal.classList.remove('active'); }
+
+// Switch between Login and Register
+function switchAuth(type) {
+    tabs.forEach(t => t.classList.remove('active'));
+    loginForm.classList.remove('active');
+    registerForm.classList.remove('active');
+
+    if(type === 'login') {
+        loginForm.classList.add('active');
+        tabs[0].classList.add('active');
+    } else {
+        registerForm.classList.add('active');
+        tabs[1].classList.add('active');
+    }
+}
+
+// Attach to your Navigation (Update your existing Nav links)
+// Add 'onclick="openAuth()"' to your Profile/About links to test it!
