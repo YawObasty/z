@@ -1,199 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NanaObasty | Ghana's Premium Marketplace</title>
-    <style>
-        :root { 
-            --primary: #007bff; --primary-dark: #0056b3;
-            --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; 
-            --border: #e2e8f0; --accent: #4db8ff; --heart: #ff4757; 
-            --success: #10b981; --glass: rgba(255, 255, 255, 0.8);
-        }
-        [data-theme="dark"] { 
-            --bg: #0f172a; --card-bg: #1e293b; --text: #f1f5f9; 
-            --border: #334155; --glass: rgba(15, 23, 42, 0.8);
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NanaObasty | Ghana's Premium Marketplace</title>
+    <style>
+        :root { 
+            --primary: #007bff; --primary-dark: #0056b3;
+            --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; 
+            --border: #e2e8f0; --accent: #4db8ff; --heart: #ff4757; 
+            --success: #10b981; --glass: rgba(255, 255, 255, 0.8);
+        }
+        [data-theme="dark"] { 
+            --bg: #0f172a; --card-bg: #1e293b; --text: #f1f5f9; 
+            --border: #334155; --glass: rgba(15, 23, 42, 0.8);
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; transition: all 0.25s ease; }
-        body { background-color: var(--bg); color: var(--text); padding-bottom: 90px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; transition: all 0.25s ease; }
+        body { background-color: var(--bg); color: var(--text); padding-bottom: 90px; }
 
-        /* --- MODERN GLASS NAVIGATION --- */
-        nav.top-nav { 
-            background: var(--glass); backdrop-filter: blur(12px); 
-            padding: 0.8rem 10%; display: flex; justify-content: space-between; 
-            align-items: center; position: sticky; top: 0; z-index: 1000;
-            border-bottom: 1px solid var(--border);
-        }
-        .logo { font-size: 1.5rem; font-weight: 900; color: var(--primary); letter-spacing: -1px; text-transform: uppercase; }
+        /* --- MODERN GLASS NAVIGATION --- */
+        nav.top-nav { 
+            background: var(--glass); backdrop-filter: blur(12px); 
+            padding: 0.8rem 10%; display: flex; justify-content: space-between; 
+            align-items: center; position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo { font-size: 1.5rem; font-weight: 900; color: var(--primary); letter-spacing: -1px; text-transform: uppercase; }
 
-        /* --- CATEGORY CHIPS --- */
-        .categories { 
-            display: flex; gap: 10px; overflow-x: auto; padding: 15px 10%; 
-            scrollbar-width: none; background: var(--card-bg);
-        }
-        .chip { 
-            padding: 8px 18px; border-radius: 20px; background: var(--bg); 
-            border: 1px solid var(--border); cursor: pointer; white-space: nowrap; font-size: 0.85rem; font-weight: 500;
-        }
-        .chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+        /* --- CATEGORY CHIPS --- */
+        .categories { 
+            display: flex; gap: 10px; overflow-x: auto; padding: 15px 10%; 
+            scrollbar-width: none; background: var(--card-bg);
+        }
+        .chip { 
+            padding: 8px 18px; border-radius: 20px; background: var(--bg); 
+            border: 1px solid var(--border); cursor: pointer; white-space: nowrap; font-size: 0.85rem; font-weight: 500;
+        }
+        .chip.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* --- HERO SEARCH --- */
-        .hero-search { padding: 20px 10%; background: var(--card-bg); border-bottom: 1px solid var(--border); }
-        .search-box { 
-            display: flex; background: var(--bg); border: 1px solid var(--border); 
-            border-radius: 12px; padding: 5px 15px; align-items: center; 
-        }
-        .search-box input { 
-            border: none; background: transparent; padding: 12px; width: 100%; 
-            outline: none; color: var(--text); font-size: 1rem;
-        }
+        /* --- HERO SEARCH --- */
+        .hero-search { padding: 20px 10%; background: var(--card-bg); border-bottom: 1px solid var(--border); }
+        .search-box { 
+            display: flex; background: var(--bg); border: 1px solid var(--border); 
+            border-radius: 12px; padding: 5px 15px; align-items: center; 
+        }
+        .search-box input { 
+            border: none; background: transparent; padding: 12px; width: 100%; 
+            outline: none; color: var(--text); font-size: 1rem;
+        }
 
-        /* --- PRODUCT CARDS --- */
-        .marketplace { padding: 20px 10%; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-        
-        .card { 
-            background: var(--card-bg); border-radius: 16px; overflow: hidden; 
-            border: 1px solid var(--border); position: relative;
-        }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.1); }
-        
-        .card-img { height: 200px; background-size: cover; background-position: center; position: relative; }
-        .badge-sold { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
-            background: rgba(255, 71, 87, 0.9); color: white; padding: 5px 15px; 
-            font-weight: 900; border: 2px solid white; z-index: 5; pointer-events: none;
-        }
-        
-        .verified-tag { color: #3b82f6; font-size: 0.9rem; margin-left: 4px; }
-        .card-body { padding: 15px; }
-        .price { font-size: 1.25rem; font-weight: 800; color: var(--success); margin: 5px 0; }
+        /* --- PRODUCT CARDS --- */
+        .marketplace { padding: 20px 10%; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+        
+        .card { 
+            background: var(--card-bg); border-radius: 16px; overflow: hidden; 
+            border: 1px solid var(--border); position: relative;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.1); }
+        
+        .card-img { height: 200px; background-size: cover; background-position: center; position: relative; }
+        .badge-sold { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg);
+            background: rgba(255, 71, 87, 0.9); color: white; padding: 5px 15px; 
+            font-weight: 900; border: 2px solid white; z-index: 5; pointer-events: none;
+        }
+        
+        .verified-tag { color: #3b82f6; font-size: 0.9rem; margin-left: 4px; }
+        .card-body { padding: 15px; }
+        .price { font-size: 1.25rem; font-weight: 800; color: var(--success); margin: 5px 0; }
 
-        /* --- PRO SELL SECTION --- */
-        .sell-banner { 
-            margin: 40px 10%; background: linear-gradient(135deg, #007bff, #6610f2); 
-            border-radius: 20px; padding: 40px; color: white; text-align: center;
-        }
-        .btn-white { 
-            background: white; color: var(--primary); padding: 12px 30px; 
-            border-radius: 10px; font-weight: 700; border: none; cursor: pointer; margin-top: 15px;
-        }
+        /* --- PRO SELL SECTION --- */
+        .sell-banner { 
+            margin: 40px 10%; background: linear-gradient(135deg, #007bff, #6610f2); 
+            border-radius: 20px; padding: 40px; color: white; text-align: center;
+        }
+        .btn-white { 
+            background: white; color: var(--primary); padding: 12px 30px; 
+            border-radius: 10px; font-weight: 700; border: none; cursor: pointer; margin-top: 15px;
+        }
 
-        /* --- BOTTOM NAV --- */
-        .bottom-nav { 
-            position: fixed; bottom: 0; width: 100%; background: var(--glass); 
-            backdrop-filter: blur(10px); display: flex; justify-content: space-around; 
-            padding: 12px; border-top: 1px solid var(--border); z-index: 1000;
-        }
-        .nav-item { text-decoration: none; color: #64748b; font-size: 0.75rem; text-align: center; }
-        .nav-item.active { color: var(--primary); font-weight: 700; }
+        /* --- BOTTOM NAV --- */
+        .bottom-nav { 
+            position: fixed; bottom: 0; width: 100%; background: var(--glass); 
+            backdrop-filter: blur(10px); display: flex; justify-content: space-around; 
+            padding: 12px; border-top: 1px solid var(--border); z-index: 1000;
+        }
+        .nav-item { text-decoration: none; color: #64748b; font-size: 0.75rem; text-align: center; }
+        .nav-item.active { color: var(--primary); font-weight: 700; }
 
-        /* Animations */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .card { animation: fadeIn 0.4s ease forwards; }
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .card { animation: fadeIn 0.4s ease forwards; }
 
-    </style>
+    </style>
 </head>
 <body data-theme="light">
 
-    <nav class="top-nav">
-        <div class="logo">NanaObasty</div>
-        <div style="display: flex; gap: 10px;">
-            <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size: 1.2rem;">🌓</button>
-            <button onclick="openAuth()" id="userBtn" style="background:var(--primary); color:white; border:none; padding: 8px 16px; border-radius: 8px; font-weight:600; cursor:pointer;">Account</button>
-        </div>
-    </nav>
+    <nav class="top-nav">
+        <div class="logo">NanaObasty</div>
+        <div style="display: flex; gap: 10px;">
+            <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size: 1.2rem;">🌓</button>
+            <button onclick="openAuth()" id="userBtn" style="background:var(--primary); color:white; border:none; padding: 8px 16px; border-radius: 8px; font-weight:600; cursor:pointer;">Account</button>
+        </div>
+    </nav>
 
-    <div class="hero-search">
-        <div class="search-box">
-            <span>🔍</span>
-            <input type="text" id="mainSearch" placeholder="Search for phones, laptops, sneakers...">
-        </div>
-    </div>
+    <div class="hero-search">
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="mainSearch" placeholder="Search for phones, laptops, sneakers...">
+        </div>
+    </div>
 
-    <div class="categories" id="catBar">
-        <div class="chip active" onclick="filterCat('All')">All Items</div>
-        <div class="chip" onclick="filterCat('Electronics')">📱 Electronics</div>
-        <div class="chip" onclick="filterCat('Vehicles')">🚗 Vehicles</div>
-        <div class="chip" onclick="filterCat('Fashion')">👕 Fashion</div>
-        <div class="chip" onclick="filterCat('Property')">🏠 Property</div>
-    </div>
+    <div class="categories" id="catBar">
+        <div class="chip active" onclick="filterCat('All')">All Items</div>
+        <div class="chip" onclick="filterCat('Electronics')">📱 Electronics</div>
+        <div class="chip" onclick="filterCat('Vehicles')">🚗 Vehicles</div>
+        <div class="chip" onclick="filterCat('Fashion')">👕 Fashion</div>
+        <div class="chip" onclick="filterCat('Property')">🏠 Property</div>
+    </div>
 
-    <section class="marketplace">
-        <div class="product-grid" id="grid">
-            <div class="card" style="height: 300px; background: #e2e8f0; opacity: 0.5;"></div>
-            <div class="card" style="height: 300px; background: #e2e8f0; opacity: 0.5;"></div>
-        </div>
-    </section>
+    <section class="marketplace">
+        <div class="product-grid" id="grid">
+            <div class="card" style="height: 300px; background: #e2e8f0; opacity: 0.5;"></div>
+            <div class="card" style="height: 300px; background: #e2e8f0; opacity: 0.5;"></div>
+        </div>
+    </section>
 
-    <section class="sell-banner">
-        <h2>Ready to make money?</h2>
-        <p>Post your item in seconds and reach buyers across Ghana.</p>
-        <button class="btn-white" onclick="location.href='#sell-form-anchor'">Start Selling Now</button>
-    </section>
+    <section class="sell-banner">
+        <h2>Ready to make money?</h2>
+        <p>Post your item in seconds and reach buyers across Ghana.</p>
+        <button class="btn-white" onclick="location.href='#sell-form-anchor'">Start Selling Now</button>
+    </section>
 
-    <nav class="bottom-nav">
-        <a href="#" class="nav-item active"><div>🏠</div>Home</a>
-        <a href="#" class="nav-item"><div>❤️</div>Wishlist</a>
-        <a href="javascript:void(0)" onclick="openAuth()" class="nav-item"><div>👤</div>Profile</a>
-        <a href="#" class="nav-item"><div>💬</div>Chats</a>
-    </nav>
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active"><div>🏠</div>Home</a>
+        <a href="#" class="nav-item"><div>❤️</div>Wishlist</a>
+        <a href="javascript:void(0)" onclick="openAuth()" class="nav-item"><div>👤</div>Profile</a>
+        <a href="#" class="nav-item"><div>💬</div>Chats</a>
+    </nav>
 
-    <script type="module">
-        // (Assuming your Firebase imports and config are here as per previous code)
-        
-        // --- NEW FEATURE: CATEGORY FILTERING ---
-        window.filterCat = (cat) => {
-            const chips = document.querySelectorAll('.chip');
-            chips.forEach(c => c.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Logic to filter allListings by category
-            const filtered = cat === 'All' ? allListings : allListings.filter(i => i.category === cat);
-            renderListings(filtered);
-        };
+    <script type="module">
+        // (Assuming your Firebase imports and config are here as per previous code)
+        
+        // --- NEW FEATURE: CATEGORY FILTERING ---
+        window.filterCat = (cat) => {
+            const chips = document.querySelectorAll('.chip');
+            chips.forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Logic to filter allListings by category
+            const filtered = cat === 'All' ? allListings : allListings.filter(i => i.category === cat);
+            renderListings(filtered);
+        };
 
-        // --- ENHANCED RENDERER ---
-        function renderListings(data) {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = "";
-            
-            data.forEach(item => {
-                const isSold = item.status === 'sold';
-                grid.innerHTML += `
-                    <div class="card" onclick="viewDetails('${item.id}')">
-                        ${isSold ? '<div class="badge-sold">SOLD</div>' : ''}
-                        <div class="card-img" style="background-image:url('${item.image}'); filter: ${isSold ? 'grayscale(1)' : 'none'}"></div>
-                        <div class="card-body">
-                            <p style="font-size:0.75rem; color:#64748b; font-weight:600;">${item.region.toUpperCase()}</p>
-                            <h4 style="margin: 4px 0;">${item.name} <span class="verified-tag">✔</span></h4>
-                            <p class="price">₵ ${item.price}</p>
-                            <div style="display:flex; align-items:center; gap:8px; margin-top:10px;">
-                                <div style="width:24px; height:24px; border-radius:50%; background:#ddd; font-size:10px; display:flex; align-items:center; justify-content:center; font-weight:bold;">${item.sellerName ? item.sellerName[0] : 'S'}</div>
-                                <span style="font-size:0.8rem; color:#475569;">${item.sellerName || 'Private Seller'}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
+        // --- ENHANCED RENDERER ---
+        function renderListings(data) {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = "";
+            
+            data.forEach(item => {
+                const isSold = item.status === 'sold';
+                grid.innerHTML += `
+                    <div class="card" onclick="viewDetails('${item.id}')">
+                        ${isSold ? '<div class="badge-sold">SOLD</div>' : ''}
+                        <div class="card-img" style="background-image:url('${item.image}'); filter: ${isSold ? 'grayscale(1)' : 'none'}"></div>
+                        <div class="card-body">
+                            <p style="font-size:0.75rem; color:#64748b; font-weight:600;">${item.region.toUpperCase()}</p>
+                            <h4 style="margin: 4px 0;">${item.name} <span class="verified-tag">✔</span></h4>
+                            <p class="price">₵ ${item.price}</p>
+                            <div style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+                                <div style="width:24px; height:24px; border-radius:50%; background:#ddd; font-size:10px; display:flex; align-items:center; justify-content:center; font-weight:bold;">${item.sellerName ? item.sellerName[0] : 'S'}</div>
+                                <span style="font-size:0.8rem; color:#475569;">${item.sellerName || 'Private Seller'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
 
-        // --- FEATURE: MARK AS SOLD ---
-        window.markAsSold = async (id) => {
-            if(confirm("Mark this item as sold? It will still show up but buyers will see it's gone.")) {
-                await updateDoc(doc(db, "listings", id), { status: 'sold' });
-            }
-        };
-    </script>
+        // --- FEATURE: MARK AS SOLD ---
+        window.markAsSold = async (id) => {
+            if(confirm("Mark this item as sold? It will still show up but buyers will see it's gone.")) {
+                await updateDoc(doc(db, "listings", id), { status: 'sold' });
+            }
+        };
+    </script>
 
-    <script>
-        function toggleTheme() {
-            const b = document.body;
-            const current = b.getAttribute('data-theme');
-            b.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-        }
-    </script>
+    <script>
+        function toggleTheme() {
+            const b = document.body;
+            const current = b.getAttribute('data-theme');
+            b.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+        }
+    </script>
 </body>
 </html>
