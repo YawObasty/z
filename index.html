@@ -38,7 +38,7 @@
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; }
         .product-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
         .product-card:hover { transform: translateY(-5px); }
-        .product-img { height: 200px; background: #e0e7ff; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+        .product-img { height: 200px; width: 100%; background-color: #e0e7ff; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
         .product-info { padding: 20px; }
         .price { color: #2ecc71; font-weight: bold; font-size: 1.3rem; margin: 5px 0; }
 
@@ -51,22 +51,20 @@
         .auth-tab.active { color: #4db8ff; border-bottom: 2px solid #4db8ff; }
         .auth-form { display: none; flex-direction: column; gap: 15px; text-align: left; }
         .auth-form.active { display: flex; }
-        .auth-form input, .sell-form input, .sell-form select, .sell-form textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; width: 100%; font-size: 1rem; }
+        .auth-form input, .sell-form input, .sell-form select, .sell-form textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; width: 100%; font-size: 1rem; margin-bottom: 10px; }
         .close-x { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #888; }
 
         /* --- SELL SECTION --- */
         .sell-section { padding: 80px 10%; background: #fff; }
-        .sell-form { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
+        .sell-form { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; }
 
         /* --- SUPPORT BUBBLE --- */
         .support-bubble { position: fixed; bottom: 90px; left: 20px; background: #25D366; color: white; padding: 10px 18px; border-radius: 50px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 2500; font-weight: bold; }
 
         /* --- MOBILE BOTTOM NAV --- */
         .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; border-top: 1px solid #eee; z-index: 2000; justify-content: space-around; padding: 12px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-        .nav-item { color: #888; display: flex; flex-direction: column; align-items: center; font-size: 0.75rem; font-weight: 600; }
+        .nav-item { color: #888; display: flex; flex-direction: column; align-items: center; font-size: 0.75rem; font-weight: 600; text-decoration: none; }
         .nav-item.active { color: #4db8ff; }
-
-        #scrollToTop { display: none; position: fixed; bottom: 90px; right: 20px; background: #4db8ff; color: #fff; border: none; padding: 12px 16px; border-radius: 50%; cursor: pointer; z-index: 1001; }
 
         @media (max-width: 768px) {
             .top-nav .nav-links { display: none; }
@@ -105,7 +103,7 @@
     <section class="sell-section" id="sell">
         <div class="section-title"><h2>Post an Item</h2><div class="underline"></div></div>
         <form class="sell-form" id="sellForm">
-            <input type="text" id="itemName" placeholder="What are you selling?" required>
+            <input type="text" id="itemName" placeholder="Item Name" required>
             <input type="number" id="itemPrice" placeholder="Price (GHS)" required>
             <select id="itemCat" required>
                 <option value="">Category</option>
@@ -113,8 +111,10 @@
                 <option>Fashion</option>
                 <option>Home</option>
             </select>
-            <textarea id="itemDesc" placeholder="Description & WhatsApp Number" rows="4"></textarea>
-            <button type="submit" class="btn">Publish to Marketplace</button>
+            <label style="font-size: 0.8rem; font-weight: bold; margin-bottom: 5px;">Upload Product Photo:</label>
+            <input type="file" id="itemImage" accept="image/*" required style="border: 2px dashed #4db8ff; padding: 10px;">
+            <textarea id="itemDesc" placeholder="Description & Contact Info" rows="4"></textarea>
+            <button type="submit" id="publishBtn" class="btn">Publish to Marketplace</button>
         </form>
     </section>
 
@@ -128,7 +128,7 @@
             <div id="authFields">
                 <div class="auth-tabs">
                     <button class="auth-tab active" id="tabL" onclick="switchAuth('login')">Login</button>
-                    <button class="auth-tab" id="tabR" onclick="switchAuth('register')">Register</button>
+                    <button class="auth-tab" id="tabR" onclick="switchAuth('reg')">Register</button>
                 </div>
                 <form id="loginForm" class="auth-form active">
                     <input type="email" id="lEmail" placeholder="Email" required>
@@ -146,10 +146,10 @@
 
     <div id="successModal" class="modal-overlay">
         <div class="modal-content">
-            <div class="success-icon">✔️</div>
-            <h2>Item Published!</h2>
-            <p>Your item is now visible to everyone in Koforidua.</p>
-            <button onclick="document.getElementById('successModal').classList.remove('active')" class="btn">Great!</button>
+            <div style="font-size: 3rem; color: #2ecc71;">✔️</div>
+            <h2>Success!</h2>
+            <p>Your item is live for all of Koforidua to see.</p>
+            <button onclick="document.getElementById('successModal').classList.remove('active')" class="btn" style="margin-top: 20px;">View Marketplace</button>
         </div>
     </div>
 
@@ -172,36 +172,65 @@
             apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I",
             authDomain: "obasty-market.firebaseapp.com",
             projectId: "obasty-market",
-            storageBucket: "obasty-market.firebasestorage.app",
-            messagingSenderId: "753490577388",
-            appId: "1:753490577388:web:8b2dac8f4082d89ee662c9",
-            measurementId: "G-1S6KPNM6QS"
+            appId: "1:753490577388:web:8b2dac8f4082d89ee662c9"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const colRef = collection(db, "listings");
 
-        // 1. Publish to Firebase
+        // --- FREE IMAGE UPLOAD FUNCTION (ImgBB) ---
+        async function uploadImage(file) {
+            const formData = new FormData();
+            formData.append("image", file);
+            
+            // PASTE YOUR IMGBB API KEY HERE!
+            const apiKey = 'f6f1d931d2c5da11833752754cf2dfcd'; 
+            
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
+            return data.data.url;
+        }
+
+        // --- PUBLISH LOGIC ---
         document.getElementById('sellForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const user = JSON.parse(localStorage.getItem('nana_user'));
             if(!user) return openAuth();
 
-            const newItem = {
-                name: document.getElementById('itemName').value,
-                price: document.getElementById('itemPrice').value,
-                desc: document.getElementById('itemDesc').value,
-                seller: user.name,
-                createdAt: new Date()
-            };
+            const btn = document.getElementById('publishBtn');
+            btn.innerText = "Uploading Item...";
+            btn.disabled = true;
 
-            await addDoc(colRef, newItem);
-            document.getElementById('successModal').classList.add('active');
-            document.getElementById('sellForm').reset();
+            try {
+                const file = document.getElementById('itemImage').files[0];
+                const imageUrl = await uploadImage(file);
+
+                const newItem = {
+                    name: document.getElementById('itemName').value,
+                    price: document.getElementById('itemPrice').value,
+                    desc: document.getElementById('itemDesc').value,
+                    image: imageUrl,
+                    seller: user.name,
+                    createdAt: new Date()
+                };
+
+                await addDoc(colRef, newItem);
+                document.getElementById('successModal').classList.add('active');
+                document.getElementById('sellForm').reset();
+            } catch (err) {
+                alert("Upload failed. Make sure you added your ImgBB API Key!");
+                console.error(err);
+            } finally {
+                btn.innerText = "Publish to Marketplace";
+                btn.disabled = false;
+            }
         });
 
-        // 2. Real-time Display for Everyone
+        // --- REAL-TIME DISPLAY ---
         const q = query(colRef, orderBy("createdAt", "desc"));
         onSnapshot(q, (snapshot) => {
             const grid = document.getElementById('publicListingGrid');
@@ -210,12 +239,12 @@
                 const item = doc.data();
                 grid.innerHTML += `
                     <div class="product-card">
-                        <div class="product-img">📦</div>
+                        <div class="product-img" style="background-image: url('${item.image}')"></div>
                         <div class="product-info">
                             <h3>${item.name}</h3>
                             <p class="price">₵ ${item.price}</p>
                             <p style="font-size:0.8rem; color:#888;">Seller: ${item.seller}</p>
-                            <a href="https://wa.me/233539547368?text=Is the ${item.name} still available?" class="btn" style="width:100%; margin-top:10px;">Contact</a>
+                            <a href="https://wa.me/233539547368?text=Hi, is the ${item.name} still available?" class="btn" style="width:100%; margin-top:10px;">Contact Seller</a>
                         </div>
                     </div>
                 `;
@@ -224,13 +253,14 @@
     </script>
 
     <script>
-        // --- AUTH & UI LOGIC ---
         function openAuth() { document.getElementById('authModal').classList.add('active'); }
         function closeAuth() { document.getElementById('authModal').classList.remove('active'); }
         
         function switchAuth(t) {
             document.getElementById('loginForm').style.display = t === 'login' ? 'flex' : 'none';
             document.getElementById('registerForm').style.display = t === 'reg' ? 'flex' : 'none';
+            document.getElementById('tabL').classList.toggle('active', t === 'login');
+            document.getElementById('tabR').classList.toggle('active', t === 'reg');
         }
 
         document.getElementById('registerForm').onsubmit = (e) => {
@@ -250,13 +280,7 @@
                 document.querySelector('.login-trigger').innerText = u.name.split(' ')[0];
             }
         }
-
         function logout() { localStorage.removeItem('nana_user'); location.reload(); }
-        
-        document.getElementById('shareBtn').onclick = () => {
-            window.open(`https://wa.me/?text=Check out NanaObasty Marketplace: ${window.location.href}`, '_blank');
-        };
-
         window.onload = updateUI;
     </script>
 </body>
