@@ -3,257 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NanaObasty Pro | Ghana's Elite Marketplace</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>NanaObasty | Premium Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent: #2563eb;
-            --text: #0f172a;
-            --light-text: #64748b;
-            --bg: #ffffff;
-            --surface: #f8fafc;
-            --border: #e2e8f0;
-            --radius-pro: 12px;
+            --brand: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --accent: #6366f1;
+            --bg: #fcfcfd;
+            --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 120px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg); color: #1a1f2e; padding-bottom: 100px; }
 
-        /* --- PRO HEADER --- */
+        /* --- PREMIUM HEADER --- */
         header {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(252, 252, 253, 0.8);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             padding: 20px 6%; display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255,255,255,0.8); backdrop-filter: saturate(180%) blur(20px);
-            position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border);
         }
-        .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 6px; }
-        .logo .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
-
-        /* --- SKELETON LOADING STATE --- */
-        .skeleton { background: #eee; background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%); border-radius: var(--radius-pro); background-size: 200% 100%; animation: 1.5s shine linear infinite; }
-        @keyframes shine { to { background-position-x: -200%; } }
-
-        /* --- HERO & SEARCH --- */
-        .hero { padding: 40px 6% 20px; max-width: 1200px; margin: 0 auto; }
-        .hero h1 { font-size: clamp(32px, 5vw, 48px); font-weight: 800; letter-spacing: -2px; line-height: 1.1; }
+        .logo { font-size: 22px; font-weight: 800; letter-spacing: -1px; background: var(--brand); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .search-pill {
-            background: var(--surface); border-radius: 100px; padding: 6px 6px 6px 20px;
-            display: flex; align-items: center; border: 1px solid var(--border); margin-top: 30px;
-            transition: all 0.3s ease;
+        .profile-icon { 
+            width: 40px; height: 40px; background: white; border-radius: 14px; 
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; cursor: pointer;
         }
-        .search-pill:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
-        .search-pill input { border: none; background: none; outline: none; width: 100%; font-size: 16px; font-weight: 500; color: var(--text); }
-        .search-btn { width: 44px; height: 44px; background: var(--text); border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .search-btn:active { transform: scale(0.9); }
+
+        /* --- HERO SEARCH --- */
+        .hero { padding: 40px 6% 20px; text-align: left; }
+        .hero h1 { font-size: 36px; font-weight: 800; line-height: 1.2; color: #0f172a; margin-bottom: 25px; }
+        
+        .search-container {
+            background: white; padding: 8px 8px 8px 20px; border-radius: 20px;
+            display: flex; align-items: center; box-shadow: var(--card-shadow);
+            border: 1px solid #f1f5f9;
+        }
+        .search-container input { border: none; outline: none; width: 100%; font-size: 16px; font-weight: 500; }
+        .search-btn { 
+            background: #1a1f2e; color: white; border: none; 
+            padding: 12px 20px; border-radius: 14px; font-weight: 600; cursor: pointer; 
+        }
 
         /* --- VIEW TRANSITIONS --- */
-        .view { display: none; padding: 0 6%; max-width: 1200px; margin: 0 auto; animation: viewEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .view { display: none; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         .view.active { display: block; }
-        @keyframes viewEnter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- PRO PRODUCT CARD --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; margin-top: 30px; }
+        /* --- PRODUCT CARDS --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 20px; padding: 20px 6%; }
         
-        .card { position: relative; cursor: pointer; border-radius: var(--radius-pro); overflow: hidden; transition: 0.3s; }
-        .card:hover { transform: translateY(-4px); }
-        .card-img-box { aspect-ratio: 1/1; border-radius: var(--radius-pro); overflow: hidden; background: var(--surface); border: 1px solid var(--border); margin-bottom: 12px; }
-        .card-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .card:hover .card-img-box img { transform: scale(1.05); }
-
-        .verified-badge { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; color: var(--accent); backdrop-filter: blur(4px); }
+        .card { 
+            background: white; border-radius: 24px; padding: 10px; 
+            box-shadow: var(--card-shadow); transition: all 0.3s ease; border: 1px solid #f8fafc;
+        }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 30px 40px rgba(0,0,0,0.08); }
+        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 18px; margin-bottom: 12px; }
         
-        .card-info h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
-        .card-info p { font-size: 14px; font-weight: 700; color: var(--accent); }
+        .card-info { padding: 5px; }
+        .card-price { font-size: 18px; font-weight: 800; color: #1a1f2e; display: block; }
+        .card-title { font-size: 13px; color: #64748b; font-weight: 500; margin-top: 4px; }
 
-        /* --- PRO FORM CONTROLS --- */
-        .form-wrap { max-width: 500px; margin: 40px auto; }
-        .form-group { margin-bottom: 24px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; color: var(--light-text); }
-        input[type="text"], input[type="number"], select, textarea {
-            width: 100%; border: 1px solid var(--border); border-radius: var(--radius-pro); padding: 14px;
-            font-size: 16px; outline: none; transition: 0.2s; background: var(--surface);
+        /* --- PRO FORM --- */
+        .form-card { max-width: 500px; margin: 20px auto; background: white; padding: 30px; border-radius: 30px; box-shadow: var(--card-shadow); }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        input, select, textarea { 
+            width: 100%; padding: 16px; border-radius: 16px; border: 1px solid #f1f5f9; 
+            background: #f8fafc; font-size: 15px; outline: none; transition: 0.3s;
         }
-        input:focus { border-color: var(--text); box-shadow: 0 0 0 1px var(--text); }
-        .btn-pro { background: var(--text); color: white; border: none; padding: 18px; width: 100%; font-weight: 700; border-radius: var(--radius-pro); cursor: pointer; transition: 0.2s; }
-        .btn-pro:active { transform: scale(0.98); }
+        input:focus { border-color: var(--accent); background: white; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
 
-        /* --- PRO DOCK NAVIGATION --- */
-        .dock {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.95); backdrop-filter: saturate(180%) blur(20px);
-            padding: 12px 30px; border-radius: 100px; display: flex; gap: 35px; z-index: 2000;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        /* --- FLOATING NAV BAR --- */
+        .navbar {
+            position: fixed; bottom: 25px; left: 5%; right: 5%; height: 70px;
+            background: rgba(26, 31, 46, 0.95); backdrop-filter: blur(10px);
+            border-radius: 24px; display: flex; justify-content: space-around; align-items: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 2000;
         }
-        .dock-item { color: rgba(255,255,255,0.5); cursor: pointer; transition: 0.3s; text-align: center; }
-        .dock-item.active { color: white; }
-        .dock-item svg { display: block; margin: 0 auto 4px; width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.2; }
-        .dock-item span { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .nav-item { color: rgba(255,255,255,0.5); text-align: center; font-size: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .nav-item.active { color: white; }
+        .nav-item svg { display: block; margin: 0 auto 4px; width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+
+        /* --- BUTTONS --- */
+        .btn-primary { background: var(--brand); color: white; border: none; padding: 18px; border-radius: 18px; width: 100%; font-weight: 700; cursor: pointer; font-size: 16px; }
+        .btn-call { background: #f1f5f9; border: none; padding: 10px; border-radius: 12px; width: 100%; margin-top: 10px; font-weight: 700; cursor: pointer; color: #1a1f2e; }
 
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo" onclick="switchView('home')">NanaObasty<div class="dot"></div></div>
-        <div id="authBtn" onclick="switchView('account')" style="cursor:pointer; font-size: 12px; font-weight: 700; color: var(--accent);">SIGN IN</div>
+        <div class="logo" onclick="switchView('home')">NanaObasty</div>
+        <div class="profile-icon" onclick="switchView('account')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1f2e" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
     </header>
 
     <main id="view-home" class="view active">
-        <section class="hero">
-            <h1>The Gold Standard <br> of Ghana's Trade.</h1>
-            <div class="search-pill">
-                <input type="text" id="searchInput" placeholder="Search verified listings...">
-                <button class="search-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                </button>
+        <div class="hero">
+            <h1>Discover Premium <br> Listings in <span style="color:var(--accent)">Ghana</span></h1>
+            <div class="search-container">
+                <input type="text" placeholder="Search for anything...">
+                <button class="search-btn">Find</button>
             </div>
-        </section>
-
-        <div class="grid" id="skeletonGrid">
-            <div class="card"><div class="card-img-box skeleton"></div><div class="skeleton" style="height:15px; width:60%; margin-bottom:10px;"></div><div class="skeleton" style="height:15px; width:40%;"></div></div>
-            <div class="card"><div class="card-img-box skeleton"></div><div class="skeleton" style="height:15px; width:60%; margin-bottom:10px;"></div><div class="skeleton" style="height:15px; width:40%;"></div></div>
-            <div class="card"><div class="card-img-box skeleton"></div><div class="skeleton" style="height:15px; width:60%; margin-bottom:10px;"></div><div class="skeleton" style="height:15px; width:40%;"></div></div>
         </div>
-
-        <div class="grid" id="mainGrid" style="display:none;"></div>
+        <div class="grid" id="mainGrid">
+            </div>
     </main>
 
     <main id="view-sell" class="view">
-        <div class="form-wrap">
-            <h2 style="font-size: 28px; margin-bottom: 10px;">Create Listing</h2>
-            <p style="color: var(--light-text); margin-bottom: 30px; font-size: 14px;">Fill in the details to publish to the public market.</p>
-            <form id="listingForm">
-                <div class="form-group">
-                    <label>Product Title</label>
-                    <input type="text" id="p-title" placeholder="e.g. 2024 Toyota Camry" required maxlength="50">
+        <div class="form-card">
+            <h2 style="margin-bottom: 25px;">Post New Item</h2>
+            <form id="postForm">
+                <div class="input-group">
+                    <label>What are you selling?</label>
+                    <input type="text" id="p-title" placeholder="iPhone 15 Pro, Mercedes C300..." required>
                 </div>
-                <div class="form-group">
+                <div class="input-group">
                     <label>Price (GH₵)</label>
-                    <input type="number" id="p-price" placeholder="0.00" required>
-                </div>
-                <div class="form-group">
-                    <label>Product Image</label>
-                    <input type="file" id="p-image" required>
-                </div>
-                <button type="submit" class="btn-pro" id="submitBtn">PUBLISH LISTING</button>
-            </form>
-        </div>
-    </main>
-
-    <main id="view-account" class="view">
-        <div class="form-wrap" style="text-align: center; padding-top: 50px;">
-            <div style="background: var(--surface); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            </div>
-            <h2>Account Access</h2>
-            <p style="color: var(--light-text); margin-top: 10px; margin-bottom: 30px;">Login to manage your listings and chats.</p>
-            <input type="email" id="auth-email" placeholder="Email Address" style="margin-bottom:15px;">
-            <input type="password" id="auth-pass" placeholder="Password" style="margin-bottom:20px;">
-            <button class="btn-pro" onclick="handleAuth()">CONTINUE</button>
-        </div>
-    </main>
-
-    <nav class="dock">
-        <div class="dock-item active" id="tab-home" onclick="switchView('home')">
-            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-            <span>Market</span>
-        </div>
-        <div class="dock-item" id="tab-sell" onclick="switchView('sell')">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span>Sell</span>
-        </div>
-        <div class="dock-item" onclick="alert('Inbox service initializing...')">
-            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-            <span>Inbox</span>
-        </div>
-    </nav>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        const firebaseConfig = { apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I", authDomain: "obasty-market.firebaseapp.com", projectId: "obasty-market", appId: "1:753490577388:web:8b2dac8f4082d89ee662c9" };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let user = null;
-
-        // --- PRO NAVIGATION ---
-        window.switchView = (id) => {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById('view-'+id).classList.add('active');
-            document.querySelectorAll('.dock-item').forEach(i => i.classList.remove('active'));
-            const tab = document.getElementById('tab-'+id);
-            if(tab) tab.classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-
-        // --- PRO AUTH ---
-        window.handleAuth = async () => {
-            const e = document.getElementById('auth-email').value;
-            const p = document.getElementById('auth-pass').value;
-            if(!e || !p) return alert("Fill all fields");
-            try { await signInWithEmailAndPassword(auth, e, p); } 
-            catch { await createUserWithEmailAndPassword(auth, e, p); }
-            switchView('home');
-        };
-
-        onAuthStateChanged(auth, u => {
-            user = u;
-            if(u) document.getElementById('authBtn').innerText = "MY DASHBOARD";
-        });
-
-        // --- PRO MARKET LOAD ---
-        onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), snap => {
-            const grid = document.getElementById('mainGrid');
-            const skeleton = document.getElementById('skeletonGrid');
-            
-            skeleton.style.display = 'none';
-            grid.style.display = 'grid';
-
-            grid.innerHTML = snap.docs.map(doc => {
-                const data = doc.data();
-                return `
-                <div class="card" onclick="window.location.href='tel:0240000000'">
-                    <span class="verified-badge">VERIFIED SELLER</span>
-                    <div class="card-img-box"><img src="${data.image}" loading="lazy"></div>
-                    <div class="card-info">
-                        <h3>${data.title}</h3>
-                        <p>₵ ${Number(data.price).toLocaleString()}</p>
-                    </div>
-                </div>`;
-            }).join('');
-        });
-
-        // --- PRO SUBMIT ---
-        document.getElementById('listingForm').onsubmit = async (e) => {
-            e.preventDefault();
-            if(!user) return switchView('account');
-            
-            const btn = document.getElementById('submitBtn');
-            btn.innerText = "AUTHENTICATING UPLOAD...";
-            btn.disabled = true;
-
-            try {
-                const file = document.getElementById('p-image').files[0];
-                const fd = new FormData(); fd.append("image", file);
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=f6f1d931d2c5da11833752754cf2dfcd`, { method: "POST", body: fd });
-                const json = await res.json();
-
-                await addDoc(collection(db, "listings"), {
-                    title: document.getElementById('p-title').value,
-                    price: document.getElementById('p-price').value,
-                    image: json.data.url,
-                    createdAt: new Date(),
-                    uid: user.uid
-                });
-                switchView('home');
-                document.getElementById('listingForm').reset();
-            } catch (err) { alert("Upload failed. Try again."); }
-            finally { btn.innerText = "PUBLISH LISTING"; btn.disabled = false; }
-        };
-    </script>
-</body>
-</html>
+                    <input type="
