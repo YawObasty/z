@@ -3,95 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NanaObasty | The Gold Standard</title>
+    <title>NanaObasty | Elite Interactive</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #6366F1; --secondary: #EC4899; --accent: #00D094;
-            --bg: #030712; --glass: rgba(17, 24, 39, 0.75);
+            --bg: #030712; --glass: rgba(17, 24, 39, 0.8);
             --border: rgba(255, 255, 255, 0.1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background: var(--bg); color: #fff; overflow-x: hidden; }
+        body { background: var(--bg); color: #fff; overflow-x: hidden; padding-bottom: 100px; }
 
-        /* --- Elite Background: Mouse Spotlight --- */
-        #spotlight {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(99, 102, 241, 0.12) 0%, transparent 40%);
-            z-index: -1; pointer-events: none;
-        }
+        /* --- Global Icon Style --- */
+        .icon { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; transition: 0.3s; }
 
-        /* --- SVG Icon Styling --- */
-        .icon { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; vertical-align: middle; }
-
-        /* --- Floating Navigation --- */
+        /* --- Navigation --- */
         nav {
-            position: sticky; top: 20px; margin: 0 5%;
+            position: sticky; top: 15px; margin: 0 5%;
             background: var(--glass); backdrop-filter: blur(20px);
             border: 1px solid var(--border); border-radius: 20px;
-            padding: 12px 25px; display: flex; justify-content: space-between;
-            align-items: center; z-index: 1000;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 1000;
         }
-
-        .logo { font-size: 1.4rem; font-weight: 800; letter-spacing: -1px; display: flex; align-items: center; gap: 10px; }
-        .logo span { color: var(--primary); }
-
-        .nav-right { display: flex; align-items: center; gap: 20px; }
-
-        /* --- Login Icon Button --- */
+        .logo { font-size: 1.4rem; font-weight: 800; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        
         .login-trigger {
-            background: rgba(99, 102, 241, 0.15); border: 1px solid var(--primary);
-            color: var(--primary); padding: 8px 16px; border-radius: 12px;
-            display: flex; align-items: center; gap: 8px; cursor: pointer;
-            transition: 0.3s; font-weight: 600;
+            background: rgba(99, 102, 241, 0.1); border: 1px solid var(--primary);
+            color: var(--primary); padding: 8px 18px; border-radius: 12px;
+            display: flex; align-items: center; gap: 8px; cursor: pointer; transition: 0.3s;
         }
-        .login-trigger:hover { background: var(--primary); color: white; box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
+        .login-trigger:hover { background: var(--primary); color: white; }
 
-        /* --- Main Hero Search --- */
-        .search-area { padding: 60px 5% 20px; max-width: 800px; margin: 0 auto; text-align: center; }
-        .search-box {
-            display: flex; align-items: center; background: var(--glass);
-            border: 1px solid var(--border); border-radius: 18px; padding: 15px 25px;
-            gap: 15px; margin-top: 30px; transition: 0.3s;
+        /* --- Views Management --- */
+        .view-section { display: none; animation: fadeIn 0.4s ease forwards; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Search Area --- */
+        .hero-search { padding: 40px 5%; text-align: center; }
+        .search-input-wrap {
+            max-width: 600px; margin: 25px auto; display: flex; align-items: center;
+            background: var(--glass); border: 1px solid var(--border);
+            padding: 15px 20px; border-radius: 18px; gap: 12px;
         }
-        .search-box:focus-within { border-color: var(--primary); box-shadow: 0 0 30px rgba(99, 102, 241, 0.2); }
-        .search-box input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 1rem; }
+        .search-input-wrap input { background: transparent; border: none; color: white; width: 100%; outline: none; }
 
-        /* --- Grid Layout --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 40px 5%; }
-
-        .card {
-            background: var(--glass); border-radius: 30px; border: 1px solid var(--border);
-            padding: 16px; position: relative; overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        .card:hover { transform: translateY(-12px); border-color: rgba(99, 102, 241, 0.4); }
-
-        .img-box { width: 100%; height: 200px; border-radius: 20px; overflow: hidden; margin-bottom: 18px; }
+        /* --- Cards Grid --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 0 5%; }
+        .card { background: var(--glass); border: 1px solid var(--border); border-radius: 28px; padding: 15px; transition: 0.3s; }
+        .card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .img-box { height: 180px; border-radius: 20px; overflow: hidden; margin-bottom: 15px; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- Card Buttons --- */
-        .btn-action {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 12px; border-radius: 14px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s;
+        /* --- Forms (Post Ad) --- */
+        .form-card { max-width: 500px; margin: 40px auto; background: var(--glass); padding: 30px; border-radius: 28px; border: 1px solid var(--border); }
+        input, select, textarea { 
+            width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; 
+            border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white; outline: none;
         }
-        .btn-main { background: var(--primary); color: white; flex: 2; }
-        .btn-sec { background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border); flex: 1; }
-        .btn-action:hover { opacity: 0.9; transform: scale(0.96); }
 
-        /* --- Mobile Bottom Nav --- */
+        /* --- Bottom Bar --- */
         .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 80px;
             background: var(--glass); backdrop-filter: blur(25px);
-            border-top: 1px solid var(--border); display: flex; justify-content: space-around;
-            align-items: center; padding-bottom: 5px; z-index: 2000;
+            border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 1000;
         }
-        .nav-item { color: rgba(255,255,255,0.5); text-align: center; cursor: pointer; transition: 0.3s; }
+        .nav-item { color: rgba(255,255,255,0.4); text-align: center; cursor: pointer; transition: 0.3s; padding: 10px; }
         .nav-item.active { color: var(--primary); }
-        .nav-item span { display: block; font-size: 0.65rem; margin-top: 4px; font-weight: 700; }
+        .nav-item span { display: block; font-size: 0.7rem; font-weight: 700; margin-top: 5px; }
 
+        /* --- Spotlight --- */
+        #spotlight { position: fixed; inset: 0; background: radial-gradient(circle at var(--x) var(--y), rgba(99, 102, 241, 0.1), transparent 40%); pointer-events: none; z-index: -1; }
     </style>
 </head>
 <body>
@@ -99,53 +81,102 @@
     <div id="spotlight"></div>
 
     <nav>
-        <div class="logo">
-            <svg class="icon" style="width:28px; height:28px; stroke:var(--primary);"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <div class="logo" onclick="switchView('feed')">
+            <svg class="icon" style="stroke:var(--primary)"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
             Nana<span>Obasty</span>
         </div>
-        <div class="nav-right">
-            <div class="login-trigger" onclick="alert('Login Modal')">
-                <svg class="icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <span>Login</span>
-            </div>
+        <div class="login-trigger" onclick="switchView('auth')">
+            <svg class="icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span id="userLabel">Login</span>
         </div>
     </nav>
 
-    <div class="search-area">
-        <h1 style="font-size: 2.5rem; font-weight: 800; letter-spacing: -1.5px;">Premium <span style="color:var(--primary)">Marketplace</span></h1>
-        <div class="search-box">
-            <svg class="icon" style="stroke:rgba(255,255,255,0.4)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" placeholder="Search cars, phones, services...">
+    <section id="view-feed" class="view-section active">
+        <div class="hero-search">
+            <h1>Find your <span style="color:var(--primary)">Next Big Thing</span></h1>
+            <div class="search-input-wrap">
+                <svg class="icon" style="opacity:0.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="I'm looking for...">
+            </div>
         </div>
-    </div>
+        <div class="grid" id="marketGrid"></div>
+    </section>
 
-    <div class="grid" id="marketGrid">
+    <section id="view-post" class="view-section">
+        <div class="form-card">
+            <h2 style="margin-bottom:20px;">Create Listing</h2>
+            <input type="text" placeholder="Product Title">
+            <input type="number" placeholder="Price (₵)">
+            <select>
+                <option>Electronics</option><option>Vehicles</option><option>Real Estate</option>
+            </select>
+            <textarea placeholder="Description" rows="4"></textarea>
+            <button style="width:100%; padding:15px; border-radius:12px; border:none; background:var(--primary); color:white; font-weight:700; cursor:pointer;">Publish Now</button>
         </div>
+    </section>
+
+    <section id="view-inbox" class="view-section">
+        <div style="text-align:center; padding:100px 5%;">
+            <svg class="icon" style="width:60px; height:60px; opacity:0.2; margin-bottom:20px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <p style="color:rgba(255,255,255,0.4)">No active conversations yet.</p>
+        </div>
+    </section>
+
+    <section id="view-auth" class="view-section">
+        <div class="form-card" style="text-align:center;">
+            <h2 style="margin-bottom:10px;">Welcome Back</h2>
+            <p style="font-size:0.9rem; color:rgba(255,255,255,0.5); margin-bottom:25px;">Enter your details to access your dashboard</p>
+            <input type="email" placeholder="Email Address">
+            <input type="password" placeholder="Password">
+            <button onclick="handleLogin()" style="width:100%; padding:15px; border-radius:12px; border:none; background:var(--primary); color:white; font-weight:700; cursor:pointer;">Enter NanaObasty</button>
+        </div>
+    </section>
 
     <div class="bottom-nav">
-        <div class="nav-item active">
+        <div class="nav-item active" id="btn-feed" onclick="switchView('feed')">
             <svg class="icon"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            <span>Feed</span>
+            <span>Market</span>
         </div>
-        <div class="nav-item">
-            <svg class="icon" style="stroke:var(--secondary);"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-            <span>Post Ad</span>
+        <div class="nav-item" id="btn-post" onclick="switchView('post')">
+            <svg class="icon" style="stroke:var(--secondary)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <span>Post</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" id="btn-inbox" onclick="switchView('inbox')">
             <svg class="icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             <span>Inbox</span>
         </div>
     </div>
 
     <script>
-        // Track Mouse Spotlight
+        // --- View Switcher Logic ---
+        function switchView(viewName) {
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+            // Show selected view
+            document.getElementById('view-' + viewName).classList.add('active');
+
+            // Update Bottom Nav active state
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            const activeBtn = document.getElementById('btn-' + viewName);
+            if(activeBtn) activeBtn.classList.add('active');
+
+            window.scrollTo(0,0);
+        }
+
+        // --- Auth Logic Placeholder ---
+        function handleLogin() {
+            document.getElementById('userLabel').innerText = "Account";
+            switchView('feed');
+        }
+
+        // --- Spotlight Mouse Effect ---
         document.addEventListener('mousemove', e => {
             document.documentElement.style.setProperty('--x', e.clientX + 'px');
             document.documentElement.style.setProperty('--y', e.clientY + 'px');
         });
 
-        const items = [
-            { t: "iPhone 15 Pro", p: "₵13,500", i: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=600" },
-            { t: "Benz C300 2022", p: "₵450,000", i: "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?q=80&w=600" },
-            { t: "MacBook Air M2", p: "₵18,000", i: "https://images.unsplash.com/photo-1611186871348-b1ec696e523b?q=80&w=600" },
-            { t
+        // --- Render Dummy Data ---
+        const data = [
+            { t: "Toyota Camry 2022", p: "₵320,000", i: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?q=80&w=400" },
+            { t: "Gaming PC Build", p: "₵15,500", i: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?q=80&w=400" },
+            { t: "iPhone 15 Pro", p: "₵13,200", i: "
