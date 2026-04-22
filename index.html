@@ -3,477 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NanaObasty | Ghana's Premium Marketplace</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>NANA OBASTY MARKETPLACE | Premium Shopping</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary: #0066FF;
-            --primary-dark: #0052cc;
-            --accent: #00D094;
-            --bg: #F8FAFC;
-            --card: #FFFFFF;
-            --text-main: #0F172A;
-            --text-muted: #64748B;
-            --border: #E2E8F0;
-            --glass: rgba(255, 255, 255, 0.8);
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-        }
-
-        [data-theme="dark"] {
-            --bg: #020617;
-            --card: #0F172A;
-            --text-main: #F1F5F9;
-            --text-muted: #94A3B8;
-            --border: #1E293B;
-            --glass: rgba(15, 23, 42, 0.8);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-
-        body { background: var(--bg); color: var(--text-main); line-height: 1.6; transition: 0.3s; }
-
-        /* --- Header & Glassmorphism --- */
-        nav.top-nav {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 0.8rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .logo { font-weight: 800; font-size: 1.4rem; letter-spacing: -0.5px; color: var(--primary); }
-        .logo span { color: var(--text-main); }
-
-        .nav-actions { display: flex; align-items: center; gap: 15px; }
-
-        /* --- Search & Filters --- */
-        .hero-search {
-            padding: 20px 5%;
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .search-wrapper {
-            display: flex;
-            gap: 12px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .input-group {
-            flex: 1;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 4px 12px;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-group input {
-            border: none;
-            background: transparent;
-            color: var(--text-main);
-            padding: 10px;
-            width: 100%;
-            outline: none;
-        }
-
-        .category-scroll {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 15px 5%;
-            scrollbar-width: none;
-        }
-        .category-scroll::-webkit-scrollbar { display: none; }
-
-        .cat-pill {
-            padding: 8px 20px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 25px;
-            white-space: nowrap;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-
-        .cat-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
-
-        /* --- Product Grid --- */
-        .main-container { padding: 20px 5%; max-width: 1400px; margin: 0 auto; min-height: 100vh; }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .product-card {
-            background: var(--card);
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-            position: relative;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-        }
-
-        .product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
-
-        .card-img {
-            height: 180px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .price-tag {
-            position: absolute;
-            bottom: 12px;
-            left: 12px;
-            background: var(--primary);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 0.9rem;
-        }
-
-        .card-body { padding: 15px; }
-        .card-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 5px; display: block; }
-        .card-loc { font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
-
-        /* --- Sell Form & Modals --- */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            z-index: 2000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal-overlay.active { display: flex; }
-
-        .modal-content {
-            background: var(--card);
-            width: 100%;
-            max-width: 500px;
-            border-radius: 24px;
-            padding: 30px;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn:hover { opacity: 0.9; transform: scale(0.98); }
-        .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-main); }
-
-        /* --- Bottom Nav (Mobile) --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px;
-            border-top: 1px solid var(--border);
-            z-index: 1000;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 0.7rem;
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-        .nav-item.active { color: var(--primary); }
-        .nav-item i { font-size: 1.2rem; margin-bottom: 4px; }
-
-        #sellSection { display: none; margin-bottom: 100px; }
-
-        /* Form Styling */
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: var(--text-muted); }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text-main);
-            outline: none;
-        }
-
-        /* Profile & Icons */
-        .avatar-circle { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; }
+        .gold-gradient { background: linear-gradient(135deg, #D4AF37 0%, #F1C40F 100%); }
+        .text-gold { color: #D4AF37; }
+        .bg-charcoal { background-color: #1A1A1A; }
     </style>
 </head>
-<body data-theme="light">
+<body class="bg-gray-50 font-sans">
 
-    <nav class="top-nav">
-        <div class="logo">NANA<span>OBASTY</span></div>
-        <div class="nav-actions">
-            <button onclick="toggleTheme()" class="btn-outline" style="padding: 8px; border-radius: 50%; width: 38px; height: 38px;">🌓</button>
-            <div id="userProfile" class="avatar-circle" onclick="openAuth()">?</div>
-        </div>
-    </nav>
+    <nav class="bg-charcoal text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-tighter">
+                NANA <span class="text-gold">OBASTY</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-8 font-medium">
+                <a href="#" class="hover:text-gold transition">Home</a>
+                <a href="#" class="hover:text-gold transition">Shop</a>
+                <a href="#" class="hover:text-gold transition">Categories</a>
+                <a href="#" class="hover:text-gold transition">Deals</a>
+            </div>
 
-    <div id="buySection">
-        <div class="hero-search">
-            <div class="search-wrapper">
-                <div class="input-group">
-                    <span>🔍</span>
-                    <input type="text" id="mainSearch" placeholder="Search phones, cars, or services in Ghana...">
+            <div class="flex items-center space-x-5">
+                <button class="hover:text-gold"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <div class="relative">
+                    <button class="hover:text-gold"><i class="fa-solid fa-cart-shopping"></i></button>
+                    <span class="absolute -top-2 -right-2 bg-gold-gradient text-black text-xs font-bold px-1.5 rounded-full">0</span>
                 </div>
-                <select id="regionSelect" style="width: auto; max-width: 150px;">
-                    <option value="All">All Regions</option>
-                    <option>Greater Accra</option>
-                    <option>Ashanti Region</option>
-                    <option>Eastern Region</option>
-                </select>
+                <button class="md:hidden"><i class="fa-solid fa-bars"></i></button>
             </div>
         </div>
-
-        <div class="category-scroll">
-            <div class="cat-pill active" onclick="filterCat('All', this)">All Items</div>
-            <div class="cat-pill" onclick="filterCat('Electronics', this)">📱 Electronics</div>
-            <div class="cat-pill" onclick="filterCat('Vehicles', this)">🚗 Vehicles</div>
-            <div class="cat-pill" onclick="filterCat('Property', this)">🏠 Property</div>
-            <div class="cat-pill" onclick="filterCat('Fashion', this)">👕 Fashion</div>
-            <div class="cat-pill" onclick="filterCat('Jobs', this)">💼 Jobs</div>
-        </div>
-
-        <main class="main-container">
-            <div class="product-grid" id="productGrid">
-                </div>
-        </main>
-    </div>
-
-    <div id="sellSection" class="main-container">
-        <div style="max-width: 600px; margin: 0 auto; background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid var(--border);">
-            <h2 style="margin-bottom: 20px;">List your item</h2>
-            <form id="listingForm">
-                <div class="form-group">
-                    <label>Product Name</label>
-                    <input type="text" id="pName" placeholder="e.g. iPhone 15 Pro Max" required>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="form-group">
-                        <label>Price (GHS)</label>
-                        <input type="number" id="pPrice" placeholder="0.00" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Category</label>
-                        <select id="pCategory">
-                            <option>Electronics</option><option>Vehicles</option><option>Property</option><option>Fashion</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Exact Location</label>
-                    <input type="text" id="pLoc" placeholder="e.g. Kumasi, Adum" required>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="pDesc" rows="4" placeholder="Describe your item..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Photo</label>
-                    <input type="file" id="pImage" accept="image/*" required>
-                </div>
-                <button type="submit" class="btn" style="width: 100%;">🚀 Post Listing</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="authModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 id="authTitle">Welcome back</h2>
-            <p id="authSub" style="color:var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Please login to manage your account.</p>
-            <form id="loginForm">
-                <input type="email" id="email" placeholder="Email Address" required style="margin-bottom:12px;">
-                <input type="password" id="pass" placeholder="Password" required style="margin-bottom:20px;">
-                <button type="submit" class="btn" style="width:100%;">Sign In</button>
-            </form>
-            <button onclick="closeAuth()" class="btn-outline" style="width:100%; margin-top:10px;">Cancel</button>
-        </div>
-    </div>
-
-    <nav class="bottom-nav">
-        <a href="#" class="nav-item active" onclick="showView('buy')"><i>🏠</i><span>Home</span></a>
-        <a href="#" class="nav-item" onclick="showView('sell')"><i>➕</i><span>Sell</span></a>
-        <a href="#" class="nav-item" onclick="openAuth()"><i>👤</i><span>Profile</span></a>
     </nav>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        // CONFIG
-        const firebaseConfig = { apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I", authDomain: "obasty-market.firebaseapp.com", projectId: "obasty-market", appId: "1:753490577388:web:8b2dac8f4082d89ee662c9" };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const IMGBB_API = "f6f1d931d2c5da11833752754cf2dfcd";
-
-        let state = {
-            user: null,
-            allListings: [],
-            activeCat: 'All',
-            searchQuery: '',
-            region: 'All'
-        };
-
-        // --- AUTH LOGIC ---
-        onAuthStateChanged(auth, async (user) => {
-            state.user = user;
-            if(user) {
-                const docSnap = await getDoc(doc(db, "users", user.uid));
-                const data = docSnap.data();
-                document.getElementById('userProfile').innerText = data?.name?.[0] || user.email[0].toUpperCase();
-            }
-        });
-
-        window.openAuth = () => document.getElementById('authModal').classList.add('active');
-        window.closeAuth = () => document.getElementById('authModal').classList.remove('active');
-
-        document.getElementById('loginForm').onsubmit = async (e) => {
-            e.preventDefault();
-            try {
-                await signInWithEmailAndPassword(auth, email.value, pass.value);
-                closeAuth();
-            } catch(err) { alert("Login failed: " + err.message); }
-        };
-
-        // --- CORE FUNCTIONS ---
-        window.showView = (view) => {
-            document.getElementById('buySection').style.display = view === 'buy' ? 'block' : 'none';
-            document.getElementById('sellSection').style.display = view === 'sell' ? 'block' : 'none';
-            document.querySelectorAll('.nav-item').forEach((n, idx) => {
-                n.classList.toggle('active', (view === 'buy' && idx === 0) || (view === 'sell' && idx === 1));
-            });
-        };
-
-        window.toggleTheme = () => {
-            const current = document.body.getAttribute('data-theme');
-            document.body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-        };
-
-        window.filterCat = (cat, el) => {
-            state.activeCat = cat;
-            document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
-            el.classList.add('active');
-            render();
-        };
-
-        // --- DATA HANDLING ---
-        onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
-            state.allListings = snap.docs.map(d => ({id: d.id, ...d.data()}));
-            render();
-        });
-
-        function render() {
-            const grid = document.getElementById('productGrid');
-            const filtered = state.allListings.filter(item => {
-                const matchesSearch = item.name.toLowerCase().includes(state.searchQuery.toLowerCase());
-                const matchesCat = state.activeCat === 'All' || item.category === state.activeCat;
-                const matchesRegion = state.region === 'All' || item.region === state.region;
-                return matchesSearch && matchesCat && matchesRegion;
-            });
-
-            grid.innerHTML = filtered.map(item => `
-                <div class="product-card" onclick="contactSeller('${item.sellerPhone}', '${item.name}')">
-                    <div class="card-img" style="background-image:url('${item.image}')">
-                        <span class="price-tag">GH₵ ${Number(item.price).toLocaleString()}</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="card-title">${item.name}</span>
-                        <div class="card-loc">📍 ${item.location}</div>
-                    </div>
+    <header class="gold-gradient py-16 md:py-24">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 text-center md:text-left">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-black mb-6 leading-tight">
+                    Regal Quality. <br>Modern Convenience.
+                </h1>
+                <p class="text-lg text-black/80 mb-8 max-w-lg">
+                    Experience the finest marketplace curated for excellence. From premium electronics to authentic fashion, we deliver the best to your doorstep.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+                    <a href="#shop" class="bg-black text-white px-8 py-3 rounded-md font-bold hover:bg-gray-800 transition shadow-xl">Shop Now</a>
+                    <a href="#" class="border-2 border-black text-black px-8 py-3 rounded-md font-bold hover:bg-black hover:text-white transition">View Deals</a>
                 </div>
-            `).join('');
-        }
+            </div>
+            <div class="md:w-1/2 mt-12 md:mt-0 flex justify-center">
+                <div class="w-72 h-72 md:w-96 md:h-96 bg-white/30 rounded-full flex items-center justify-center border-4 border-white/50 shadow-2xl">
+                    <i class="fa-solid fa-bag-shopping text-white text-9xl"></i>
+                </div>
+            </div>
+        </div>
+    </header>
 
-        window.contactSeller = (phone, name) => {
-            const msg = encodeURIComponent(`Hi, I'm interested in your "${name}" on NanaObasty.`);
-            window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
-        };
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="flex items-center space-x-4 p-6 border rounded-lg">
+                <i class="fa-solid fa-truck-fast text-3xl text-gold"></i>
+                <div>
+                    <h3 class="font-bold">Fast Delivery</h3>
+                    <p class="text-sm text-gray-500">Reliable shipping nationwide.</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4 p-6 border rounded-lg">
+                <i class="fa-solid fa-shield-halved text-3xl text-gold"></i>
+                <div>
+                    <h3 class="font-bold">Secure Payment</h3>
+                    <p class="text-sm text-gray-500">100% encrypted transactions.</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4 p-6 border rounded-lg">
+                <i class="fa-solid fa-headset text-3xl text-gold"></i>
+                <div>
+                    <h3 class="font-bold">24/7 Support</h3>
+                    <p class="text-sm text-gray-500">We are here to help anytime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // --- POSTING LOGIC ---
-        document.getElementById('listingForm').onsubmit = async (e) => {
-            e.preventDefault();
-            if(!state.user) return openAuth();
+    <section id="shop" class="py-16 container mx-auto px-6">
+        <div class="flex justify-between items-end mb-10">
+            <div>
+                <h2 class="text-3xl font-bold text-charcoal">Featured Products</h2>
+                <div class="h-1 w-20 bg-gold-gradient mt-2"></div>
+            </div>
+            <a href="#" class="text-gold font-bold hover:underline">View All</a>
+        </div>
 
-            const btn = e.target.querySelector('button');
-            btn.innerText = "Processing...";
-            btn.disabled = true;
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="bg-white rounded-xl shadow-sm hover:shadow-xl transition group p-4 border border-gray-100">
+                <div class="h-64 bg-gray-100 rounded-lg mb-4 flex items-center justify-center relative overflow-hidden">
+                    <i class="fa-solid fa-laptop text-gray-300 text-6xl group-hover:scale-110 transition duration-300"></i>
+                    <span class="absolute top-2 left-2 bg-charcoal text-white text-xs px-2 py-1 rounded">New</span>
+                </div>
+                <h3 class="font-bold text-lg mb-1">Premium Laptop Pro</h3>
+                <p class="text-gray-500 text-sm mb-3">High-performance tech for professionals.</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-bold text-charcoal">$1,299.00</span>
+                    <button class="bg-charcoal text-white p-2 rounded-full hover:bg-gold-gradient hover:text-black transition">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+            </div>
 
-            try {
-                // Upload Image
-                const fd = new FormData();
-                fd.append("image", document.getElementById('pImage').files[0]);
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API}`, { method: "POST", body: fd });
-                const imgData = await res.json();
+            <div class="bg-white rounded-xl shadow-sm hover:shadow-xl transition group p-4 border border-gray-100">
+                <div class="h-64 bg-gray-100 rounded-lg mb-4 flex items-center justify-center relative overflow-hidden">
+                    <i class="fa-solid fa-clock text-gray-300 text-6xl group-hover:scale-110 transition duration-300"></i>
+                </div>
+                <h3 class="font-bold text-lg mb-1">Luxury Gold Watch</h3>
+                <p class="text-gray-500 text-sm mb-3">Timeless elegance for your wrist.</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-bold text-charcoal">$450.00</span>
+                    <button class="bg-charcoal text-white p-2 rounded-full hover:bg-gold-gradient hover:text-black transition">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+            </div>
 
-                await addDoc(collection(db, "listings"), {
-                    name: pName.value,
-                    price: pPrice.value,
-                    category: pCategory.value,
-                    location: pLoc.value,
-                    image: imgData.data.url,
-                    sellerId: state.user.uid,
-                    sellerPhone: "233" + (Math.random() > 0.5 ? "244123456" : "501234567"), // Placeholder for demo
-                    createdAt: new Date()
-                });
+            </div>
+    </section>
 
-                alert("Success! Your ad is live.");
-                location.reload();
-            } catch(err) {
-                alert("Error posting ad.");
-                btn.innerText = "Post Listing";
-                btn.disabled = false;
-            }
-        };
-
-        // Search Listeners
-        document.getElementById('mainSearch').oninput = (e) => { state.searchQuery = e.target.value; render(); };
-        document.getElementById('regionSelect').onchange = (e) => { state.region = e.target.value; render(); };
-
-    </script>
-</body>
-</html>
+    <footer class="bg-charcoal text-white py-12 mt-12">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div class="col-span-1 md:col-span-1">
+                <h2 class="text-2xl font-bold mb-6">NANA <span class="text-gold">OBASTY</span></h2>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Your trusted marketplace for quality products and royal service. Experience the gold standard of online shopping.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 border
