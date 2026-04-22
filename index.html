@@ -18,7 +18,17 @@
         
         .filter-container { padding: 15px 10%; background: var(--card-bg); border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 10px; position: sticky; top: 60px; z-index: 999; }
         .search-bar { flex: 2; min-width: 200px; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--input-bg); color: var(--text); outline: none; }
-        .search-bar:focus { border-color: var(--accent); }
+        .search-bar:focus { border-color: var(--accent); 
+                          <div class="filter-container">
+    <input type="text" id="searchInput" class="search-bar" placeholder="Search for items...">
+    <div class="categories-tags" id="categoryBar">
+        <div class="tag active" onclick="filterByCategory('All')">All</div>
+        <div class="tag" onclick="filterByCategory('Electronics')">Electronics</div>
+        <div class="tag" onclick="filterByCategory('Vehicles')">Vehicles</div>
+        <div class="tag" onclick="filterByCategory('Property')">Property</div>
+        <div class="tag" onclick="filterByCategory('Fashion')">Fashion</div>
+    </div>
+</div>}
 
         /* --- MARKETPLACE GRID --- */
         .marketplace { padding: 30px 10%; min-height: 60vh; }
