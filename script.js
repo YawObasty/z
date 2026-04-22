@@ -76,3 +76,63 @@ async function sendMessage(chatId) {
 
     input.value = ""; // Clear input
 }
+// New Global State
+let activeCategory = "All";
+
+// Category Filter Logic
+window.filterByCategory = (cat) => {
+    activeCategory = cat;
+    // Update UI tags
+    document.querySelectorAll('.tag').forEach(t => {
+        t.classList.toggle('active', t.innerText === cat);
+    });
+    applyFilters();
+};
+
+// Updated applyFilters to include categories
+function applyFilters() {
+    const s = document.getElementById('searchInput').value.toLowerCase();
+    const r = document.getElementById('regFilter').value;
+    
+    let filtered = allListings.filter(i => {
+        const matchesSearch = i.name.toLowerCase().includes(s);
+        const matchesRegion = (r === "All" || i.region === r);
+        const matchesCategory = (activeCategory === "All" || i.category === activeCategory);
+        return matchesSearch && matchesRegion && matchesCategory;
+    });
+    
+    renderListings(filtered);
+}
+
+// Format Price Function (e.g., 1000 -> 1,000)
+const formatMoney = (num) => new Intl.NumberFormat('en-GH', { style: 'currency', currency: 'GHS' }).format(num);
+
+// Updated Render function with detail view
+function renderListings(data) {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = data.length ? "" : "<p style='grid-column:1/-1; text-align:center; opacity:0.5;'>No items found...</p>";
+    
+    data.forEach(item => {
+        const isLiked = likedIds.includes(item.id);
+        grid.innerHTML += `
+            <div class="product-card" onclick="showProductDetails('${item.id}')">
+                <div class="badge">New</div>
+                <button class="like-btn ${isLiked?'active':''}" onclick="toggleLike('${item.id}', event)">${isLiked?'❤️':'🤍'}</button>
+                <div class="product-img" style="background-image:url('${item.image}')">
+                    <div class="view-count">👁️ ${item.views || 0}</div>
+                </div>
+                <div class="product-info">
+                    <span class="loc-tag">📍 ${item.location}, ${item.region}</span>
+                    <strong style="display:block; margin-bottom:5px;">${item.name}</strong>
+                    <p style="color:var(--success); font-weight:bold; font-size:1.1rem;">${formatMoney(item.price)}</p>
+                </div>
+            </div>`;
+    });
+}
+
+// Feature: Safety Modal when clicking an item
+window.showProductDetails = (id) => {
+    const item = allListings.find(i => i.id === id);
+    // You can use your existing authModal or a new one to show full description
+    alert(`Item: ${item.name}\n\nDescription: ${item.pDesc || 'No description provided.'}\n\nSafety Tip: Always meet sellers in public places!`);
+};
