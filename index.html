@@ -5,161 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NANA OBASTY | Premium Marketplace</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .gold-accent { color: #C5A059; }
         .bg-gold-accent { background: #C5A059; }
-        .bg-dark { background-color: #0F0F0F; }
-        .product-card:hover .product-image { transform: scale(1.05); }
-        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
-        .hero-gradient { background: linear-gradient(135deg, #0F0F0F 0%, #2D2D2D 100%); }
+        .glass { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .product-card:hover img { transform: scale(1.08); }
+        .hero-bg {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+        }
     </style>
 </head>
-<body class="bg-[#F8F9FA] text-[#1A1A1A]">
+<body class="bg-[#FDFDFD] text-[#1A1A1A]">
 
-    <div class="bg-dark text-white text-[10px] tracking-[0.2em] py-2 text-center uppercase font-bold">
-        Free Worldwide Shipping on Orders Over $200 — Shop Now
+    <div class="bg-[#111] text-white text-[10px] tracking-[0.3em] py-2.5 text-center uppercase font-bold">
+        Luxury Goods Delivered to Your Doorstep
     </div>
 
     <nav class="glass sticky top-0 z-50 border-b border-gray-100">
-        <div class="container mx-auto px-6 py-5 flex justify-between items-center">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="text-2xl font-extrabold tracking-tighter flex items-center">
-                NANA <span class="bg-dark text-white ml-1 px-2 py-0.5 rounded">OBASTY</span>
+                NANA <span class="bg-[#111] text-white ml-1 px-2 py-0.5 rounded">OBASTY</span>
             </a>
             
-            <div class="hidden lg:flex space-x-10 text-xs uppercase tracking-widest font-semibold">
-                <a href="#" class="hover:gold-accent transition">New Arrivals</a>
-                <a href="#" class="hover:gold-accent transition">Collections</a>
-                <a href="#" class="hover:gold-accent transition">Exclusives</a>
-                <a href="#" class="hover:gold-accent transition">Sale</a>
+            <div class="hidden lg:flex space-x-10 text-[11px] uppercase tracking-widest font-bold">
+                <a href="#" class="hover:text-[#C5A059] transition">New Arrivals</a>
+                <a href="#" class="hover:text-[#C5A059] transition">Technology</a>
+                <a href="#" class="hover:text-[#C5A059] transition">Style</a>
+                <a href="#" class="hover:text-[#C5A059] transition">Limited</a>
             </div>
 
-            <div class="flex items-center space-x-6">
-                <a href="#"><i class="fa-solid fa-magnifying-glass text-lg"></i></a>
-                <a href="#" class="relative">
-                    <i class="fa-solid fa-bag-shopping text-lg"></i>
-                    <span class="absolute -top-2 -right-2 bg-gold-accent text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">0</span>
-                </a>
-                <a href="#" class="hidden sm:block text-xs font-bold uppercase tracking-widest border-b-2 border-dark">Login</a>
+            <div class="flex items-center space-x-5">
+                <button class="material-symbols-outlined text-[22px]">search</button>
+                <div class="relative">
+                    <button class="material-symbols-outlined text-[22px]">shopping_bag</button>
+                    <span class="absolute -top-1 -right-1 bg-[#C5A059] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">2</span>
+                </div>
+                <button class="material-symbols-outlined text-[22px] lg:hidden">menu</button>
             </div>
         </div>
     </nav>
 
-    <header class="relative h-[80vh] flex items-center overflow-hidden hero-gradient">
-        <div class="container mx-auto px-6 grid md:grid-cols-2 items-center z-10">
-            <div class="text-white space-y-6">
-                <span class="text-gold-accent font-bold tracking-[0.3em] uppercase text-sm block">Established 2026</span>
-                <h1 class="text-5xl md:text-7xl font-extrabold leading-tight">The Standard of <br>Modern Living.</h1>
-                <p class="text-gray-400 text-lg max-w-md font-light leading-relaxed">
-                    Curating a marketplace of high-end essentials designed for those who value quality over quantity.
+    <header class="relative h-[75vh] flex items-center hero-bg">
+        <div class="container mx-auto px-6 z-10 text-center md:text-left">
+            <div class="max-w-2xl text-white space-y-6">
+                <p class="text-[#C5A059] font-bold tracking-[0.4em] uppercase text-xs">Excellence Since 2026</p>
+                <h1 class="text-5xl md:text-8xl font-extrabold leading-[0.9] tracking-tighter">
+                    THE GOLD <br>STANDARD.
+                </h1>
+                <p class="text-gray-300 text-lg font-light max-w-md">
+                    Curated marketplace for those who refuse to settle for anything less than perfection.
                 </p>
-                <div class="pt-4">
-                    <a href="#shop" class="bg-white text-dark px-10 py-4 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-gold-accent hover:text-white transition-all duration-300 shadow-2xl">
-                        Explore Collection
+                <div class="pt-6">
+                    <a href="#shop" class="bg-white text-black px-12 py-4 rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#C5A059] hover:text-white transition-all duration-500 shadow-2xl">
+                        Shop Collection
                     </a>
                 </div>
             </div>
         </div>
-        <div class="absolute -right-20 top-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/5 rounded-full"></div>
     </header>
 
-    <section class="py-20 container mx-auto px-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="relative group overflow-hidden h-80 bg-gray-200 rounded-2xl">
-                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all z-10"></div>
-                <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
-                    <h3 class="text-white text-2xl font-bold">Tech Elite</h3>
-                    <p class="text-white/80 text-sm mb-4">Precision Engineering</p>
-                    <a href="#" class="text-white text-xs font-bold uppercase tracking-widest underline decoration-gold-accent decoration-2 underline-offset-8">Shop Now</a>
+    <section id="shop" class="py-24 container mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+            <div>
+                <h2 class="text-4xl font-extrabold tracking-tight">Curated Selection</h2>
+                <p class="text-gray-500 mt-2 font-medium">Quality tested and verified by Nana Obasty Experts</p>
+            </div>
+            <div class="flex space-x-4">
+                <button class="px-6 py-2 border rounded-full text-xs font-bold uppercase tracking-widest bg-black text-white">All</button>
+                <button class="px-6 py-2 border rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gray-100">Tech</button>
+                <button class="px-6 py-2 border rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gray-100">Lifestyle</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+            <div class="product-card group">
+                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800" 
+                         alt="Product" class="w-full h-full object-cover transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">View Details</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center px-2">
+                    <div>
+                        <h3 class="font-bold text-xl">Obasty Studio Pro</h3>
+                        <p class="text-gray-400 text-sm italic">High Fidelity Sound</p>
+                    </div>
+                    <p class="text-xl font-extrabold text-[#C5A059]">$399</p>
                 </div>
             </div>
-            <div class="relative group overflow-hidden h-80 bg-gray-300 rounded-2xl">
-                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all z-10"></div>
-                <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
-                    <h3 class="text-white text-2xl font-bold">Urban Fashion</h3>
-                    <p class="text-white/80 text-sm mb-4">Regal Aesthetics</p>
-                    <a href="#" class="text-white text-xs font-bold uppercase tracking-widest underline decoration-gold-accent decoration-2 underline-offset-8">Shop Now</a>
+
+            <div class="product-card group">
+                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
+                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800" 
+                         alt="Product" class="w-full h-full object-cover transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">View Details</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center px-2">
+                    <div>
+                        <h3 class="font-bold text-xl">Minimalist Series 1</h3>
+                        <p class="text-gray-400 text-sm italic">Premium Aesthetics</p>
+                    </div>
+                    <p class="text-xl font-extrabold text-[#C5A059]">$150</p>
                 </div>
             </div>
-            <div class="relative group overflow-hidden h-80 bg-gray-400 rounded-2xl">
-                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all z-10"></div>
-                <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
-                    <h3 class="text-white text-2xl font-bold">Home Luxury</h3>
-                    <p class="text-white/80 text-sm mb-4">Elevated Comfort</p>
-                    <a href="#" class="text-white text-xs font-bold uppercase tracking-widest underline decoration-gold-accent decoration-2 underline-offset-8">Shop Now</a>
+
+            <div class="product-card group">
+                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
+                    <img src="https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&q=80&w=800" 
+                         alt="Product" class="w-full h-full object-cover transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">View Details</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center px-2">
+                    <div>
+                        <h3 class="font-bold text-xl">Executive Timepiece</h3>
+                        <p class="text-gray-400 text-sm italic">Precision Movement</p>
+                    </div>
+                    <p class="text-xl font-extrabold text-[#C5A059]">$850</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="shop" class="pb-24 container mx-auto px-6">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-extrabold mb-4">New Drops</h2>
-            <p class="text-gray-500 uppercase tracking-widest text-xs">Handpicked selections just for you</p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-            <div class="product-card group cursor-pointer">
-                <div class="relative overflow-hidden rounded-2xl bg-white aspect-[4/5] mb-6 flex items-center justify-center border border-gray-100 shadow-sm">
-                    <i class="fa-solid fa-mobile-screen-button text-7xl text-gray-100 group-hover:text-gold-accent/20 transition-all duration-500 product-image"></i>
-                    <button class="absolute bottom-4 left-4 right-4 bg-dark text-white py-3 rounded-xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 font-bold text-xs uppercase tracking-widest">
-                        Quick Add +
-                    </button>
-                </div>
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="font-bold text-gray-900 group-hover:text-gold-accent transition">Obasty Smart Ultra</h3>
-                        <p class="text-gray-400 text-sm">Space Grey Edition</p>
-                    </div>
-                    <span class="font-bold text-lg">$999.00</span>
-                </div>
-            </div>
-
-            <div class="product-card group cursor-pointer">
-                <div class="relative overflow-hidden rounded-2xl bg-white aspect-[4/5] mb-6 flex items-center justify-center border border-gray-100 shadow-sm">
-                    <i class="fa-solid fa-headphones text-7xl text-gray-100 group-hover:text-gold-accent/20 transition-all duration-500 product-image"></i>
-                    <button class="absolute bottom-4 left-4 right-4 bg-dark text-white py-3 rounded-xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 font-bold text-xs uppercase tracking-widest">
-                        Quick Add +
-                    </button>
-                </div>
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="font-bold text-gray-900 group-hover:text-gold-accent transition">Sonic Pro Headphones</h3>
-                        <p class="text-gray-400 text-sm">Active Noise Cancelling</p>
-                    </div>
-                    <span class="font-bold text-lg">$349.00</span>
-                </div>
-            </div>
-
-            </div>
-    </section>
-
-    <footer class="bg-dark text-white pt-20 pb-10">
-        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12">
-            <div class="md:col-span-5 space-y-6">
-                <h2 class="text-3xl font-extrabold tracking-tighter">NANA OBASTY</h2>
-                <p class="text-gray-500 max-w-sm leading-relaxed">
-                    Providing an unmatched shopping experience with curated goods and impeccable service. Stay ahead with the marketplace of the future.
-                </p>
-                <div class="flex space-x-6">
-                    <a href="#" class="hover:text-gold-accent transition"><i class="fa-brands fa-instagram text-xl"></i></a>
-                    <a href="#" class="hover:text-gold-accent transition"><i class="fa-brands fa-twitter text-xl"></i></a>
-                    <a href="#" class="hover:text-gold-accent transition"><i class="fa-brands fa-tiktok text-xl"></i></a>
-                </div>
-            </div>
-            
-            <div class="md:col-span-2">
-                <h4 class="text-xs uppercase tracking-[0.2em] font-bold mb-8 text-gold-accent">Legal</h4>
-                <ul class="space-y-4 text-sm text-gray-400">
-                    <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
-                    <li><a href="#" class="hover:text-white transition">Refund Terms</a></li>
-                    <li><a href="#" class="hover:text-white transition">Shipping Info</a></li>
-                </ul>
-            </div>
-
-            <div class="md:col-span-5">
-                <h4 class="text-xs uppercase tracking-[0.2em] font-bold mb-8 text-gold-accent">Newsletter</h4>
-                <form class="flex border-b border-gray-700 pb-2">
-                    <input type="email" placeholder="ENTER YOUR EMAIL" class="bg-transparent border-none w-full focus:
+    <footer class="bg-[#0A0A0A] text-white pt-20 pb-10">
+        <div class="container mx-auto px-6 text
