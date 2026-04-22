@@ -115,3 +115,52 @@
     background: #fff8e1; color: #ffa000; padding: 4px 10px; 
     border-radius: 20px; font-size: 0.75rem; font-weight: bold; border: 1px solid #ffe082;
 }
+/* New Category Pills */
+.categories-tags {
+    display: flex;
+    gap: 10px;
+    padding: 10px 10px 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+.categories-tags::-webkit-scrollbar { display: none; } /* Hide scrollbar for Chrome/Safari */
+
+.tag {
+    padding: 8px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+.tag.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+/* Badge for "Sold" or "New" */
+.badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--accent);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    z-index: 10;
+}
+
+/* Safety Tip Box */
+.safety-box {
+    background: #fff9db;
+    border: 1px solid #ffe066;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 15px;
+    font-size: 0.85rem;
+    color: #856404;
+}
