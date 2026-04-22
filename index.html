@@ -3,376 +3,477 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NanaObasty Marketplace | Ghana</title>
+    <title>NanaObasty | Ghana's Premium Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        /* --- CORE STYLES --- */
-        :root { --bg: #f4f7f6; --card-bg: #fff; --text: #333; --nav-bg: #1a2a3a; --border: #eee; --input-bg: #fff; --accent: #4db8ff; --heart: #ff4757; --success: #2ecc71; }
-        [data-theme="dark"] { --bg: #0f172a; --card-bg: #1e293b; --text: #f1f5f9; --nav-bg: #020617; --border: #334155; --input-bg: #334155; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; transition: background 0.3s, color 0.3s; }
-        body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 80px; }
-        
-        /* --- NAVIGATION --- */
-        nav.top-nav { background: var(--nav-bg); color: #fff; padding: 1rem 10%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .logo { font-size: 1.6rem; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
-        .theme-toggle { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #fff; margin-right: 15px; }
-        
-        .filter-container { padding: 15px 10%; background: var(--card-bg); border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 10px; position: sticky; top: 60px; z-index: 999; }
-        .search-bar { flex: 2; min-width: 200px; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--input-bg); color: var(--text); outline: none; }
-        .search-bar:focus { border-color: var(--accent); 
-                          <div class="filter-container">
-    <input type="text" id="searchInput" class="search-bar" placeholder="Search for items...">
-    <div class="categories-tags" id="categoryBar">
-        <div class="tag active" onclick="filterByCategory('All')">All</div>
-        <div class="tag" onclick="filterByCategory('Electronics')">Electronics</div>
-        <div class="tag" onclick="filterByCategory('Vehicles')">Vehicles</div>
-        <div class="tag" onclick="filterByCategory('Property')">Property</div>
-        <div class="tag" onclick="filterByCategory('Fashion')">Fashion</div>
-    </div>
-</div>}
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052cc;
+            --accent: #00D094;
+            --bg: #F8FAFC;
+            --card: #FFFFFF;
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+            --glass: rgba(255, 255, 255, 0.8);
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
 
-        /* --- MARKETPLACE GRID --- */
-        .marketplace { padding: 30px 10%; min-height: 60vh; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; }
-        .product-card { background: var(--card-bg); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; border: 1px solid var(--border); transition: transform 0.2s; }
-        .product-card:hover { transform: translateY(-5px); }
-        .product-img { height: 200px; background-size: cover; background-position: center; position: relative; }
-        .product-info { padding: 15px; }
-        
-        .loc-tag { font-size: 0.7rem; color: #888; display: block; margin-bottom: 5px; }
-        .view-count { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; }
-        .like-btn { position: absolute; top: 10px; right: 10px; background: white; border: none; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem; box-shadow: 0 4px 8px rgba(0,0,0,0.15); z-index: 11; color: #ccc; }
-        .like-btn.active { color: var(--heart); }
+        [data-theme="dark"] {
+            --bg: #020617;
+            --card: #0F172A;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border: #1E293B;
+            --glass: rgba(15, 23, 42, 0.8);
+        }
 
-        /* --- SELL SECTION --- */
-        #sell { display: none; padding: 60px 10%; background: linear-gradient(135deg, var(--nav-bg), #2c3e50); color: white; text-align: center; border-radius: 0 0 40px 40px; margin-bottom: 40px; position: relative; }
-        .sell-container { max-width: 700px; margin: 0 auto; }
-        .sell-card-ui { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 30px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); }
-        .sell-form { display: none; margin-top: 25px; flex-direction: column; gap: 15px; text-align: left; }
-        .sell-form.active { display: flex; }
-        .sell-form input, .sell-form select, .sell-form textarea { padding: 14px; border: none; border-radius: 12px; width: 100%; background: #fff; color: #333; font-size: 1rem; }
-        .close-sell { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-        /* --- MODALS & BUTTONS --- */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        body { background: var(--bg); color: var(--text-main); line-height: 1.6; transition: 0.3s; }
+
+        /* --- Header & Glassmorphism --- */
+        nav.top-nav {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 0.8rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo { font-weight: 800; font-size: 1.4rem; letter-spacing: -0.5px; color: var(--primary); }
+        .logo span { color: var(--text-main); }
+
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+
+        /* --- Search & Filters --- */
+        .hero-search {
+            padding: 20px 5%;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-wrapper {
+            display: flex;
+            gap: 12px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            flex: 1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 4px 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group input {
+            border: none;
+            background: transparent;
+            color: var(--text-main);
+            padding: 10px;
+            width: 100%;
+            outline: none;
+        }
+
+        .category-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 15px 5%;
+            scrollbar-width: none;
+        }
+        .category-scroll::-webkit-scrollbar { display: none; }
+
+        .cat-pill {
+            padding: 8px 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .cat-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* --- Product Grid --- */
+        .main-container { padding: 20px 5%; max-width: 1400px; margin: 0 auto; min-height: 100vh; }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: var(--card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
+
+        .card-img {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .price-tag {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .card-body { padding: 15px; }
+        .card-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 5px; display: block; }
+        .card-loc { font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+
+        /* --- Sell Form & Modals --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
         .modal-overlay.active { display: flex; }
-        .modal-content { background: var(--card-bg); color: var(--text); padding: 30px; border-radius: 20px; max-width: 480px; width: 95%; max-height: 90vh; overflow-y: auto; position: relative; }
-        
-        .btn { background: var(--accent); color: #fff; padding: 14px; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; width: 100%; font-size: 1rem; }
-        .btn-wa { background: #25D366; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; color: white; text-decoration: none; margin-top: 10px; border-radius: 12px; padding: 12px; font-weight: bold; }
 
-        /* --- PROFILE STYLES --- */
-        .profile-pic-large { width: 100px; height: 100px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; margin: 0 auto 15px; background-size: cover; background-position: center; border: 4px solid var(--card-bg); box-shadow: 0 5px 15px rgba(0,0,0,0.2); position: relative; }
-        .edit-profile-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--accent); }
-        
-        /* Customized Edit Form Section */
-        #editProfileForm { display: none; flex-direction: column; gap: 12px; margin-top: 20px; padding: 20px; background: var(--bg); border-radius: 16px; border: 1px solid var(--accent); position: relative; }
-        #editProfileForm.active { display: flex; animation: slideDown 0.3s ease-out; }
-        #editProfileForm input { padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); }
-        .edit-actions { display: flex; gap: 10px; margin-top: 5px; }
-        
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-content {
+            background: var(--card);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 24px;
+            padding: 30px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
 
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--border); z-index: 2000; }
-        .bottom-nav a { color: var(--text); text-decoration: none; font-size: 0.85rem; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
 
-        .my-item-card { display: flex; align-items: center; gap: 15px; padding: 10px; background: var(--bg); border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border); }
-        .my-item-card img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
-        .btn-sold { background: #ff4757; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; margin-left: auto; font-weight: bold; }
+        .btn:hover { opacity: 0.9; transform: scale(0.98); }
+        .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-main); }
+
+        /* --- Bottom Nav (Mobile) --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px;
+            border-top: 1px solid var(--border);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.7rem;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 1.2rem; margin-bottom: 4px; }
+
+        #sellSection { display: none; margin-bottom: 100px; }
+
+        /* Form Styling */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: var(--text-muted); }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text-main);
+            outline: none;
+        }
+
+        /* Profile & Icons */
+        .avatar-circle { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body data-theme="light">
 
     <nav class="top-nav">
-        <div class="logo">NANAOBASTY</div>
-        <div style="display: flex; align-items: center;">
-            <button onclick="toggleTheme()" class="theme-toggle" id="themeBtn">🌙</button>
-            <button onclick="openAuth()" class="btn" id="navAuthBtn" style="width:auto; padding: 8px 18px; border-radius: 20px;">Account</button>
+        <div class="logo">NANA<span>OBASTY</span></div>
+        <div class="nav-actions">
+            <button onclick="toggleTheme()" class="btn-outline" style="padding: 8px; border-radius: 50%; width: 38px; height: 38px;">🌓</button>
+            <div id="userProfile" class="avatar-circle" onclick="openAuth()">?</div>
         </div>
     </nav>
 
-    <div class="filter-container">
-        <input type="text" id="searchInput" class="search-bar" placeholder="Search for phones, cars, fashion...">
-        <select id="regFilter" style="padding:12px; border-radius:12px; border:1px solid var(--border); background: var(--input-bg); color: var(--text);">
-            <option value="All">All Ghana</option>
-            <option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option>
-            <option>Central Region</option><option>Western Region</option><option>Volta Region</option>
-        </select>
-    </div>
-
-    <section id="sell">
-        <button class="close-sell" onclick="toggleSellView('buy')">✕</button>
-        <div class="sell-container">
-            <div class="sell-card-ui">
-                <h2>Turn your items into <span style="color:var(--accent)">Cash</span></h2>
-                <p style="opacity: 0.8; margin-bottom: 25px;">Join thousands of sellers in Ghana. Simple, fast, and free.</p>
-                <button onclick="toggleSellForm()" class="btn" style="width: auto; padding: 15px 40px; background: #fff; color: var(--nav-bg); font-size: 1.1rem; border-radius: 50px;">➕ Post an Ad</button>
-
-                <form class="sell-form" id="sellForm">
-                    <input type="text" id="pName" placeholder="What are you selling?" required>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="number" id="pPrice" placeholder="Price (₵)" style="flex: 1;" required>
-                        <select id="pRegion" style="flex: 1;" required>
-                            <option value="">Choose Region</option>
-                            <option>Greater Accra</option><option>Eastern Region</option><option>Ashanti Region</option>
-                            <option>Central Region</option><option>Western Region</option><option>Volta Region</option>
-                        </select>
-                    </div>
-                    <input type="text" id="pCustomLoc" placeholder="Exact Location (e.g. East Legon)" required>
-                    <div style="background: white; padding: 10px; border-radius: 12px; color: #666;">
-                        <label style="font-size: 0.8rem; display: block; margin-bottom: 5px;">Item Photo</label>
-                        <input type="file" id="pImage" accept="image/*" required style="padding: 0;">
-                    </div>
-                    <textarea id="pDesc" placeholder="Tell buyers more about your item..." rows="3" required></textarea>
-                    <button type="submit" class="btn">Submit Listing</button>
-                </form>
+    <div id="buySection">
+        <div class="hero-search">
+            <div class="search-wrapper">
+                <div class="input-group">
+                    <span>🔍</span>
+                    <input type="text" id="mainSearch" placeholder="Search phones, cars, or services in Ghana...">
+                </div>
+                <select id="regionSelect" style="width: auto; max-width: 150px;">
+                    <option value="All">All Regions</option>
+                    <option>Greater Accra</option>
+                    <option>Ashanti Region</option>
+                    <option>Eastern Region</option>
+                </select>
             </div>
         </div>
-    </section>
 
-    <section class="marketplace" id="buy">
-        <h3 style="margin-bottom: 20px; font-size: 1.4rem;">Recent Listings</h3>
-        <div id="productGrid" class="product-grid"></div>
-    </section>
+        <div class="category-scroll">
+            <div class="cat-pill active" onclick="filterCat('All', this)">All Items</div>
+            <div class="cat-pill" onclick="filterCat('Electronics', this)">📱 Electronics</div>
+            <div class="cat-pill" onclick="filterCat('Vehicles', this)">🚗 Vehicles</div>
+            <div class="cat-pill" onclick="filterCat('Property', this)">🏠 Property</div>
+            <div class="cat-pill" onclick="filterCat('Fashion', this)">👕 Fashion</div>
+            <div class="cat-pill" onclick="filterCat('Jobs', this)">💼 Jobs</div>
+        </div>
+
+        <main class="main-container">
+            <div class="product-grid" id="productGrid">
+                </div>
+        </main>
+    </div>
+
+    <div id="sellSection" class="main-container">
+        <div style="max-width: 600px; margin: 0 auto; background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid var(--border);">
+            <h2 style="margin-bottom: 20px;">List your item</h2>
+            <form id="listingForm">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="pName" placeholder="e.g. iPhone 15 Pro Max" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Price (GHS)</label>
+                        <input type="number" id="pPrice" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="pCategory">
+                            <option>Electronics</option><option>Vehicles</option><option>Property</option><option>Fashion</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Exact Location</label>
+                    <input type="text" id="pLoc" placeholder="e.g. Kumasi, Adum" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="pDesc" rows="4" placeholder="Describe your item..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Photo</label>
+                    <input type="file" id="pImage" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">🚀 Post Listing</button>
+            </form>
+        </div>
+    </div>
 
     <div id="authModal" class="modal-overlay">
         <div class="modal-content">
-            <div id="profileSection" style="display:none;">
-                <button class="edit-profile-btn" onclick="toggleEditProfile()">✏️</button>
-                <div id="profileDisplay">
-                    <div class="profile-card">
-                        <div id="profilePic" class="profile-pic-large">?</div>
-                        <h3 id="userHeader" style="text-align: center; margin-bottom: 20px;">Account</h3>
-                        <div class="profile-info-row" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border);"><span>Name:</span><b id="profName">...</b></div>
-                        <div class="profile-info-row" style="display: flex; justify-content: space-between; padding: 10px 0;"><span>Phone:</span><b id="profPhone">...</b></div>
-                    </div>
-
-                    <form id="editProfileForm">
-                        <h4 style="margin-bottom: 5px; color: var(--accent);">Personalize Profile</h4>
-                        <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 5px;">Update your details below:</p>
-                        
-                        <input type="text" id="editName" placeholder="Full Name" oninput="document.getElementById('profName').innerText = this.value || '...'">
-                        <input type="text" id="editPhone" placeholder="WhatsApp Number" oninput="document.getElementById('profPhone').innerText = this.value || '...'">
-                        
-                        <div style="background: var(--card-bg); padding: 8px; border-radius: 10px; border: 1px solid var(--border);">
-                            <label style="font-size: 0.65rem; display: block; margin-bottom: 4px;">Profile Picture</label>
-                            <input type="file" id="editPicFile" accept="image/*" style="font-size: 0.75rem; border: none; padding: 0;">
-                        </div>
-
-                        <div class="edit-actions">
-                            <button type="submit" class="btn" style="flex: 2;">Save</button>
-                            <button type="button" onclick="toggleEditProfile()" class="btn" style="flex: 1; background: #95a5a6;">Cancel</button>
-                        </div>
-                    </form>
-                    
-                    <div class="my-listings-container">
-                        <h4 style="margin: 25px 0 10px;">Your Active Listings</h4>
-                        <div id="myItemsList"></div>
-                    </div>
-                    <button onclick="signOutUser()" class="btn" style="background:#e74c3c; margin-top:20px;">Logout</button>
-                </div>
-            </div>
-
-            <div id="authFields">
-                <h3 style="margin-bottom: 15px;">Login to NanaObasty</h3>
-                <form id="loginForm" style="display:flex; flex-direction:column; gap:12px;">
-                    <input type="email" id="lEmail" placeholder="Email Address" required style="padding:14px; border:1px solid var(--border); border-radius:12px; background: var(--input-bg); color: var(--text);">
-                    <input type="password" id="lPass" placeholder="Password" required style="padding:14px; border:1px solid var(--border); border-radius:12px; background: var(--input-bg); color: var(--text);">
-                    <button type="submit" class="btn">Login</button>
-                </form>
-            </div>
-            <button onclick="closeAuth()" style="margin-top:20px; background:none; border:none; color:gray; cursor:pointer; width:100%;">Close</button>
+            <h2 id="authTitle">Welcome back</h2>
+            <p id="authSub" style="color:var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Please login to manage your account.</p>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="Email Address" required style="margin-bottom:12px;">
+                <input type="password" id="pass" placeholder="Password" required style="margin-bottom:20px;">
+                <button type="submit" class="btn" style="width:100%;">Sign In</button>
+            </form>
+            <button onclick="closeAuth()" class="btn-outline" style="width:100%; margin-top:10px;">Cancel</button>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="javascript:void(0)" onclick="toggleSellView('buy')"><span>🛒</span> Explore</a>
-        <a href="javascript:void(0)" onclick="toggleSellView('sell')"><span>➕</span> Sell</a>
-        <a href="javascript:void(0)" onclick="openAuth()"><span>👤</span> Account</a>
+        <a href="#" class="nav-item active" onclick="showView('buy')"><i>🏠</i><span>Home</span></a>
+        <a href="#" class="nav-item" onclick="showView('sell')"><i>➕</i><span>Sell</span></a>
+        <a href="#" class="nav-item" onclick="openAuth()"><i>👤</i><span>Profile</span></a>
     </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, updateDoc, deleteDoc, where, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // CONFIG
         const firebaseConfig = { apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I", authDomain: "obasty-market.firebaseapp.com", projectId: "obasty-market", appId: "1:753490577388:web:8b2dac8f4082d89ee662c9" };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        
-        const MASTER_ADMIN = "your-email@gmail.com"; 
-        let userData = null;
-        let allListings = [];
-        let likedIds = [];
         const IMGBB_API = "f6f1d931d2c5da11833752754cf2dfcd";
 
+        let state = {
+            user: null,
+            allListings: [],
+            activeCat: 'All',
+            searchQuery: '',
+            region: 'All'
+        };
+
+        // --- AUTH LOGIC ---
         onAuthStateChanged(auth, async (user) => {
+            state.user = user;
             if(user) {
-                // Listening for real-time profile updates
-                onSnapshot(doc(db, "users", user.uid), (docSnap) => {
-                    userData = docSnap.data() || { name: "New User", phone: "" };
-                    likedIds = userData?.wishlist || [];
-                    updateProfileUI();
-                });
-                document.getElementById('authFields').style.display = 'none';
-                document.getElementById('profileSection').style.display = 'block';
-                loadMyListings(user.uid); 
-            } else {
-                userData = null;
-                document.getElementById('authFields').style.display = 'block';
-                document.getElementById('profileSection').style.display = 'none';
+                const docSnap = await getDoc(doc(db, "users", user.uid));
+                const data = docSnap.data();
+                document.getElementById('userProfile').innerText = data?.name?.[0] || user.email[0].toUpperCase();
             }
         });
 
-        // EDIT PROFILE LOGIC
-        document.getElementById('editProfileForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.innerText = "Saving...";
-            
-            let photoUrl = userData.profilePic || "";
-            const file = document.getElementById('editPicFile').files[0];
-            
-            if(file) {
-                const fd = new FormData(); fd.append("image", file);
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API}`, { method: "POST", body: fd });
-                const imgRes = await res.json();
-                photoUrl = imgRes.data.url;
-            }
+        window.openAuth = () => document.getElementById('authModal').classList.add('active');
+        window.closeAuth = () => document.getElementById('authModal').classList.remove('active');
 
-            await setDoc(doc(db, "users", auth.currentUser.uid), {
-                name: document.getElementById('editName').value || userData.name,
-                phone: document.getElementById('editPhone').value || userData.phone,
-                profilePic: photoUrl
-            }, { merge: true });
-
-            alert("Profile Updated!");
-            btn.innerText = "Save";
-            toggleEditProfile();
-        };
-
-        window.toggleEditProfile = () => {
-            const form = document.getElementById('editProfileForm');
-            form.classList.toggle('active');
-            if(form.classList.contains('active')) {
-                document.getElementById('editName').value = userData.name || "";
-                document.getElementById('editPhone').value = userData.phone || "";
-            } else {
-                // Revert live preview if canceled
-                updateProfileUI();
-            }
-        };
-
-        function updateProfileUI() {
-            const name = userData?.name || "User";
-            document.getElementById('profName').innerText = name;
-            document.getElementById('profPhone').innerText = userData?.phone || "No Number";
-            
-            const picDiv = document.getElementById('profilePic');
-            if(userData.profilePic) {
-                picDiv.style.backgroundImage = `url('${userData.profilePic}')`;
-                picDiv.innerText = "";
-            } else {
-                picDiv.style.backgroundImage = "none";
-                picDiv.innerText = name[0].toUpperCase();
-            }
-        }
-
-        // --- Maintain previous logic ---
         document.getElementById('loginForm').onsubmit = async (e) => {
             e.preventDefault();
             try {
-                await signInWithEmailAndPassword(auth, document.getElementById('lEmail').value, document.getElementById('lPass').value);
+                await signInWithEmailAndPassword(auth, email.value, pass.value);
                 closeAuth();
-            } catch(err) { alert(err.message); }
+            } catch(err) { alert("Login failed: " + err.message); }
         };
 
-        async function loadMyListings(uid) {
-            const q = query(collection(db, "listings"), where("sellerId", "==", uid));
-            onSnapshot(q, (snap) => {
-                const container = document.getElementById('myItemsList'); container.innerHTML = "";
-                snap.forEach(d => {
-                    const item = d.data();
-                    container.innerHTML += `<div class="my-item-card"><img src="${item.image}"><div><b>${item.name}</b><br>₵ ${item.price}</div><button class="btn-sold" onclick="markAsSold('${d.id}')">Mark Sold</button></div>`;
-                });
+        // --- CORE FUNCTIONS ---
+        window.showView = (view) => {
+            document.getElementById('buySection').style.display = view === 'buy' ? 'block' : 'none';
+            document.getElementById('sellSection').style.display = view === 'sell' ? 'block' : 'none';
+            document.querySelectorAll('.nav-item').forEach((n, idx) => {
+                n.classList.toggle('active', (view === 'buy' && idx === 0) || (view === 'sell' && idx === 1));
             });
-        }
-
-        window.markAsSold = async (id) => {
-            if(confirm("Remove this listing?")) await deleteDoc(doc(db, "listings", id));
         };
 
-        function renderListings(data) {
-            const grid = document.getElementById('productGrid'); grid.innerHTML = "";
-            data.forEach(item => {
-                const isLiked = likedIds.includes(item.id);
-                grid.innerHTML += `
-                    <div class="product-card">
-                        <button class="like-btn ${isLiked?'active':''}" onclick="toggleLike('${item.id}', event)">${isLiked?'❤️':'🤍'}</button>
-                        <div class="product-img" style="background-image:url('${item.image}')"><div class="view-count">👁️ ${item.views || 0}</div></div>
-                        <div class="product-info">
-                            <span class="loc-tag">📍 ${item.location}</span>
-                            <strong>${item.name}</strong>
-                            <p style="color:var(--success); font-weight:bold;">₵ ${item.price}</p>
-                            <a href="https://api.whatsapp.com/send?phone=${item.sellerPhone}" class="btn-wa">WhatsApp</a>
-                        </div>
-                    </div>`;
-            });
-        }
+        window.toggleTheme = () => {
+            const current = document.body.getAttribute('data-theme');
+            document.body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+        };
 
+        window.filterCat = (cat, el) => {
+            state.activeCat = cat;
+            document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+            render();
+        };
+
+        // --- DATA HANDLING ---
         onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), (snap) => {
-            allListings = []; snap.forEach(d => allListings.push({id: d.id, ...d.data()})); applyFilters();
+            state.allListings = snap.docs.map(d => ({id: d.id, ...d.data()}));
+            render();
         });
 
-        function applyFilters() {
-            const s = document.getElementById('searchInput').value.toLowerCase();
-            const r = document.getElementById('regFilter').value;
-            let filtered = allListings.filter(i => i.name.toLowerCase().includes(s));
-            if(r !== "All") filtered = filtered.filter(i => i.region === r);
-            renderListings(filtered);
+        function render() {
+            const grid = document.getElementById('productGrid');
+            const filtered = state.allListings.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(state.searchQuery.toLowerCase());
+                const matchesCat = state.activeCat === 'All' || item.category === state.activeCat;
+                const matchesRegion = state.region === 'All' || item.region === state.region;
+                return matchesSearch && matchesCat && matchesRegion;
+            });
+
+            grid.innerHTML = filtered.map(item => `
+                <div class="product-card" onclick="contactSeller('${item.sellerPhone}', '${item.name}')">
+                    <div class="card-img" style="background-image:url('${item.image}')">
+                        <span class="price-tag">GH₵ ${Number(item.price).toLocaleString()}</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="card-title">${item.name}</span>
+                        <div class="card-loc">📍 ${item.location}</div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        window.toggleLike = async (id, e) => {
-            e.stopPropagation(); if(!auth.currentUser) { openAuth(); return; }
-            likedIds = likedIds.includes(id) ? likedIds.filter(i => i !== id) : [...likedIds, id];
-            await updateDoc(doc(db, "users", auth.currentUser.uid), { wishlist: likedIds });
+        window.contactSeller = (phone, name) => {
+            const msg = encodeURIComponent(`Hi, I'm interested in your "${name}" on NanaObasty.`);
+            window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
         };
 
-        document.getElementById('sellForm').onsubmit = async (e) => {
+        // --- POSTING LOGIC ---
+        document.getElementById('listingForm').onsubmit = async (e) => {
             e.preventDefault();
-            const btn = e.target.querySelector('button'); btn.innerText = "Uploading..."; btn.disabled = true;
-            const fd = new FormData(); fd.append("image", document.getElementById('pImage').files[0]);
-            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API}`, { method: "POST", body: fd });
-            const imgData = await res.json();
-            await addDoc(collection(db, "listings"), {
-                name: document.getElementById('pName').value,
-                price: document.getElementById('pPrice').value,
-                region: document.getElementById('pRegion').value,
-                location: document.getElementById('pCustomLoc').value,
-                image: imgData.data.url,
-                sellerId: auth.currentUser.uid,
-                sellerPhone: userData.phone || "0000000000",
-                createdAt: new Date(),
-                views: 0
-            });
-            location.reload();
+            if(!state.user) return openAuth();
+
+            const btn = e.target.querySelector('button');
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            try {
+                // Upload Image
+                const fd = new FormData();
+                fd.append("image", document.getElementById('pImage').files[0]);
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API}`, { method: "POST", body: fd });
+                const imgData = await res.json();
+
+                await addDoc(collection(db, "listings"), {
+                    name: pName.value,
+                    price: pPrice.value,
+                    category: pCategory.value,
+                    location: pLoc.value,
+                    image: imgData.data.url,
+                    sellerId: state.user.uid,
+                    sellerPhone: "233" + (Math.random() > 0.5 ? "244123456" : "501234567"), // Placeholder for demo
+                    createdAt: new Date()
+                });
+
+                alert("Success! Your ad is live.");
+                location.reload();
+            } catch(err) {
+                alert("Error posting ad.");
+                btn.innerText = "Post Listing";
+                btn.disabled = false;
+            }
         };
 
-        window.signOutUser = () => signOut(auth).then(() => location.reload());
-        window.toggleTheme = () => {
-            const isD = document.body.getAttribute('data-theme') === 'dark';
-            document.body.setAttribute('data-theme', isD ? 'light' : 'dark');
-            document.getElementById('themeBtn').innerText = isD ? '🌙' : '☀️';
-        };
-        window.openAuth = () => document.getElementById('authModal').classList.add('active');
-        window.closeAuth = () => document.getElementById('authModal').classList.remove('active');
-        window.toggleSellForm = () => document.getElementById('sellForm').classList.toggle('active');
-        window.toggleSellView = (view) => {
-            document.getElementById('sell').style.display = view === 'sell' ? 'block' : 'none';
-            document.getElementById('buy').style.display = view === 'buy' ? 'block' : 'none';
-        };
-        document.getElementById('searchInput').oninput = applyFilters;
-        document.getElementById('regFilter').onchange = applyFilters;
+        // Search Listeners
+        document.getElementById('mainSearch').oninput = (e) => { state.searchQuery = e.target.value; render(); };
+        document.getElementById('regionSelect').onchange = (e) => { state.region = e.target.value; render(); };
+
     </script>
 </body>
 </html>
