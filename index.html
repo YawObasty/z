@@ -3,189 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NanaObasty | Pro Market</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>NanaObasty | Ghana's Professional Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366F1; --bg: #020617; --glass: rgba(15, 23, 42, 0.8);
-            --border: rgba(255, 255, 255, 0.1); --text: #F8FAFC;
+            --primary: #006aff; /* Professional Blue */
+            --secondary: #ff9900; /* Amazon-style Orange */
+            --bg: #f7f8fa;
+            --card: #ffffff;
+            --text: #1a1a1a;
+            --muted: #666666;
+            --border: #e1e4e8;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 100px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 80px; }
 
-        /* --- UI ELEMENTS --- */
-        .icon { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; transition: 0.3s; }
+        /* --- HEADER --- */
+        header {
+            background: #fff; padding: 15px 5%; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-size: 22px; font-weight: 800; color: var(--primary); text-decoration: none; }
+        .logo span { color: var(--text); }
         
-        nav {
-            position: sticky; top: 15px; margin: 0 5%;
-            background: var(--glass); backdrop-filter: blur(20px);
-            border: 1px solid var(--border); border-radius: 20px;
-            padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+        .top-nav-btn {
+            background: var(--primary); color: #fff; border: none;
+            padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 8px; font-size: 14px;
         }
 
-        .view-section { display: none; animation: fadeIn 0.3s ease; }
-        .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* --- SEARCH SECTION --- */
+        .search-container { background: #fff; padding: 20px 5%; border-bottom: 1px solid var(--border); }
+        .search-bar {
+            background: #f0f2f5; display: flex; align-items: center;
+            padding: 12px 20px; border-radius: 10px; gap: 10px;
+        }
+        .search-bar input { background: transparent; border: none; width: 100%; outline: none; font-size: 16px; }
 
-        /* --- MARKET GRID --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 20px 5%; }
-        .pro-card { background: var(--glass); border: 1px solid var(--border); border-radius: 20px; padding: 10px; overflow: hidden; }
-        .pro-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 15px; margin-bottom: 10px; }
+        /* --- VIEWS --- */
+        .view { display: none; padding: 20px 5%; max-width: 1200px; margin: 0 auto; }
+        .view.active { display: block; }
 
-        /* --- FORM STYLING --- */
-        .form-container { max-width: 500px; margin: 30px auto; padding: 0 20px; }
-        input, select, textarea { 
-            width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; 
-            border: 1px solid var(--border); background: rgba(255,255,255,0.05); color: white; outline: none;
+        /* --- PRODUCT GRID --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        
+        .product-card {
+            background: var(--card); border-radius: 12px; border: 1px solid var(--border);
+            overflow: hidden; transition: 0.2s; cursor: pointer;
+        }
+        .product-card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
+        .product-img { height: 160px; background: #eee; position: relative; }
+        .product-img img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .product-info { padding: 12px; }
+        .product-price { font-size: 18px; font-weight: 700; color: var(--text); }
+        .product-title { font-size: 14px; color: var(--muted); margin: 4px 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .btn-call {
+            width: 100%; background: #fff; border: 1px solid var(--primary);
+            color: var(--primary); padding: 8px; border-radius: 6px;
+            font-weight: 600; font-size: 13px; cursor: pointer;
+        }
+        .btn-call:hover { background: var(--primary); color: #fff; }
+
+        /* --- POST FORM --- */
+        .form-box { background: #fff; border: 1px solid var(--border); padding: 30px; border-radius: 15px; max-width: 500px; margin: 0 auto; }
+        .form-box h2 { margin-bottom: 20px; font-size: 20px; }
+        .form-box input, .form-box select, .form-box textarea {
+            width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 15px; font-size: 15px;
         }
 
-        /* --- BOTTOM NAV --- */
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; height: 75px;
-            background: var(--glass); backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center;
+        /* --- BOTTOM BAR --- */
+        .bottom-bar {
+            position: fixed; bottom: 0; width: 100%; height: 65px;
+            background: #fff; border-top: 1px solid var(--border);
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 1000;
         }
-        .nav-item { color: rgba(255,255,255,0.4); text-align: center; cursor: pointer; }
+        .nav-item { color: #888; text-decoration: none; text-align: center; font-size: 11px; font-weight: 600; cursor: pointer; }
         .nav-item.active { color: var(--primary); }
-        .nav-item span { display: block; font-size: 0.65rem; font-weight: 700; margin-top: 4px; }
+        .nav-item svg { display: block; margin: 0 auto 4px; width: 24px; height: 24px; }
 
-        .btn-pro { width: 100%; padding: 15px; border-radius: 12px; border: none; background: var(--primary); color: white; font-weight: 800; cursor: pointer; }
+        /* --- ICONS --- */
+        .icon { stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo" onclick="switchView('market')" style="cursor:pointer; font-weight:800;">Nana<span>Obasty</span></div>
-        <div id="loginBtn" onclick="switchView('auth')" style="cursor:pointer;">
-            <svg class="icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        </div>
-    </nav>
+    <header>
+        <a href="#" class="logo" onclick="showView('home')">Nana<span>Obasty</span></a>
+        <button class="top-nav-btn" onclick="showView('post')">
+            <svg class="icon" style="width:18px; height:18px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Sell Item
+        </button>
+    </header>
 
-    <section id="view-market" class="view-section active">
-        <div style="padding: 30px 5% 10px;">
-            <input type="text" placeholder="Search Ghana's Market..." style="background:var(--glass); border-radius:15px;">
-        </div>
-        <div class="grid" id="itemsGrid"></div>
-    </section>
-
-    <section id="view-post" class="view-section">
-        <div class="form-container">
-            <h2 style="margin-bottom:20px;">Sell Something</h2>
-            <form id="postForm">
-                <input type="text" id="title" placeholder="What are you selling?" required>
-                <input type="number" id="price" placeholder="Price (₵)" required>
-                <input type="file" id="imageFile" accept="image/*" required>
-                <button type="submit" class="btn-pro" id="submitBtn">Post My Ad</button>
-            </form>
-        </div>
-    </section>
-
-    <section id="view-auth" class="view-section">
-        <div class="form-container" style="text-align:center;">
-            <h2>Seller Account</h2>
-            <p style="color:gray; margin-bottom:20px; font-size:0.9rem;">Join NanaObasty to start selling</p>
-            <input type="email" id="email" placeholder="Email">
-            <input type="password" id="pass" placeholder="Password">
-            <button class="btn-pro" onclick="handleAuth()">Login / Sign Up</button>
-        </div>
-    </section>
-
-    <div class="bottom-nav">
-        <div class="nav-item active" id="tab-market" onclick="switchView('market')">
-            <svg class="icon"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-            <span>Explore</span>
-        </div>
-        <div class="nav-item" id="tab-post" onclick="switchView('post')">
-            <svg class="icon" style="stroke:#EC4899"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-            <span>Sell</span>
-        </div>
-        <div class="nav-item" onclick="alert('Chat Coming Soon')">
-            <svg class="icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            <span>Inbox</span>
+    <div class="search-container" id="searchBar">
+        <div class="search-bar">
+            <svg class="icon" style="width:18px; height:18px; stroke:#888;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" placeholder="I'm looking for...">
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <main id="view-home" class="view active">
+        <h3 style="margin-bottom: 20px; font-size: 16px;">Recently Added</h3>
+        <div class="grid" id="productGrid">
+            </div>
+    </main>
 
-        const firebaseConfig = { apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I", authDomain: "obasty-market.firebaseapp.com", projectId: "obasty-market", appId: "1:753490577388:web:8b2dac8f4082d89ee662c9" };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    <main id="view-post" class="view">
+        <div class="form-box">
+            <h2>Post your Ad</h2>
+            <form id="listingForm">
+                <input type="text" id="title" placeholder="Item Name" required>
+                <input type="number" id="price" placeholder="Price (₵)" required>
+                <select id="category">
+                    <option>Electronics</option>
+                    <option>Vehicles</option>
+                    <option>Fashion</option>
+                    <option>Home & Garden</option>
+                </select>
+                <input type="file" id="imageFile" required>
+                <button type="submit" class="top-nav-btn" style="width:100%; justify-content:center; padding:15px;" id="submitBtn">Post Now</button>
+            </form>
+        </div>
+    </main>
 
-        let user = null;
+    <main id="view-account" class="view">
+        <div class="form-box" style="text-align:center;">
+            <h2>Log In</h2>
+            <p style="color:var(--muted); margin-bottom: 20px;">Join Ghana's professional trading network.</p>
+            <input type="email" id="email" placeholder="Email Address">
+            <input type="password" id="password" placeholder="Password">
+            <button class="top-nav-btn" style="width:100%; justify-content:center; padding:15px;">Login / Sign Up</button>
+        </div>
+    </main>
 
-        // --- AUTH LOGIC ---
-        window.handleAuth = async () => {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
-            try {
-                await signInWithEmailAndPassword(auth, e, p);
-            } catch {
-                await createUserWithEmailAndPassword(auth, e, p);
-            }
-            switchView('market');
-        };
-
-        onAuthStateChanged(auth, u => {
-            user = u;
-            if(u) document.getElementById('loginBtn').innerHTML = `<div style="background:var(--primary); width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:bold;">${u.email[0].toUpperCase()}</div>`;
-        });
-
-        // --- VIEW SWITCHER ---
-        window.switchView = (name) => {
-            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-            document.getElementById('view-' + name).classList.add('active');
-            
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            const tab = document.getElementById('tab-' + name);
-            if(tab) tab.classList.add('active');
-        };
-
-        // --- LOAD DATA ---
-        onSnapshot(query(collection(db, "listings"), orderBy("createdAt", "desc")), snap => {
-            const grid = document.getElementById('itemsGrid');
-            grid.innerHTML = snap.docs.map(doc => {
-                const item = doc.data();
-                return `
-                <div class="pro-card">
-                    <img src="${item.image}">
-                    <h4 style="font-size:0.85rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.title}</h4>
-                    <p style="color:var(--primary); font-weight:800; font-size:0.9rem; margin-top:5px;">₵ ${item.price}</p>
-                </div>`;
-            }).join('');
-        });
-
-        // --- POST LOGIC ---
-        document.getElementById('postForm').onsubmit = async (e) => {
-            e.preventDefault();
-            if(!user) return switchView('auth');
-
-            const btn = document.getElementById('submitBtn');
-            btn.innerText = "Uploading to NanaObasty...";
-            btn.disabled = true;
-
-            // Upload image to ImgBB
-            const file = document.getElementById('imageFile').files[0];
-            const fd = new FormData(); fd.append("image", file);
-            const res = await fetch(`https://api.imgbb.com/1/upload?key=f6f1d931d2c5da11833752754cf2dfcd`, { method: "POST", body: fd });
-            const imgData = await res.json();
-
-            await addDoc(collection(db, "listings"), {
-                title: document.getElementById('title').value,
-                price: document.getElementById('price').value,
-                image: imgData.data.url,
-                sellerId: user.uid,
-                createdAt: new Date()
-            });
-
-            btn.innerText = "Post My Ad";
-            btn.disabled = false;
-            switchView('market');
-        };
-    </script>
-</body>
-</html>
+    <nav class="bottom-bar">
+        <div class="nav-item active" id="tab-home" onclick="showView('home')">
+            <svg class="icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a
