@@ -20,6 +20,8 @@
         }
         #profile-modal { transition: all 0.3s ease; }
         .hidden-form { display: none; }
+        /* Cart Sidebar Animation */
+        .cart-sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
 <body class="bg-[#FDFDFD] text-[#1A1A1A]">
@@ -35,23 +37,44 @@
             </a>
             
             <div class="hidden lg:flex space-x-10 text-[11px] uppercase tracking-widest font-bold">
-                <a href="#" class="hover:text-[#C5A059] transition">New Arrivals</a>
-                <a href="#" class="hover:text-[#C5A059] transition">Technology</a>
-                <a href="#" class="hover:text-[#C5A059] transition">Style</a>
-                <a href="#" class="hover:text-[#C5A059] transition">Limited</a>
+                <button onclick="filterCat('all')" class="hover:text-[#C5A059] transition uppercase">All</button>
+                <button onclick="filterCat('tech')" class="hover:text-[#C5A059] transition uppercase">Technology</button>
+                <button onclick="filterCat('style')" class="hover:text-[#C5A059] transition uppercase">Style</button>
+                <button onclick="filterCat('limited')" class="hover:text-[#C5A059] transition uppercase">Limited</button>
             </div>
 
             <div class="flex items-center space-x-5">
-                <button class="material-symbols-outlined text-[22px]">search</button>
-                <button onclick="toggleModal('main')" class="material-symbols-outlined text-[24px] hover:text-[#C5A059] transition">account_circle</button>
+                <div class="relative hidden md:block">
+                    <input type="text" id="searchInput" onkeyup="searchProducts()" placeholder="Search..." class="bg-gray-100 border-none rounded-full px-4 py-1 text-sm outline-none w-40 focus:w-60 transition-all">
+                    <button class="material-symbols-outlined text-[20px] absolute right-2 top-1">search</button>
+                </div>
+                <button onclick="toggleModal()" class="material-symbols-outlined text-[24px] hover:text-[#C5A059] transition">account_circle</button>
                 <div class="relative">
-                    <button class="material-symbols-outlined text-[22px]">shopping_bag</button>
-                    <span class="absolute -top-1 -right-1 bg-[#C5A059] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">2</span>
+                    <button onclick="toggleCart()" class="material-symbols-outlined text-[22px]">shopping_bag</button>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-[#C5A059] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">0</span>
                 </div>
                 <button class="material-symbols-outlined text-[22px] lg:hidden">menu</button>
             </div>
         </div>
     </nav>
+
+    <div id="cart-overlay" class="fixed inset-0 bg-black/40 z-[100] hidden opacity-0 transition-all" onclick="toggleCart()"></div>
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full max-w-md bg-white z-[101] cart-sidebar translate-x-full shadow-2xl flex flex-col">
+        <div class="p-8 border-b flex justify-between items-center">
+            <h2 class="text-2xl font-extrabold tracking-tighter uppercase">Your Bag</h2>
+            <button onclick="toggleCart()" class="material-symbols-outlined">close</button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-6">
+            <p class="text-gray-400 italic text-center py-10">Your bag is empty.</p>
+        </div>
+        <div class="p-8 border-t bg-gray-50">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-gray-500 font-bold uppercase text-xs tracking-widest">Total Amount</span>
+                <span id="cart-total" class="text-2xl font-extrabold text-[#C5A059]">$0</span>
+            </div>
+            <button onclick="checkout()" class="w-full bg-black text-white py-5 rounded-full font-bold uppercase tracking-[0.2em] text-[10px] hover:bg-[#C5A059] transition">Proceed to Checkout</button>
+        </div>
+    </div>
 
     <div id="profile-modal" class="fixed inset-0 bg-black/60 z-[1000] flex items-center justify-center hidden opacity-0">
         <div class="bg-white p-10 rounded-[2rem] w-full max-w-md shadow-2xl relative mx-4">
@@ -73,7 +96,7 @@
                     <span class="material-symbols-outlined text-sm">arrow_back</span> BACK
                 </button>
                 <h2 class="text-2xl font-extrabold mb-6 tracking-tight">Welcome Back</h2>
-                <form class="space-y-4" onsubmit="event.preventDefault(); alert('Login successful!');">
+                <form class="space-y-4" onsubmit="event.preventDefault(); alert('Login successful!'); toggleModal();">
                     <input type="email" placeholder="Email Address" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
                     <input type="password" placeholder="Password" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
                     <button type="submit" class="w-full bg-black text-white py-4 rounded-full font-bold uppercase tracking-widest text-[10px]">Sign In</button>
@@ -85,7 +108,7 @@
                     <span class="material-symbols-outlined text-sm">arrow_back</span> BACK
                 </button>
                 <h2 class="text-2xl font-extrabold mb-6 tracking-tight">Create Account</h2>
-                <form class="space-y-4" onsubmit="event.preventDefault(); alert('Account created!');">
+                <form class="space-y-4" onsubmit="event.preventDefault(); alert('Account created!'); toggleModal();">
                     <input type="text" placeholder="Full Name" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
                     <input type="email" placeholder="Email Address" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
                     <input type="password" placeholder="Create Password" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
@@ -122,24 +145,43 @@
 
     <section id="shop" class="py-24 container mx-auto px-6">
         <h2 class="text-4xl font-extrabold tracking-tight mb-12 text-center">Curated Selection</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-            <div class="product-card group">
-                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner text-center content-center italic text-gray-400">
-                    Product Image
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+            <div class="product-card group" data-category="tech" data-name="Obasty Studio Pro">
+                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800" alt="Product" class="w-full h-full object-cover transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                        <button onclick="addToCart('Obasty Studio Pro', 399)" class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">Add to Bag</button>
+                    </div>
                 </div>
                 <div class="flex justify-between items-center px-2">
                     <h3 class="font-bold text-xl">Obasty Studio Pro</h3>
                     <p class="text-xl font-extrabold text-[#C5A059]">$399</p>
                 </div>
             </div>
+
+            <div class="product-card group" data-category="style" data-name="Limited Edition Watch">
+                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
+                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800" alt="Product" class="w-full h-full object-cover transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                        <button onclick="addToCart('Limited Edition Watch', 850)" class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">Add to Bag</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center px-2">
+                    <h3 class="font-bold text-xl">Limited Edition Watch</h3>
+                    <p class="text-xl font-extrabold text-[#C5A059]">$850</p>
+                </div>
+            </div>
         </div>
     </section>
 
     <script>
+        let cart = [];
+
+        // MODAL LOGIC
         function toggleModal() {
             const modal = document.getElementById('profile-modal');
             if (modal.classList.contains('hidden')) {
-                showForm('selection'); // Reset to main buttons when opening
+                showForm('selection');
                 modal.classList.remove('hidden');
                 setTimeout(() => modal.classList.remove('opacity-0'), 10);
                 document.body.style.overflow = 'hidden';
@@ -151,19 +193,87 @@
         }
 
         function showForm(view) {
-            const selection = document.getElementById('auth-selection');
-            const login = document.getElementById('login-form');
-            const signup = document.getElementById('signup-form');
+            document.getElementById('auth-selection').style.display = view === 'selection' ? 'block' : 'none';
+            document.getElementById('login-form').style.display = view === 'login' ? 'block' : 'none';
+            document.getElementById('signup-form').style.display = view === 'signup' ? 'block' : 'none';
+        }
 
-            // Hide all
-            selection.style.display = 'none';
-            login.style.display = 'none';
-            signup.style.display = 'none';
+        // CART LOGIC
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            if (sidebar.classList.contains('translate-x-full')) {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            } else {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
 
-            // Show selected
-            if (view === 'selection') selection.style.display = 'block';
-            if (view === 'login') login.style.display = 'block';
-            if (view === 'signup') signup.style.display = 'block';
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCart();
+            toggleCart();
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotal = document.getElementById('cart-total');
+            
+            cartCount.innerText = cart.length;
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-gray-400 italic text-center py-10">Your bag is empty.</p>';
+                cartTotal.innerText = '$0';
+                return;
+            }
+
+            let total = 0;
+            cartItems.innerHTML = cart.map((item, index) => {
+                total += item.price;
+                return `
+                    <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl">
+                        <div>
+                            <p class="font-bold text-sm uppercase">${item.name}</p>
+                            <p class="text-[#C5A059] font-bold">$${item.price}</p>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="material-symbols-outlined text-gray-300 hover:text-red-500 transition">delete</button>
+                    </div>
+                `;
+            }).join('');
+            cartTotal.innerText = '$' + total;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        // SEARCH & FILTER LOGIC
+        function searchProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(p => {
+                const name = p.getAttribute('data-name').toLowerCase();
+                p.style.display = name.includes(query) ? 'block' : 'none';
+            });
+        }
+
+        function filterCat(cat) {
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(p => {
+                const category = p.getAttribute('data-category');
+                p.style.display = (cat === 'all' || category === cat) ? 'block' : 'none';
+            });
+        }
+
+        function checkout() {
+            if (cart.length === 0) return alert("Your cart is empty!");
+            alert("Redirecting to secure payment... (Integration point for Stripe/Paystack)");
         }
     </script>
 
