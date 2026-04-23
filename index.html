@@ -19,7 +19,7 @@
             background-position: center;
         }
         /* Modal Animation */
-        #profile-modal { transition: opacity 0.3s ease; }
+        #profile-modal { transition: all 0.3s ease; }
     </style>
 </head>
 <body class="bg-[#FDFDFD] text-[#1A1A1A]">
@@ -45,6 +45,7 @@
                 <button class="material-symbols-outlined text-[22px]">search</button>
                 
                 <button onclick="toggleModal()" class="material-symbols-outlined text-[24px] hover:text-[#C5A059] transition">account_circle</button>
+
                 <div class="relative">
                     <button class="material-symbols-outlined text-[22px]">shopping_bag</button>
                     <span class="absolute -top-1 -right-1 bg-[#C5A059] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">2</span>
@@ -54,8 +55,8 @@
         </div>
     </nav>
 
-    <div id="profile-modal" class="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center hidden opacity-0">
-        <div class="bg-white p-10 rounded-[2rem] w-full max-w-md shadow-2xl relative mx-4">
+    <div id="profile-modal" class="fixed inset-0 bg-black/60 z-[1000] flex items-center justify-center hidden opacity-0">
+        <div class="bg-white p-10 rounded-[2rem] w-full max-w-md shadow-2xl relative mx-4 transform transition-all">
             <button onclick="toggleModal()" class="absolute top-6 right-6 material-symbols-outlined text-gray-400 hover:text-black">close</button>
             
             <div class="text-center mb-8">
@@ -78,6 +79,7 @@
             </div>
         </div>
     </div>
+
     <header class="relative h-[75vh] flex items-center hero-bg">
         <div class="container mx-auto px-6 z-10 text-center md:text-left">
             <div class="max-w-2xl text-white space-y-6">
@@ -115,4 +117,85 @@
                 <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
                     <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800" 
                          alt="Product" class="w-full h-full object-cover transition-transform duration-700">
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">View Details</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center px-2">
+                    <div>
+                        <h3 class="font-bold text-xl">Obasty Studio Pro</h3>
+                        <p class="text-gray-400 text-sm italic">High Fidelity Sound</p>
+                    </div>
+                    <p class="text-xl font-extrabold text-[#C5A059]">$399</p>
+                </div>
+            </div>
+
+            <div class="product-card group">
+                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
+                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800" 
+                         alt="Product" class="w-full h-full object-cover transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">View Details</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center px-2">
+                    <div>
+                        <h3 class="font-bold text-xl">Minimalist Series 1</h3>
+                        <p class="text-gray-400 text-sm italic">Premium Aesthetics</p>
+                    </div>
+                    <p class="text-xl font-extrabold text-[#C5A059]">$150</p>
+                </div>
+            </div>
+
+            <div class="product-card group">
+                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
+                    <img src="https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&q=80&w=800" 
+                         alt="Product" class="w-full h-full object-cover transition-transform duration-700">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">View Details</button>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center px-2">
+                    <div>
+                        <h3 class="font-bold text-xl">Executive Timepiece</h3>
+                        <p class="text-gray-400 text-sm italic">Precision Movement</p>
+                    </div>
+                    <p class="text-xl font-extrabold text-[#C5A059]">$850</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#0A0A0A] text-white pt-20 pb-10">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-extrabold tracking-tighter mb-8">NANA <span class="text-[#C5A059]">OBASTY</span></h2>
+            <div class="flex justify-center space-x-8 mb-12">
+                <a href="#" class="text-xs font-bold uppercase tracking-[0.2em] hover:text-[#C5A059]">Instagram</a>
+                <a href="#" class="text-xs font-bold uppercase tracking-[0.2em] hover:text-[#C5A059]">Twitter</a>
+                <a href="#" class="text-xs font-bold uppercase tracking-[0.2em] hover:text-[#C5A059]">Privacy</a>
+            </div>
+            <p class="text-[10px] text-gray-600 tracking-[0.4em] uppercase">© 2026 Nana Obasty Marketplace. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleModal() {
+            const modal = document.getElementById('profile-modal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                }, 10);
+                document.body.style.overflow = 'hidden'; // Stop page scrolling
+            } else {
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+                document.body.style.overflow = 'auto'; // Enable page scrolling
+            }
+        }
+    </script>
+
+</body>
+</html>
