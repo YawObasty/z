@@ -20,7 +20,6 @@
         }
         #profile-modal, #sell-modal { transition: all 0.3s ease; }
         .hidden-form { display: none; }
-        /* Cart Sidebar Animation */
         .cart-sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
@@ -40,7 +39,7 @@
                 <button onclick="filterCat('all')" class="hover:text-[#C5A059] transition uppercase">All</button>
                 <button onclick="filterCat('tech')" class="hover:text-[#C5A059] transition uppercase">Technology</button>
                 <button onclick="filterCat('style')" class="hover:text-[#C5A059] transition uppercase">Style</button>
-                <button onclick="toggleSellModal()" class="bg-black text-white px-4 py-1.5 rounded-full hover:bg-[#C5A059] transition uppercase">Sell Item</button>
+                <button onclick="checkAuthAndSell()" class="bg-black text-white px-4 py-1.5 rounded-full hover:bg-[#C5A059] transition uppercase">Sell Item</button>
             </div>
 
             <div class="flex items-center space-x-5">
@@ -115,7 +114,7 @@
                     <span class="material-symbols-outlined text-sm">arrow_back</span> BACK
                 </button>
                 <h2 class="text-2xl font-extrabold mb-6 tracking-tight">Welcome Back</h2>
-                <form class="space-y-4" onsubmit="event.preventDefault(); alert('Login successful!'); toggleModal();">
+                <form class="space-y-4" onsubmit="handleAuthAction('login')">
                     <input type="email" placeholder="Email Address" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
                     <input type="password" placeholder="Password" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
                     <button type="submit" class="w-full bg-black text-white py-4 rounded-full font-bold uppercase tracking-widest text-[10px]">Sign In</button>
@@ -127,7 +126,7 @@
                     <span class="material-symbols-outlined text-sm">arrow_back</span> BACK
                 </button>
                 <h2 class="text-2xl font-extrabold mb-6 tracking-tight">Create Account</h2>
-                <form class="space-y-4" onsubmit="event.preventDefault(); alert('Account created!'); toggleModal();">
+                <form class="space-y-4" onsubmit="handleAuthAction('signup')">
                     <input type="text" placeholder="Full Name" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
                     <input type="email" placeholder="Email Address" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
                     <input type="password" placeholder="Create Password" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
@@ -141,16 +140,10 @@
         <div class="container mx-auto px-6 z-10 text-center md:text-left">
             <div class="max-w-2xl text-white space-y-6">
                 <p class="text-[#C5A059] font-bold tracking-[0.4em] uppercase text-xs">Excellence Since 2026</p>
-                <h1 class="text-5xl md:text-8xl font-extrabold leading-[0.9] tracking-tighter">
-                    YAW OBASTY <br> BUY AND SELL.
-                </h1>
-                <p class="text-gray-300 text-lg font-light max-w-md">
-                    Curated marketplace for those who refuse to settle for anything less than perfection.
-                </p>
+                <h1 class="text-5xl md:text-8xl font-extrabold leading-[0.9] tracking-tighter">YAW OBASTY <br> BUY AND SELL.</h1>
+                <p class="text-gray-300 text-lg font-light max-w-md">Curated marketplace for those who refuse to settle for anything less than perfection.</p>
                 <div class="pt-6">
-                    <a href="#shop" class="bg-white text-black px-12 py-4 rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#C5A059] hover:text-white transition-all duration-500 shadow-2xl">
-                        Shop Collection
-                    </a>
+                    <a href="#shop" class="bg-white text-black px-12 py-4 rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#C5A059] hover:text-white transition-all duration-500 shadow-2xl">Shop Collection</a>
                 </div>
             </div>
         </div>
@@ -161,9 +154,9 @@
         <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
             <div class="product-card group" data-category="tech" data-name="Obasty Studio Pro">
                 <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
-                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800" alt="Product" class="w-full h-full object-cover transition-transform duration-700">
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800" class="w-full h-full object-cover transition-transform duration-700">
                     <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                        <button onclick="addToCart('Obasty Studio Pro', 399)" class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">Add to Bag</button>
+                        <button onclick="checkAuthAndAdd('Obasty Studio Pro', 399)" class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">Add to Bag</button>
                     </div>
                 </div>
                 <div class="flex justify-between items-center px-2">
@@ -171,24 +164,38 @@
                     <p class="text-xl font-extrabold text-[#C5A059]">$399</p>
                 </div>
             </div>
-
-            <div class="product-card group" data-category="style" data-name="Limited Edition Watch">
-                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
-                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800" alt="Product" class="w-full h-full object-cover transition-transform duration-700">
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                        <button onclick="addToCart('Limited Edition Watch', 850)" class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">Add to Bag</button>
-                    </div>
-                </div>
-                <div class="flex justify-between items-center px-2">
-                    <h3 class="font-bold text-xl">Limited Edition Watch</h3>
-                    <p class="text-xl font-extrabold text-[#C5A059]">$850</p>
-                </div>
-            </div>
         </div>
     </section>
 
     <script>
         let cart = [];
+        let isLoggedIn = false; // Auth State Tracker
+
+        // AUTH CHECKERS
+        function checkAuthAndSell() {
+            if (!isLoggedIn) {
+                alert("Please log in to sell items.");
+                toggleModal();
+            } else {
+                toggleSellModal();
+            }
+        }
+
+        function checkAuthAndAdd(name, price) {
+            if (!isLoggedIn) {
+                alert("Please log in to add items to your bag.");
+                toggleModal();
+            } else {
+                addToCart(name, price);
+            }
+        }
+
+        function handleAuthAction(type) {
+            event.preventDefault();
+            isLoggedIn = true;
+            alert(type === 'login' ? "Welcome back!" : "Account created successfully!");
+            toggleModal();
+        }
 
         // SELL MODAL LOGIC
         function toggleSellModal() {
@@ -217,9 +224,9 @@
 
             newDiv.innerHTML = `
                 <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
-                    <img src="${img}" alt="Product" class="w-full h-full object-cover transition-transform duration-700">
+                    <img src="${img}" class="w-full h-full object-cover transition-transform duration-700">
                     <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                        <button onclick="addToCart('${name}', ${price})" class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">Add to Bag</button>
+                        <button onclick="checkAuthAndAdd('${name}', ${price})" class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">Add to Bag</button>
                     </div>
                 </div>
                 <div class="flex justify-between items-center px-2">
@@ -227,25 +234,21 @@
                     <p class="text-xl font-extrabold text-[#C5A059]">$${price}</p>
                 </div>
             `;
-
             grid.appendChild(newDiv);
             toggleSellModal();
             event.target.reset();
-            alert("Your product has been listed!");
         }
 
-        // MODAL LOGIC
+        // ORIGINAL LOGIC (Cart, Modal, etc)
         function toggleModal() {
             const modal = document.getElementById('profile-modal');
             if (modal.classList.contains('hidden')) {
                 showForm('selection');
                 modal.classList.remove('hidden');
                 setTimeout(() => modal.classList.remove('opacity-0'), 10);
-                document.body.style.overflow = 'hidden';
             } else {
                 modal.classList.add('opacity-0');
                 setTimeout(() => modal.classList.add('hidden'), 300);
-                document.body.style.overflow = 'auto';
             }
         }
 
@@ -255,7 +258,6 @@
             document.getElementById('signup-form').style.display = view === 'signup' ? 'block' : 'none';
         }
 
-        // CART LOGIC
         function toggleCart() {
             const sidebar = document.getElementById('cart-sidebar');
             const overlay = document.getElementById('cart-overlay');
@@ -280,27 +282,19 @@
             const cartItems = document.getElementById('cart-items');
             const cartCount = document.getElementById('cart-count');
             const cartTotal = document.getElementById('cart-total');
-            
             cartCount.innerText = cart.length;
-            
             if (cart.length === 0) {
                 cartItems.innerHTML = '<p class="text-gray-400 italic text-center py-10">Your bag is empty.</p>';
                 cartTotal.innerText = '$0';
                 return;
             }
-
             let total = 0;
             cartItems.innerHTML = cart.map((item, index) => {
                 total += item.price;
-                return `
-                    <div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl">
-                        <div>
-                            <p class="font-bold text-sm uppercase">${item.name}</p>
-                            <p class="text-[#C5A059] font-bold">$${item.price}</p>
-                        </div>
-                        <button onclick="removeFromCart(${index})" class="material-symbols-outlined text-gray-300 hover:text-red-500 transition">delete</button>
-                    </div>
-                `;
+                return `<div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl">
+                    <div><p class="font-bold text-sm uppercase">${item.name}</p><p class="text-[#C5A059] font-bold">$${item.price}</p></div>
+                    <button onclick="removeFromCart(${index})" class="material-symbols-outlined text-gray-300">delete</button>
+                </div>`;
             }).join('');
             cartTotal.innerText = '$' + total.toFixed(2);
         }
@@ -310,7 +304,6 @@
             updateCart();
         }
 
-        // SEARCH & FILTER LOGIC
         function searchProducts() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const products = document.querySelectorAll('.product-card');
