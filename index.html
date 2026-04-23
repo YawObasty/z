@@ -18,8 +18,8 @@
             background-size: cover;
             background-position: center;
         }
-        /* Modal Animation */
         #profile-modal { transition: all 0.3s ease; }
+        .hidden-form { display: none; }
     </style>
 </head>
 <body class="bg-[#FDFDFD] text-[#1A1A1A]">
@@ -43,9 +43,7 @@
 
             <div class="flex items-center space-x-5">
                 <button class="material-symbols-outlined text-[22px]">search</button>
-                
-                <button onclick="toggleModal()" class="material-symbols-outlined text-[24px] hover:text-[#C5A059] transition">account_circle</button>
-
+                <button onclick="toggleModal('main')" class="material-symbols-outlined text-[24px] hover:text-[#C5A059] transition">account_circle</button>
                 <div class="relative">
                     <button class="material-symbols-outlined text-[22px]">shopping_bag</button>
                     <span class="absolute -top-1 -right-1 bg-[#C5A059] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">2</span>
@@ -56,25 +54,48 @@
     </nav>
 
     <div id="profile-modal" class="fixed inset-0 bg-black/60 z-[1000] flex items-center justify-center hidden opacity-0">
-        <div class="bg-white p-10 rounded-[2rem] w-full max-w-md shadow-2xl relative mx-4 transform transition-all">
+        <div class="bg-white p-10 rounded-[2rem] w-full max-w-md shadow-2xl relative mx-4">
             <button onclick="toggleModal()" class="absolute top-6 right-6 material-symbols-outlined text-gray-400 hover:text-black">close</button>
             
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-extrabold tracking-tighter">My Account</h2>
-                <p class="text-gray-500 text-sm mt-2 font-medium">Join the Nana Obasty marketplace today.</p>
+            <div id="auth-selection">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-extrabold tracking-tighter">My Account</h2>
+                    <p class="text-gray-500 text-sm mt-2 font-medium">Join the Nana Obasty marketplace today.</p>
+                </div>
+                <div class="space-y-4">
+                    <button onclick="showForm('login')" class="w-full bg-black text-white py-4 rounded-full font-bold uppercase tracking-widest text-[10px] hover:bg-[#C5A059] transition">Log In</button>
+                    <button onclick="showForm('signup')" class="w-full border-2 border-black text-black py-4 rounded-full font-bold uppercase tracking-widest text-[10px] hover:bg-gray-50 transition">Create Account</button>
+                </div>
             </div>
 
-            <div class="space-y-4">
-                <button class="w-full bg-black text-white py-4 rounded-full font-bold uppercase tracking-widest text-[10px] hover:bg-[#C5A059] transition">Log In</button>
-                <button class="w-full border-2 border-black text-black py-4 rounded-full font-bold uppercase tracking-widest text-[10px] hover:bg-gray-50 transition">Create Account</button>
+            <div id="login-form" class="hidden-form">
+                <button onclick="showForm('selection')" class="mb-4 flex items-center text-xs font-bold text-gray-400 hover:text-black transition">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span> BACK
+                </button>
+                <h2 class="text-2xl font-extrabold mb-6 tracking-tight">Welcome Back</h2>
+                <form class="space-y-4" onsubmit="event.preventDefault(); alert('Login successful!');">
+                    <input type="email" placeholder="Email Address" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
+                    <input type="password" placeholder="Password" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
+                    <button type="submit" class="w-full bg-black text-white py-4 rounded-full font-bold uppercase tracking-widest text-[10px]">Sign In</button>
+                </form>
+            </div>
+
+            <div id="signup-form" class="hidden-form">
+                <button onclick="showForm('selection')" class="mb-4 flex items-center text-xs font-bold text-gray-400 hover:text-black transition">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span> BACK
+                </button>
+                <h2 class="text-2xl font-extrabold mb-6 tracking-tight">Create Account</h2>
+                <form class="space-y-4" onsubmit="event.preventDefault(); alert('Account created!');">
+                    <input type="text" placeholder="Full Name" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
+                    <input type="email" placeholder="Email Address" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
+                    <input type="password" placeholder="Create Password" class="w-full p-4 bg-gray-50 rounded-xl outline-none focus:ring-2 ring-[#C5A059]/20 transition" required>
+                    <button type="submit" class="w-full bg-black text-white py-4 rounded-full font-bold uppercase tracking-widest text-[10px]">Register Now</button>
+                </form>
             </div>
 
             <div class="mt-8 pt-6 border-t border-gray-100 flex flex-col space-y-3">
                 <a href="#" class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-black transition flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">local_shipping</span> Track My Order
-                </a>
-                <a href="#" class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-black transition flex items-center gap-2">
-                    <span class="material-symbols-outlined text-sm">help</span> Customer Support
                 </a>
             </div>
         </div>
@@ -85,7 +106,7 @@
             <div class="max-w-2xl text-white space-y-6">
                 <p class="text-[#C5A059] font-bold tracking-[0.4em] uppercase text-xs">Excellence Since 2026</p>
                 <h1 class="text-5xl md:text-8xl font-extrabold leading-[0.9] tracking-tighter">
-                    YAW OBASTY <br> BUY ABD SELL.
+                    YAW OBASTY <br> BUY AND SELL.
                 </h1>
                 <p class="text-gray-300 text-lg font-light max-w-md">
                     Curated marketplace for those who refuse to settle for anything less than perfection.
@@ -100,100 +121,49 @@
     </header>
 
     <section id="shop" class="py-24 container mx-auto px-6">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
-            <div>
-                <h2 class="text-4xl font-extrabold tracking-tight">Curated Selection</h2>
-                <p class="text-gray-500 mt-2 font-medium">Quality tested and verified by Nana Obasty Experts</p>
-            </div>
-            <div class="flex space-x-4">
-                <button class="px-6 py-2 border rounded-full text-xs font-bold uppercase tracking-widest bg-black text-white">All</button>
-                <button class="px-6 py-2 border rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gray-100">Tech</button>
-                <button class="px-6 py-2 border rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gray-100">Lifestyle</button>
-            </div>
-        </div>
-
+        <h2 class="text-4xl font-extrabold tracking-tight mb-12 text-center">Curated Selection</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
             <div class="product-card group">
-                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
-                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800" 
-                         alt="Product" class="w-full h-full object-cover transition-transform duration-700">
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <button class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">View Details</button>
-                    </div>
+                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner text-center content-center italic text-gray-400">
+                    Product Image
                 </div>
                 <div class="flex justify-between items-center px-2">
-                    <div>
-                        <h3 class="font-bold text-xl">Obasty Studio Pro</h3>
-                        <p class="text-gray-400 text-sm italic">High Fidelity Sound</p>
-                    </div>
+                    <h3 class="font-bold text-xl">Obasty Studio Pro</h3>
                     <p class="text-xl font-extrabold text-[#C5A059]">$399</p>
-                </div>
-            </div>
-
-            <div class="product-card group">
-                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
-                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800" 
-                         alt="Product" class="w-full h-full object-cover transition-transform duration-700">
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <button class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">View Details</button>
-                    </div>
-                </div>
-                <div class="flex justify-between items-center px-2">
-                    <div>
-                        <h3 class="font-bold text-xl">Minimalist Series 1</h3>
-                        <p class="text-gray-400 text-sm italic">Premium Aesthetics</p>
-                    </div>
-                    <p class="text-xl font-extrabold text-[#C5A059]">$150</p>
-                </div>
-            </div>
-
-            <div class="product-card group">
-                <div class="relative overflow-hidden rounded-3xl bg-gray-100 aspect-[4/5] mb-6 shadow-inner">
-                    <img src="https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&q=80&w=800" 
-                         alt="Product" class="w-full h-full object-cover transition-transform duration-700">
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <button class="bg-white text-black px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest">View Details</button>
-                    </div>
-                </div>
-                <div class="flex justify-between items-center px-2">
-                    <div>
-                        <h3 class="font-bold text-xl">Executive Timepiece</h3>
-                        <p class="text-gray-400 text-sm italic">Precision Movement</p>
-                    </div>
-                    <p class="text-xl font-extrabold text-[#C5A059]">$850</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-[#0A0A0A] text-white pt-20 pb-10">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl font-extrabold tracking-tighter mb-8">NANA <span class="text-[#C5A059]">OBASTY</span></h2>
-            <div class="flex justify-center space-x-8 mb-12">
-                <a href="#" class="text-xs font-bold uppercase tracking-[0.2em] hover:text-[#C5A059]">Instagram</a>
-                <a href="#" class="text-xs font-bold uppercase tracking-[0.2em] hover:text-[#C5A059]">Twitter</a>
-                <a href="#" class="text-xs font-bold uppercase tracking-[0.2em] hover:text-[#C5A059]">Privacy</a>
-            </div>
-            <p class="text-[10px] text-gray-600 tracking-[0.4em] uppercase">© 2026 Nana Obasty Marketplace. All Rights Reserved.</p>
-        </div>
-    </footer>
-
     <script>
         function toggleModal() {
             const modal = document.getElementById('profile-modal');
             if (modal.classList.contains('hidden')) {
+                showForm('selection'); // Reset to main buttons when opening
                 modal.classList.remove('hidden');
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                }, 10);
-                document.body.style.overflow = 'hidden'; // Stop page scrolling
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+                document.body.style.overflow = 'hidden';
             } else {
                 modal.classList.add('opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300);
-                document.body.style.overflow = 'auto'; // Enable page scrolling
+                setTimeout(() => modal.classList.add('hidden'), 300);
+                document.body.style.overflow = 'auto';
             }
+        }
+
+        function showForm(view) {
+            const selection = document.getElementById('auth-selection');
+            const login = document.getElementById('login-form');
+            const signup = document.getElementById('signup-form');
+
+            // Hide all
+            selection.style.display = 'none';
+            login.style.display = 'none';
+            signup.style.display = 'none';
+
+            // Show selected
+            if (view === 'selection') selection.style.display = 'block';
+            if (view === 'login') login.style.display = 'block';
+            if (view === 'signup') signup.style.display = 'block';
         }
     </script>
 
