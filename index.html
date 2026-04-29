@@ -3,152 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NANA OBASTY | Premium Live Market</title>
+    <title>NANA OBASTY ELITE | Luxury Marketplace</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,1&display=swap" rel="stylesheet">
     <style>
-        :root { --jumia-orange: #f68b1e; --dark-bg: #1a1a1a; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f5f5f5; }
-        .orange-gradient { background: linear-gradient(135deg, #f68b1e 0%, #ff5c00 100%); }
-        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #eee; }
-        .product-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .product-card:hover { transform: translateY(-5px); shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+        :root { --accent: #C5A059; --dark: #121212; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0d0d0d; color: #fff; }
+        .gold-text { color: var(--accent); }
+        .bg-gold { background: var(--accent); }
+        .glass-nav { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid #222; }
+        .product-card { background: #1a1a1a; border: 1px solid #222; transition: all 0.4s ease; border-radius: 20px; overflow: hidden; }
+        .product-card:hover { border-color: var(--accent); transform: translateY(-10px); }
+        .wishlist-btn.active { color: #ff4b2b; font-variation-settings: 'FILL' 1; }
+        .toast-notify { animation: slideUp 0.5s ease forwards; }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .cart-open { transform: translateX(0) !important; }
-        .modal-active { display: flex !important; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<body class="text-gray-900">
+<body>
 
-    <div class="orange-gradient text-white text-[11px] py-2 text-center font-bold tracking-widest uppercase">
-        ⚡ Flash Sale Ends In: <span id="timer" class="font-black">00:00:00</span> ⚡
+    <div id="live-toast" class="fixed bottom-6 left-6 z-[2000] hidden">
+        <div class="bg-white text-black p-4 rounded-2xl shadow-2xl flex items-center gap-4 toast-notify">
+            <div class="w-10 h-10 bg-gold rounded-full flex items-center justify-center text-white">
+                <span class="material-symbols-outlined">shopping_bag</span>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold uppercase text-gray-400">Recent Purchase</p>
+                <p id="toast-msg" class="text-xs font-black">Someone just bought a Rolex Submariner</p>
+            </div>
+        </div>
     </div>
 
-    <nav class="glass-nav sticky top-0 z-[100] px-4 py-3">
-        <div class="container mx-auto flex justify-between items-center gap-4">
-            <a href="#" class="text-2xl font-black tracking-tighter text-orange-500">NANA OBASTY</a>
+    <nav class="glass-nav sticky top-0 z-[100] px-6 py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-black tracking-tighter flex items-center gap-2">
+                NANA <span class="bg-gold text-black px-2 py-0.5 rounded italic text-xl">ELITE</span>
+            </a>
             
-            <div class="flex-1 max-w-2xl relative hidden md:block">
-                <input type="text" id="searchInput" onkeyup="window.searchProducts()" placeholder="Search brands, products..." class="w-full bg-gray-100 border-none rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 ring-orange-500 transition-all">
-                <span class="material-symbols-outlined absolute left-3 top-2.5 text-gray-400">search</span>
+            <div class="hidden lg:flex flex-1 max-w-md mx-10 relative">
+                <input type="text" id="searchInput" onkeyup="window.searchProducts()" placeholder="Search luxury items..." class="w-full bg-[#222] border-none rounded-full py-2.5 px-6 text-sm focus:ring-2 ring-[#C5A059] text-white">
+                <span class="material-symbols-outlined absolute right-4 top-2.5 text-gray-500">search</span>
             </div>
 
-            <div class="flex items-center space-x-5">
-                <button onclick="window.toggleModal()" class="flex flex-col items-center group">
-                    <span class="material-symbols-outlined group-hover:text-orange-500">person</span>
-                    <span id="user-label" class="text-[10px] font-bold uppercase">Account</span>
+            <div class="flex items-center space-x-6">
+                <button onclick="window.toggleModal()" class="flex items-center gap-2 group">
+                    <div class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center group-hover:border-gold transition">
+                        <span class="material-symbols-outlined text-gray-400 group-hover:text-gold">person</span>
+                    </div>
+                    <div class="text-left hidden sm:block">
+                        <p class="text-[9px] font-bold text-gray-500 uppercase">Welcome</p>
+                        <p id="user-display" class="text-[11px] font-black uppercase tracking-widest">Sign In</p>
+                    </div>
                 </button>
                 <div class="relative cursor-pointer" onclick="window.toggleCart()">
-                    <span class="material-symbols-outlined hover:text-orange-500">shopping_cart</span>
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-orange-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold shadow-md">0</span>
+                    <span class="material-symbols-outlined text-2xl hover:text-gold transition">shopping_cart</span>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-black text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-black">0</span>
                 </div>
             </div>
         </div>
     </nav>
 
-    <section class="bg-white shadow-sm overflow-x-auto no-scrollbar py-6">
-        <div class="container mx-auto px-4 flex justify-between md:justify-center gap-8 min-w-max">
-            <div onclick="window.filterCat('all')" class="flex flex-col items-center gap-2 cursor-pointer group">
-                <div class="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center group-hover:bg-orange-500 transition-all duration-300">
-                    <span class="material-symbols-outlined text-orange-500 group-hover:text-white">dashboard</span>
-                </div>
-                <span class="text-[10px] font-bold uppercase">All</span>
-            </div>
-            <div onclick="window.filterCat('tech')" class="flex flex-col items-center gap-2 cursor-pointer group">
-                <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center group-hover:bg-blue-500 transition-all duration-300">
-                    <span class="material-symbols-outlined text-blue-500 group-hover:text-white">smartphone</span>
-                </div>
-                <span class="text-[10px] font-bold uppercase">Phones</span>
-            </div>
-            <div onclick="window.filterCat('style')" class="flex flex-col items-center gap-2 cursor-pointer group">
-                <div class="w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center group-hover:bg-purple-500 transition-all duration-300">
-                    <span class="material-symbols-outlined text-purple-500 group-hover:text-white">checkroom</span>
-                </div>
-                <span class="text-[10px] font-bold uppercase">Fashion</span>
-            </div>
-            <div onclick="window.checkAuthAndSell()" class="flex flex-col items-center gap-2 cursor-pointer group">
-                <div class="w-14 h-14 rounded-2xl orange-gradient flex items-center justify-center shadow-lg shadow-orange-200 hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-white">add_shopping_cart</span>
-                </div>
-                <span class="text-[10px] font-black text-orange-600 uppercase">Sell Item</span>
-            </div>
-        </div>
-    </section>
-
-    <main class="container mx-auto px-4 py-8">
-        <div class="flex items-center justify-between mb-6 border-l-4 border-orange-500 pl-4 bg-white p-4 rounded-r-lg shadow-sm">
-            <h2 class="text-xl font-black italic uppercase tracking-tighter">Live Marketplace</h2>
-            <span class="text-xs font-bold text-gray-400">Real-time Updates</span>
-        </div>
-        
-        <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            <div class="col-span-full text-center py-20">
-                <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-orange-500 mb-4"></div>
-                <p class="text-gray-400 font-bold uppercase text-xs">Connecting to Nana Obasty Cloud...</p>
-            </div>
-        </div>
-    </main>
-
-    <div id="auth-modal" class="fixed inset-0 bg-black/80 z-[200] hidden items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-2xl p-8 relative overflow-hidden">
-            <button onclick="window.toggleModal()" class="absolute top-4 right-4 material-symbols-outlined text-gray-400 hover:text-black">close</button>
-            <div id="auth-box">
-                <h2 class="text-2xl font-black uppercase mb-2">Welcome</h2>
-                <p class="text-gray-400 text-sm mb-8 font-medium">Join our premium vendor community.</p>
-                <div class="space-y-4">
-                    <button onclick="window.showAuthForm('login')" class="w-full bg-black text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-orange-500 transition-colors">Sign In</button>
-                    <button onclick="window.showAuthForm('signup')" class="w-full border-2 border-black text-black py-4 rounded-xl font-bold uppercase text-xs tracking-widest">Create Account</button>
-                </div>
-            </div>
-
-            <div id="login-form" class="hidden">
-                <button onclick="window.showAuthForm('selection')" class="text-orange-500 font-bold text-[10px] mb-4 uppercase">← Back</button>
-                <form id="firebaseLoginForm" class="space-y-4">
-                    <input type="email" placeholder="Email Address" class="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 ring-orange-500" required>
-                    <input type="password" placeholder="Password" class="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 ring-orange-500" required>
-                    <button type="submit" class="w-full orange-gradient text-white py-4 rounded-xl font-bold uppercase">Enter Shop</button>
-                </form>
-            </div>
+    <div class="bg-[#111] py-3 border-b border-[#222]">
+        <div class="container mx-auto px-6 overflow-x-auto no-scrollbar whitespace-nowrap space-x-8 text-[10px] font-bold uppercase tracking-[0.3em] text-gray-500">
+            <span>✨ Free Global Shipping on Orders Over $500</span>
+            <span class="text-gold">💎 24k Gold Authenticity Guaranteed</span>
+            <span>🚀 24h Express Delivery in Accra & Kumasi</span>
         </div>
     </div>
 
-    <div id="sell-modal" class="fixed inset-0 bg-black/80 z-[200] hidden items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-2xl p-8 relative">
-            <button onclick="window.toggleSellModal()" class="absolute top-4 right-4 material-symbols-outlined">close</button>
-            <h2 class="text-2xl font-black uppercase mb-6 italic">List Your Item</h2>
-            <form id="firebaseSellForm" class="space-y-4">
-                <input type="text" id="pName" placeholder="Product Title" class="w-full p-4 bg-gray-100 rounded-xl outline-none" required>
-                <input type="number" id="pPrice" placeholder="Price (USD)" class="w-full p-4 bg-gray-100 rounded-xl outline-none" required>
-                <select id="pCat" class="w-full p-4 bg-gray-100 rounded-xl outline-none">
-                    <option value="tech">Electronics</option>
-                    <option value="style">Fashion/Style</option>
-                </select>
-                <input type="url" id="pImg" placeholder="Image Link (Unsplash/URL)" class="w-full p-4 bg-gray-100 rounded-xl outline-none" required>
-                <button type="submit" class="w-full orange-gradient text-white py-4 rounded-xl font-bold uppercase shadow-lg">Post Product Live</button>
+    <section class="container mx-auto px-6 py-8">
+        <div class="flex gap-4 overflow-x-auto no-scrollbar pb-4">
+            <button onclick="window.filterCat('all')" class="px-8 py-3 rounded-full bg-gold text-black font-black text-[10px] uppercase tracking-widest shadow-lg shadow-gold/20">All Collections</button>
+            <button onclick="window.filterCat('tech')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] hover:border-gold transition font-bold text-[10px] uppercase tracking-widest">Tech & Gadgets</button>
+            <button onclick="window.filterCat('style')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] hover:border-gold transition font-bold text-[10px] uppercase tracking-widest">Elite Fashion</button>
+            <button onclick="window.checkAuthAndSell()" class="px-8 py-3 rounded-full bg-white text-black font-black text-[10px] uppercase tracking-widest flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">add_circle</span> List Item
+            </button>
+        </div>
+    </section>
+
+    <main class="container mx-auto px-6 pb-20">
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            </div>
+    </main>
+
+    <div id="auth-modal" class="fixed inset-0 bg-black/95 z-[2000] hidden items-center justify-center p-4">
+        <div class="bg-[#1a1a1a] w-full max-w-md rounded-[30px] p-10 border border-[#333] relative">
+            <button onclick="window.toggleModal()" class="absolute top-6 right-6 material-symbols-outlined text-gray-500">close</button>
+            <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">Elite Access</h2>
+            <form id="authForm" class="space-y-4">
+                <input type="email" placeholder="Email Address" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl focus:border-gold outline-none">
+                <input type="password" placeholder="Password" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl focus:border-gold outline-none">
+                <button type="submit" class="w-full bg-gold text-black py-4 rounded-xl font-black uppercase tracking-tighter">Enter Marketplace</button>
             </form>
         </div>
     </div>
 
-    <div id="cart-overlay" class="fixed inset-0 bg-black/40 z-[150] hidden" onclick="window.toggleCart()"></div>
-    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full max-w-sm bg-white z-[151] translate-x-full transition-transform duration-500 flex flex-col shadow-2xl">
-        <div class="p-6 border-b flex justify-between items-center bg-gray-50">
-            <h2 class="font-black uppercase italic flex items-center gap-2"><span class="material-symbols-outlined">shopping_bag</span> My Bag</h2>
-            <button onclick="window.toggleCart()" class="material-symbols-outlined hover:rotate-90 transition-transform">close</button>
+    <div id="sell-modal" class="fixed inset-0 bg-black/95 z-[2000] hidden items-center justify-center p-4">
+        <div class="bg-[#1a1a1a] w-full max-w-md rounded-[30px] p-10 border border-[#333] relative">
+            <button onclick="window.toggleSellModal()" class="absolute top-6 right-6 material-symbols-outlined">close</button>
+            <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">List Luxury</h2>
+            <form id="sellForm" class="space-y-4">
+                <input type="text" id="pName" placeholder="Item Name" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl outline-none" required>
+                <input type="number" id="pPrice" placeholder="Market Value ($)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl outline-none" required>
+                <select id="pCat" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl outline-none text-gray-400">
+                    <option value="tech">Technology</option>
+                    <option value="style">Fashion</option>
+                </select>
+                <input type="url" id="pImg" placeholder="Image URL" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl outline-none" required>
+                <button type="submit" class="w-full bg-gold text-black py-4 rounded-xl font-black uppercase">Post Live</button>
+            </form>
         </div>
-        <div id="cart-content" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
-        <div class="p-6 border-t bg-white">
-            <div class="flex justify-between items-center mb-6"><span class="text-gray-400 font-bold uppercase text-xs">Total Amount</span><span id="total-val" class="text-2xl font-black text-orange-500">$0</span></div>
-            <button onclick="alert('Success! Payment Gateway coming soon.')" class="w-full orange-gradient text-white py-5 rounded-xl font-bold uppercase tracking-widest text-xs shadow-lg">Checkout Now</button>
+    </div>
+
+    <div id="cart-overlay" class="fixed inset-0 bg-black/60 z-[150] hidden" onclick="window.toggleCart()"></div>
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full max-w-md bg-[#121212] z-[151] translate-x-full transition-transform duration-500 border-l border-[#333] flex flex-col">
+        <div class="p-8 border-b border-[#222] flex justify-between items-center">
+            <h2 class="text-xl font-black uppercase gold-text">Your Selection</h2>
+            <button onclick="window.toggleCart()" class="material-symbols-outlined">close</button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-6"></div>
+        <div class="p-8 bg-[#1a1a1a] border-t border-[#222]">
+            <div class="flex justify-between mb-8"><span class="text-gray-500 font-bold uppercase text-xs">Total Investment</span><span id="cart-total" class="text-2xl font-black gold-text">$0</span></div>
+            <button onclick="alert('Proceeding to Secure Gold Checkout...')" class="w-full bg-gold text-black py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-xl shadow-gold/20">Secure Checkout</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // APP CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I",
             authDomain: "obasty-market.firebaseapp.com",
@@ -164,115 +149,116 @@
         const pRef = collection(db, "products");
 
         let cart = [];
-        window.userStatus = false;
+        window.isLoggedIn = false;
 
-        // AUTH HANDLER
+        // AUTH TRACKING
         onAuthStateChanged(auth, (user) => {
-            window.userStatus = !!user;
-            document.getElementById('user-label').innerText = user ? user.email.split('@')[0] : "Account";
+            window.isLoggedIn = !!user;
+            document.getElementById('user-display').innerText = user ? user.email.split('@')[0].toUpperCase() : "SIGN IN";
         });
 
-        // GLOBAL UI CONTROLS
-        window.toggleModal = () => document.getElementById('auth-modal').classList.toggle('modal-active');
-        window.toggleSellModal = () => document.getElementById('sell-modal').classList.toggle('modal-active');
+        // UI ACTIONS
+        window.toggleModal = () => document.getElementById('auth-modal').classList.toggle('hidden');
+        window.toggleSellModal = () => document.getElementById('sell-modal').classList.toggle('hidden');
         window.toggleCart = () => {
-            document.getElementById('cart-sidebar').classList.toggle('cart-open');
+            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
             document.getElementById('cart-overlay').classList.toggle('hidden');
         };
-        window.showAuthForm = (v) => {
-            document.getElementById('auth-box').className = v === 'selection' ? '' : 'hidden';
-            document.getElementById('login-form').className = (v === 'login' || v === 'signup') ? '' : 'hidden';
-        };
 
-        // DB ACTIONS
-        document.getElementById('firebaseLoginForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const [email, pass] = e.target.querySelectorAll('input');
-            try { await signInWithEmailAndPassword(auth, email.value, pass.value); window.toggleModal(); }
-            catch(err) { alert(err.message); }
-        };
+        // NOTIFICATION ENGINE
+        const buyers = ["Yaw", "Kojo", "Amara", "Ekow", "Nana", "Efya"];
+        const items = ["iPhone 15 Pro", "Rolex Datejust", "Elite Jordan 1s", "MacBook M3", "Gucci Belt"];
+        setInterval(() => {
+            const toast = document.getElementById('live-toast');
+            document.getElementById('toast-msg').innerText = `${buyers[Math.floor(Math.random()*buyers.length)]} just bought ${items[Math.floor(Math.random()*items.length)]}`;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 4000);
+        }, 12000);
 
-        document.getElementById('firebaseSellForm').onsubmit = async (e) => {
+        // FIREBASE SYNC
+        const q = query(pRef, orderBy("createdAt", "desc"));
+        onSnapshot(q, (snap) => {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+            snap.forEach(doc => {
+                const p = doc.data();
+                const card = document.createElement('div');
+                card.className = "product-card group relative";
+                card.setAttribute('data-name', p.name.toLowerCase());
+                card.setAttribute('data-cat', p.category);
+                card.innerHTML = `
+                    <div class="relative h-64 overflow-hidden">
+                        <button onclick="this.classList.toggle('active')" class="wishlist-btn absolute top-4 right-4 z-10 text-white hover:text-red-500 transition material-symbols-outlined">favorite</button>
+                        <img src="${p.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <button onclick="window.checkAuthAndAdd('${p.name}', ${p.price})" class="bg-white text-black px-8 py-3 rounded-full font-black text-[10px] uppercase">Express Add</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-sm tracking-tight text-gray-200">${p.name}</h3>
+                            <span class="text-gold font-black">$${p.price}</span>
+                        </div>
+                        <p class="text-[9px] font-black text-gray-600 uppercase mb-4 tracking-[0.2em]">${p.category}</p>
+                        <div class="flex gap-1 text-gold">
+                            <span class="material-symbols-outlined text-xs">star</span>
+                            <span class="material-symbols-outlined text-xs">star</span>
+                            <span class="material-symbols-outlined text-xs">star</span>
+                            <span class="material-symbols-outlined text-xs">star</span>
+                            <span class="text-[9px] text-gray-500 ml-2 font-bold">(4.9)</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        });
+
+        // SELL SUBMIT
+        document.getElementById('sellForm').onsubmit = async (e) => {
             e.preventDefault();
-            if(!window.userStatus) return window.toggleModal();
-            const payload = {
+            if(!window.isLoggedIn) return window.toggleModal();
+            const product = {
                 name: document.getElementById('pName').value,
                 price: parseFloat(document.getElementById('pPrice').value),
                 category: document.getElementById('pCat').value,
                 image: document.getElementById('pImg').value,
                 createdAt: Date.now()
             };
-            await addDoc(pRef, payload);
+            await addDoc(pRef, product);
             window.toggleSellModal();
             e.target.reset();
         };
 
-        // REAL-TIME PRODUCT SYNC
-        const q = query(pRef, orderBy("createdAt", "desc"));
-        onSnapshot(q, (snap) => {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = '';
-            snap.forEach(doc => {
-                const item = doc.data();
-                const div = document.createElement('div');
-                div.className = "product-card bg-white p-3 rounded-2xl shadow-sm border border-transparent hover:border-orange-200 cursor-pointer";
-                div.setAttribute('data-name', item.name.toLowerCase());
-                div.setAttribute('data-cat', item.category);
-                div.innerHTML = `
-                    <div class="relative overflow-hidden rounded-xl mb-3 aspect-square">
-                        <img src="${item.image}" class="w-full h-full object-cover">
-                        <span class="absolute top-2 left-2 bg-white/90 text-orange-500 font-black text-[9px] px-2 py-1 rounded">NEW</span>
-                    </div>
-                    <p class="text-[10px] text-blue-500 font-black mb-1 uppercase tracking-tighter flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[12px]">verified</span> Verified Seller
-                    </p>
-                    <h3 class="font-bold text-sm truncate text-gray-800">${item.name}</h3>
-                    <p class="text-lg font-black text-orange-500 mb-3">$${item.price}</p>
-                    <button onclick="window.checkAuthAndAdd('${item.name}', ${item.price})" class="w-full py-2 bg-orange-500 text-white rounded-lg text-[10px] font-black uppercase shadow-md shadow-orange-100 hover:bg-orange-600 transition-colors">Add to Bag</button>
-                `;
-                grid.appendChild(div);
-            });
-        });
-
-        // CART LOGIC
+        // CART ENGINE
         window.checkAuthAndAdd = (name, price) => {
-            if(!window.userStatus) return window.toggleModal();
+            if(!window.isLoggedIn) return window.toggleModal();
             cart.push({name, price});
-            const list = document.getElementById('cart-content');
             document.getElementById('cart-count').innerText = cart.length;
-            let sum = 0;
-            list.innerHTML = cart.map((i, idx) => {
-                sum += i.price;
-                return `<div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100">
-                    <span class="text-xs font-black uppercase text-gray-600">${i.name}</span>
-                    <span class="text-orange-500 font-black">$${i.price}</span>
+            const list = document.getElementById('cart-items');
+            let total = 0;
+            list.innerHTML = cart.map(item => {
+                total += item.price;
+                return `<div class="flex justify-between items-center bg-[#1a1a1a] p-4 rounded-xl border border-[#222]">
+                    <div><p class="text-[10px] font-black uppercase text-gray-400">${item.name}</p></div>
+                    <p class="gold-text font-black">$${item.price}</p>
                 </div>`;
             }).join('');
-            document.getElementById('total-val').innerText = '$' + sum;
-            if(!document.getElementById('cart-sidebar').classList.contains('cart-open')) window.toggleCart();
+            document.getElementById('cart-total').innerText = '$' + total;
+            window.toggleCart();
         };
 
-        window.checkAuthAndSell = () => window.userStatus ? window.toggleSellModal() : window.toggleModal();
-
-        // SEARCH & FILTER
+        window.checkAuthAndSell = () => window.isLoggedIn ? window.toggleSellModal() : window.toggleModal();
+        window.filterCat = (cat) => {
+            document.querySelectorAll('.product-card').forEach(c => {
+                c.style.display = (cat === 'all' || c.getAttribute('data-cat') === cat) ? 'block' : 'none';
+            });
+        };
         window.searchProducts = () => {
             const query = document.getElementById('searchInput').value.toLowerCase();
             document.querySelectorAll('.product-card').forEach(c => {
                 c.style.display = c.getAttribute('data-name').includes(query) ? 'block' : 'none';
             });
         };
-
-        window.filterCat = (cat) => {
-            document.querySelectorAll('.product-card').forEach(c => {
-                c.style.display = (cat === 'all' || c.getAttribute('data-cat') === cat) ? 'block' : 'none';
-            });
-        };
-
-        // TIMER ANIMATION
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('timer').innerText = now.toLocaleTimeString();
-        }, 1000);
 
     </script>
 </body>
