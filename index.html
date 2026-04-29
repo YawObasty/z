@@ -35,6 +35,111 @@
     </div>
 
     <nav class="glass-nav sticky top-0 z-[100] px-6 py-4">
+        <nav class="glass-nav sticky top-0 z-[100] px-6 py-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="text-2xl font-black tracking-tighter flex items-center gap-2">
+            NANA <span class="bg-gold text-black px-2 py-0.5 rounded italic text-xl">ELITE</span>
+        </a>
+        
+        <div class="hidden lg:flex flex-1 max-w-md mx-10 relative">
+            <input type="text" id="searchInput" onkeyup="window.searchProducts()" placeholder="Search luxury items..." class="w-full bg-[#222] border-none rounded-full py-2.5 px-6 text-sm focus:ring-2 ring-[#C5A059] text-white">
+            <span class="material-symbols-outlined absolute right-4 top-2.5 text-gray-500">search</span>
+        </div>
+
+        <div class="flex items-center space-x-6">
+            <div class="flex items-center gap-4">
+                <button onclick="window.handleAccountClick()" class="flex items-center gap-2 group">
+                    <div class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center group-hover:border-gold transition">
+                        <span class="material-symbols-outlined text-gray-400 group-hover:text-gold">person</span>
+                    </div>
+                    <div class="text-left hidden sm:block">
+                        <p class="text-[9px] font-bold text-gray-500 uppercase">Profile</p>
+                        <p id="user-display" class="text-[11px] font-black uppercase tracking-widest text-white">Sign In</p>
+                    </div>
+                </button>
+                
+                <button id="logout-btn" onclick="window.handleLogout()" class="hidden text-gray-500 hover:text-red-500 transition-colors">
+                    <span class="material-symbols-outlined text-xl">logout</span>
+                </button>
+            </div>
+
+            <div class="relative cursor-pointer" onclick="window.toggleCart()">
+                <span class="material-symbols-outlined text-2xl hover:text-gold transition">shopping_cart</span>
+                <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-black text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-black">0</span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    // [FIREBASE CONFIG - Use your previously provided keys]
+    const firebaseConfig = {
+        apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I",
+        authDomain: "obasty-market.firebaseapp.com",
+        projectId: "obasty-market",
+        storageBucket: "obasty-market.firebasestorage.app",
+        messagingSenderId: "753490577388",
+        appId: "1:753490577388:web:b091a8f4ba9d88c0e662c9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const pRef = collection(db, "products");
+
+    window.isLoggedIn = false;
+
+    // --- UPDATED AUTH TRACKING ---
+    onAuthStateChanged(auth, (user) => {
+        const userDisplay = document.getElementById('user-display');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        if (user) {
+            window.isLoggedIn = true;
+            userDisplay.innerText = user.email.split('@')[0].toUpperCase();
+            logoutBtn.classList.remove('hidden'); // Show logout
+        } else {
+            window.isLoggedIn = false;
+            userDisplay.innerText = "SIGN IN";
+            logoutBtn.classList.add('hidden'); // Hide logout
+        }
+    });
+
+    // --- NEW: LOGOUT FUNCTION ---
+    window.handleLogout = async () => {
+        try {
+            await signOut(auth);
+            alert("Signed out successfully.");
+        } catch (error) {
+            console.error("Logout Error:", error);
+        }
+    };
+
+    // Decide whether to open Login Modal or do something else
+    window.handleAccountClick = () => {
+        if (!window.isLoggedIn) {
+            window.toggleModal();
+        } else {
+            alert("You are already logged in as " + auth.currentUser.email);
+        }
+    };
+
+    // --- [Rest of previous Logic: toggleModal, toggleCart, Firebase Sync, etc.] ---
+    
+    // (Ensure you keep the window assignment for all functions used in HTML)
+    window.toggleModal = () => document.getElementById('auth-modal').classList.toggle('hidden');
+    window.toggleSellModal = () => document.getElementById('sell-modal').classList.toggle('hidden');
+    window.toggleCart = () => {
+        document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+        document.getElementById('cart-overlay').classList.toggle('hidden');
+    };
+    
+    // (Re-include the onSnapshot and form submission logic from the previous version here)
+</script>
         <div class="container mx-auto flex justify-between items-center">
             <a href="#" class="text-2xl font-black tracking-tighter flex items-center gap-2">
                 NANA <span class="bg-gold text-black px-2 py-0.5 rounded italic text-xl">ELITE</span>
