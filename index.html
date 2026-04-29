@@ -46,15 +46,21 @@
             </div>
 
             <div class="flex items-center space-x-6">
-                <button onclick="window.toggleModal()" class="flex items-center gap-2 group">
-                    <div class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center group-hover:border-gold transition">
-                        <span class="material-symbols-outlined text-gray-400 group-hover:text-gold">person</span>
-                    </div>
-                    <div class="text-left hidden sm:block">
-                        <p class="text-[9px] font-bold text-gray-500 uppercase">Welcome</p>
-                        <p id="user-display" class="text-[11px] font-black uppercase tracking-widest">Sign In</p>
-                    </div>
-                </button>
+                <div class="flex items-center gap-3">
+                    <button onclick="window.toggleModal()" class="flex items-center gap-2 group">
+                        <div class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center group-hover:border-gold transition">
+                            <span class="material-symbols-outlined text-gray-400 group-hover:text-gold">person</span>
+                        </div>
+                        <div class="text-left hidden sm:block">
+                            <p class="text-[9px] font-bold text-gray-500 uppercase">Welcome</p>
+                            <p id="user-display" class="text-[11px] font-black uppercase tracking-widest text-white">Sign In</p>
+                        </div>
+                    </button>
+                    <button id="logout-btn" onclick="window.handleLogout()" class="hidden text-gray-500 hover:text-red-500 transition">
+                        <span class="material-symbols-outlined text-xl">logout</span>
+                    </button>
+                </div>
+
                 <div class="relative cursor-pointer" onclick="window.toggleCart()">
                     <span class="material-symbols-outlined text-2xl hover:text-gold transition">shopping_cart</span>
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-black text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-black">0</span>
@@ -83,8 +89,7 @@
     </section>
 
     <main class="container mx-auto px-6 pb-20">
-        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            </div>
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
     </main>
 
     <div id="auth-modal" class="fixed inset-0 bg-black/95 z-[2000] hidden items-center justify-center p-4">
@@ -92,8 +97,8 @@
             <button onclick="window.toggleModal()" class="absolute top-6 right-6 material-symbols-outlined text-gray-500">close</button>
             <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">Elite Access</h2>
             <form id="authForm" class="space-y-4">
-                <input type="email" placeholder="Email Address" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl focus:border-gold outline-none">
-                <input type="password" placeholder="Password" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl focus:border-gold outline-none">
+                <input type="email" id="authEmail" placeholder="Email Address" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl focus:border-gold outline-none text-white">
+                <input type="password" id="authPass" placeholder="Password" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl focus:border-gold outline-none text-white">
                 <button type="submit" class="w-full bg-gold text-black py-4 rounded-xl font-black uppercase tracking-tighter">Enter Marketplace</button>
             </form>
         </div>
@@ -104,13 +109,14 @@
             <button onclick="window.toggleSellModal()" class="absolute top-6 right-6 material-symbols-outlined">close</button>
             <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">List Luxury</h2>
             <form id="sellForm" class="space-y-4">
-                <input type="text" id="pName" placeholder="Item Name" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl outline-none" required>
-                <input type="number" id="pPrice" placeholder="Market Value ($)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl outline-none" required>
+                <input type="text" id="pName" placeholder="Item Name" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl outline-none text-white" required>
+                <input type="number" id="pPrice" placeholder="Market Value ($)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl outline-none text-white" required>
+                <input type="tel" id="pPhone" placeholder="WhatsApp Number (e.g. 233240000000)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl outline-none text-white" required>
                 <select id="pCat" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl outline-none text-gray-400">
                     <option value="tech">Technology</option>
                     <option value="style">Fashion</option>
                 </select>
-                <input type="url" id="pImg" placeholder="Image URL" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl outline-none" required>
+                <input type="url" id="pImg" placeholder="Image URL" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl outline-none text-white" required>
                 <button type="submit" class="w-full bg-gold text-black py-4 rounded-xl font-black uppercase">Post Live</button>
             </form>
         </div>
@@ -132,7 +138,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I",
@@ -154,8 +160,24 @@
         // AUTH TRACKING
         onAuthStateChanged(auth, (user) => {
             window.isLoggedIn = !!user;
-            document.getElementById('user-display').innerText = user ? user.email.split('@')[0].toUpperCase() : "SIGN IN";
+            const display = document.getElementById('user-display');
+            const logoutBtn = document.getElementById('logout-btn');
+            
+            if(user) {
+                display.innerText = user.email.split('@')[0].toUpperCase();
+                logoutBtn.classList.remove('hidden');
+            } else {
+                display.innerText = "SIGN IN";
+                logoutBtn.classList.add('hidden');
+            }
         });
+
+        // LOGOUT ACTION
+        window.handleLogout = async () => {
+            if(confirm("Log out of Nana Obasty?")) {
+                await signOut(auth);
+            }
+        };
 
         // UI ACTIONS
         window.toggleModal = () => document.getElementById('auth-modal').classList.toggle('hidden');
@@ -163,6 +185,17 @@
         window.toggleCart = () => {
             document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
             document.getElementById('cart-overlay').classList.toggle('hidden');
+        };
+
+        // AUTH SUBMIT
+        document.getElementById('authForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPass').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                window.toggleModal();
+            } catch(err) { alert(err.message); }
         };
 
         // NOTIFICATION ENGINE
@@ -175,13 +208,16 @@
             setTimeout(() => toast.classList.add('hidden'), 4000);
         }, 12000);
 
-        // FIREBASE SYNC
+        // FIREBASE SYNC (WITH WHATSAPP BUTTON)
         const q = query(pRef, orderBy("createdAt", "desc"));
         onSnapshot(q, (snap) => {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
             snap.forEach(doc => {
                 const p = doc.data();
+                const waMsg = encodeURIComponent(`Hello, I'm interested in "${p.name}" ($${p.price}) on Nana Obasty. Is it available?`);
+                const waLink = `https://wa.me/${p.phone}?text=${waMsg}`;
+
                 const card = document.createElement('div');
                 card.className = "product-card group relative";
                 card.setAttribute('data-name', p.name.toLowerCase());
@@ -190,22 +226,22 @@
                     <div class="relative h-64 overflow-hidden">
                         <button onclick="this.classList.toggle('active')" class="wishlist-btn absolute top-4 right-4 z-10 text-white hover:text-red-500 transition material-symbols-outlined">favorite</button>
                         <img src="${p.image}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <button onclick="window.checkAuthAndAdd('${p.name}', ${p.price})" class="bg-white text-black px-8 py-3 rounded-full font-black text-[10px] uppercase">Express Add</button>
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3">
+                            <button onclick="window.checkAuthAndAdd('${p.name}', ${p.price})" class="bg-white text-black px-6 py-2 rounded-full font-black text-[10px] uppercase w-32">Express Add</button>
+                            <a href="${waLink}" target="_blank" class="bg-[#25D366] text-white px-6 py-2 rounded-full font-black text-[10px] uppercase w-32 flex items-center justify-center gap-1">
+                                <span class="material-symbols-outlined text-sm">chat</span> Chat
+                            </a>
                         </div>
                     </div>
                     <div class="p-6">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-bold text-sm tracking-tight text-gray-200">${p.name}</h3>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-sm tracking-tight text-gray-200 truncate pr-2">${p.name}</h3>
                             <span class="text-gold font-black">$${p.price}</span>
                         </div>
                         <p class="text-[9px] font-black text-gray-600 uppercase mb-4 tracking-[0.2em]">${p.category}</p>
                         <div class="flex gap-1 text-gold">
-                            <span class="material-symbols-outlined text-xs">star</span>
-                            <span class="material-symbols-outlined text-xs">star</span>
-                            <span class="material-symbols-outlined text-xs">star</span>
-                            <span class="material-symbols-outlined text-xs">star</span>
-                            <span class="text-[9px] text-gray-500 ml-2 font-bold">(4.9)</span>
+                            <span class="material-symbols-outlined text-[12px]">verified</span>
+                            <span class="text-[9px] text-gray-500 font-bold uppercase">Seller: ${p.sellerEmail ? p.sellerEmail.split('@')[0] : 'Elite'}</span>
                         </div>
                     </div>
                 `;
@@ -213,15 +249,17 @@
             });
         });
 
-        // SELL SUBMIT
+        // SELL SUBMIT (WITH PHONE & EMAIL)
         document.getElementById('sellForm').onsubmit = async (e) => {
             e.preventDefault();
             if(!window.isLoggedIn) return window.toggleModal();
             const product = {
                 name: document.getElementById('pName').value,
                 price: parseFloat(document.getElementById('pPrice').value),
+                phone: document.getElementById('pPhone').value,
                 category: document.getElementById('pCat').value,
                 image: document.getElementById('pImg').value,
+                sellerEmail: auth.currentUser.email,
                 createdAt: Date.now()
             };
             await addDoc(pRef, product);
@@ -259,7 +297,6 @@
                 c.style.display = c.getAttribute('data-name').includes(query) ? 'block' : 'none';
             });
         };
-
     </script>
 </body>
 </html>
