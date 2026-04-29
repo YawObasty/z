@@ -257,42 +257,62 @@
 
         // REAL-TIME SYNC
         const q = query(pRef, orderBy("createdAt", "desc"));
-        onSnapshot(q, (snap) => {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = snap.empty ? '<div class="col-span-full py-20 text-center text-gray-600 uppercase font-black">No Items Found</div>' : '';
-            
-            snap.forEach(ds => {
-                const p = ds.data();
-                const id = ds.id;
-                const isOwner = auth.currentUser && auth.currentUser.email === p.sellerEmail;
-                const card = document.createElement('div');
-                card.className = "product-card group relative";
-                card.setAttribute('data-name', p.name.toLowerCase());
-                card.setAttribute('data-cat', p.category);
-                card.innerHTML = `
-                    <div class="relative h-64 overflow-hidden">
-                        ${isOwner ? `<button onclick="window.deleteProduct('${id}')" class="absolute top-4 left-4 z-20 bg-red-600 text-white p-2 rounded-full shadow-lg"><span class="material-symbols-outlined text-sm">delete</span></button>` : ''}
-                        <img src="${p.image}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-3">
-                            <button onclick="window.checkAuthAndAdd('${p.name}', ${p.price})" class="bg-white text-black px-6 py-2 rounded-full font-black text-[10px] w-32">Add to Bag</button>
-                            <a href="https://wa.me/${p.phone}" target="_blank" class="bg-[#25D366] text-white px-6 py-2 rounded-full font-black text-[10px] w-32 flex items-center justify-center gap-1">Chat</a>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-1">
-                            <h3 class="font-bold text-sm text-gray-200 truncate">${p.name}</h3>
-                            <span class="text-gold font-black">$${p.price}</span>
-                        </div>
-                        <p class="text-[9px] font-black text-gray-600 uppercase tracking-widest">${p.category}</p>
-                    </div>`;
-                grid.appendChild(card);
-            });
-        });
+       // Function to show details
+window.openDetail = (data) => {
+    const p = JSON.parse(decodeURIComponent(data));
+    document.getElementById('detail-img').src = p.image;
+    document.getElementById('detail-name').innerText = p.name;
+    document.getElementById('detail-cat').innerText = p.category;
+    document.getElementById('detail-price').innerText = `$${p.price.toLocaleString()}`;
+    document.getElementById('detail-seller').innerText = p.sellerEmail.split('@')[0];
+    document.getElementById('detail-date').innerText = new Date(p.createdAt).toLocaleDateString();
+    
+    // Setup Buttons
+    document.getElementById('detail-add-btn').onclick = () => window.checkAuthAndAdd(p.name, p.price);
+    document.getElementById('detail-wa-btn').href = `https://wa.me/${p.phone}?text=I'm interested in ${p.name}`;
+    
+    document.getElementById('detail-overlay').classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // Stop background scrolling
+};
 
-        window.searchProducts = () => {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            document.querySelectorAll('.product-card').forEach(c => c.style.display = c.getAttribute('data-name').includes(query) ? 'block' : 'none');
-        };
+window.closeDetail = () => {
+    document.getElementById('detail-overlay').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+};
+
+// Update onSnapshot to make the image/card clickable
+onSnapshot(q, (snap) => {
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = snap.empty ? '<div class="col-span-full py-20 text-center text-gray-600 uppercase font-black">No Items Found</div>' : '';
+    
+    snap.forEach(ds => {
+        const p = ds.data();
+        const id = ds.id;
+        const isOwner = auth.currentUser && auth.currentUser.email === p.sellerEmail;
+        
+        // Stringify data for the detail function
+        const dataString = encodeURIComponent(JSON.stringify({...p, id}));
+
+        const card = document.createElement('div');
+        card.className = "product-card group relative cursor-pointer";
+        card.setAttribute('data-name', p.name.toLowerCase());
+        
+        card.innerHTML = `
+            <div class="relative h-64 overflow-hidden" onclick="window.openDetail('${dataString}')">
+                ${isOwner ? `<button onclick="event.stopPropagation(); window.deleteProduct('${id}')" class="absolute top-4 left-4 z-20 bg-red-600 text-white p-2 rounded-full shadow-lg hover:scale-110 transition"><span class="material-symbols-outlined text-sm">delete</span></button>` : ''}
+                <img src="${p.image}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all"></div>
+            </div>
+            <div class="p-6" onclick="window.openDetail('${dataString}')">
+                <div class="flex justify-between items-start mb-1">
+                    <h3 class="font-bold text-sm text-gray-200 truncate">${p.name}</h3>
+                    <span class="text-gold font-black">$${p.price}</span>
+                </div>
+                <p class="text-[9px] font-black text-gray-600 uppercase tracking-widest">${p.category}</p>
+            </div>`;
+        grid.appendChild(card);
+    });
+});
 
         window.checkAuthAndAdd = (n, p) => {
             if(!window.isLoggedIn) return window.toggleModal();
