@@ -56,6 +56,37 @@
         <main class="container mx-auto px-6 pb-20">
             <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
         </main>
+
+        <footer class="bg-[#0a0a0a] border-t border-white/5 pt-20 pb-10 mt-20">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
+                    <div class="relative">
+                        <div class="w-40 h-40 md:w-48 md:h-48 rounded-full border-2 border-gold p-1 shadow-[0_0_30px_rgba(197,160,89,0.2)]">
+                            <div class="w-full h-full rounded-full bg-[#1a1a1a] flex items-center justify-center overflow-hidden">
+                                <img src="https://i.ibb.co/dZRcM0X/image.jpg" alt="Nana Obasty" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                        <div class="absolute bottom-2 right-2 bg-gold text-black p-1.5 rounded-full flex items-center justify-center border-4 border-[#0a0a0a]">
+                            <span class="material-symbols-outlined text-sm font-black">verified</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h2 class="text-[10px] font-black uppercase tracking-[0.4em] text-gold mb-2">Founder & Curator</h2>
+                        <h3 class="text-4xl font-black uppercase text-white mb-4 tracking-tighter">Nana Obasty</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-8 font-medium italic">
+                            "I created Nana Obasty Elite to bridge the gap between luxury and accessibility. Every item is a reflection of my commitment to excellence."
+                        </p>
+                        <div class="flex flex-wrap justify-center md:justify-start gap-3">
+                            <a href="https://instagram.com/nana_obasty" target="_blank" class="px-5 py-2.5 bg-[#161616] border border-white/5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-gold hover:border-gold/50 transition">Instagram</a>
+                            <a href="https://wa.me/233539547368" target="_blank" class="px-5 py-2.5 bg-[#25D366]/10 border border-[#25D366]/20 rounded-full text-[10px] font-black uppercase tracking-widest text-[#25D366] hover:bg-[#25D366] hover:text-white transition">WhatsApp</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-20 pt-8 border-t border-white/5 text-center">
+                    <p class="text-[9px] text-gray-600 font-bold uppercase tracking-[0.5em]">&copy; 2026 NANA OBASTY ELITE</p>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <div id="product-page">
@@ -63,19 +94,16 @@
             <button onclick="window.closeProductPage()" class="mb-8 flex items-center gap-2 text-gray-400 hover:text-gold transition font-bold uppercase text-[10px] tracking-widest">
                 <span class="material-symbols-outlined">arrow_back</span> Back to Gallery
             </button>
-
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                 <div class="rounded-[40px] overflow-hidden bg-[#161616] border border-white/5 sticky top-28">
                     <img id="view-img" src="" class="w-full aspect-square object-cover">
                 </div>
-
                 <div class="space-y-10">
                     <div>
                         <span id="view-cat" class="text-gold font-black text-xs uppercase tracking-[0.3em]"></span>
                         <h1 id="view-name" class="text-5xl font-black uppercase mt-4 tracking-tighter leading-none"></h1>
                         <p id="view-price" class="text-4xl text-gray-400 mt-6 font-light"></p>
                     </div>
-
                     <div class="p-8 rounded-3xl bg-[#161616] border border-white/5 space-y-4">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center">
@@ -86,15 +114,12 @@
                                 <p class="font-bold">Nana Obasty Elite</p>
                             </div>
                         </div>
-                        <p class="text-sm text-gray-400 leading-relaxed italic">This listing is authenticated and secured by our luxury standard.</p>
                     </div>
-
                     <a id="view-wa-btn" href="#" target="_blank" class="block w-full bg-[#25D366] text-white py-6 rounded-2xl font-black uppercase text-center hover:brightness-110 transition">
                         Contact Seller
                     </a>
                 </div>
             </div>
-
             <div class="mt-32">
                 <h3 class="text-2xl font-black uppercase italic mb-8">You May Also Like</h3>
                 <div id="similar-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
@@ -105,20 +130,15 @@
     <div id="sell-modal" class="fixed inset-0 bg-black/98 z-[3000] hidden flex items-center justify-center p-4">
         <div class="bg-[#161616] w-full max-w-md rounded-[40px] p-10 border border-white/5 relative">
             <button onclick="window.toggleSellModal()" class="absolute top-8 right-8 material-symbols-outlined text-gray-500">close</button>
-
             <div id="payment-gate" class="text-center py-6">
                 <div class="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
                     <span class="material-symbols-outlined gold-text text-4xl">payments</span>
                 </div>
                 <h2 class="text-2xl font-black uppercase italic mb-2">Listing Fee</h2>
                 <p class="text-gray-400 text-sm mb-8">Pay GHS 50.00 to unlock your luxury listing slot.</p>
-                <button onclick="window.startPaymentProcess()" class="w-full bg-white text-black py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-gold transition">
-                    Pay to Unlock
-                </button>
+                <button onclick="window.startPaymentProcess()" class="w-full bg-white text-black py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-gold transition">Pay to Unlock</button>
             </div>
-
             <form id="sellForm" class="space-y-4 hidden">
-                <h2 class="text-xl font-black uppercase italic mb-6">Upload Item</h2>
                 <input type="text" id="pName" placeholder="Item Name" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
                 <input type="number" id="pPrice" placeholder="Price ($)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
                 <select id="pCat" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-gray-400 outline-none">
@@ -172,118 +192,25 @@
             document.getElementById('user-display').innerText = user ? "ADMIN LOGGED" : "SIGN IN";
         });
 
-        // UI ACTIONS
         window.toggleModal = () => document.getElementById('auth-modal').classList.toggle('hidden');
         window.toggleSellModal = () => {
             document.getElementById('sell-modal').classList.toggle('hidden');
-            // Reset to Payment Gate when closing/opening
             document.getElementById('payment-gate').classList.remove('hidden');
             document.getElementById('sellForm').classList.add('hidden');
         };
-
         window.startPaymentProcess = () => {
-            alert("Redirecting to Mobile Money Gateway... (Demo OK)");
+            alert("Redirecting to MoMo Gateway...");
             document.getElementById('payment-gate').classList.add('hidden');
             document.getElementById('sellForm').classList.remove('hidden');
         };
-
         window.closeProductPage = () => {
             document.getElementById('home-view').style.display = 'block';
             document.getElementById('product-page').style.display = 'none';
         };
-
         window.viewProduct = (id) => {
             const p = allProducts.find(item => item.id === id);
             if (!p) return;
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('product-page').style.display = 'block';
             window.scrollTo(0,0);
-            document.getElementById('view-img').src = p.image;
-            document.getElementById('view-name').innerText = p.name;
-            document.getElementById('view-cat').innerText = p.category;
-            document.getElementById('view-price').innerText = `$${p.price.toLocaleString()}`;
-            document.getElementById('view-wa-btn').href = `https://wa.me/233539547368?text=Interested in ${p.name}`;
-            
-            const similar = allProducts.filter(item => item.category === p.category && item.id !== p.id).slice(0, 4);
-            document.getElementById('similar-grid').innerHTML = similar.map(p => createCardHTML(p)).join('');
-        };
-
-        // DATABASE ACTIONS
-        document.getElementById('authForm').onsubmit = async (e) => {
-            e.preventDefault();
-            try {
-                await signInWithEmailAndPassword(auth, document.getElementById('authEmail').value, document.getElementById('authPass').value);
-                window.toggleModal();
-            } catch(err) { alert("Invalid Credentials"); }
-        };
-
-        document.getElementById('sellForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('sellSubmitBtn');
-            const file = document.getElementById('pFile').files[0];
-            try {
-                btn.innerText = "UPLOADING..."; btn.disabled = true;
-                const fileRef = sRef(storage, `products/${Date.now()}_${file.name}`);
-                const snapshot = await uploadBytes(fileRef, file);
-                const url = await getDownloadURL(snapshot.ref);
-                await addDoc(pRef, {
-                    name: document.getElementById('pName').value,
-                    price: parseFloat(document.getElementById('pPrice').value),
-                    phone: "233539547368",
-                    category: document.getElementById('pCat').value,
-                    image: url,
-                    sellerEmail: auth.currentUser?.email || "public@user.com",
-                    createdAt: Date.now()
-                });
-                window.toggleSellModal();
-                e.target.reset();
-            } catch (err) { alert("Error uploading"); }
-            finally { btn.innerText = "POST LIVE"; btn.disabled = false; }
-        };
-
-        window.deleteProduct = async (e, id) => {
-            e.stopPropagation();
-            if (confirm("Remove item?")) await deleteDoc(doc(db, "products", id));
-        };
-
-        function createCardHTML(p) {
-            const isOwner = auth.currentUser && auth.currentUser.email === p.sellerEmail;
-            return `
-                <div class="product-card cursor-pointer" onclick="window.viewProduct('${p.id}')">
-                    <div class="h-72 relative">
-                        ${isOwner ? `<button onclick="window.deleteProduct(event, '${p.id}')" class="absolute top-4 left-4 z-10 bg-red-600 p-2 rounded-full"><span class="material-symbols-outlined text-sm">delete</span></button>` : ''}
-                        <img src="${p.image}" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-bold text-gray-200 truncate w-3/4">${p.name}</h3>
-                            <p class="text-gold font-black">$${p.price.toLocaleString()}</p>
-                        </div>
-                        <p class="text-[9px] uppercase tracking-widest text-gray-500 font-black">${p.category}</p>
-                    </div>
-                </div>`;
-        }
-
-        onSnapshot(query(pRef, orderBy("createdAt", "desc")), (snap) => {
-            const grid = document.getElementById('product-grid');
-            allProducts = [];
-            let total = 0;
-            snap.forEach(ds => {
-                const data = {id: ds.id, ...ds.data()};
-                allProducts.push(data);
-                total += data.price;
-            });
-            grid.innerHTML = allProducts.map(p => createCardHTML(p)).join('');
-            document.getElementById('stat-count').innerText = allProducts.length;
-            document.getElementById('stat-value').innerText = `$${total.toLocaleString()}`;
-        });
-
-        window.filterCat = (cat) => {
-            const filtered = cat === 'all' ? allProducts : allProducts.filter(p => p.category === cat);
-            document.getElementById('product-grid').innerHTML = filtered.map(p => createCardHTML(p)).join('');
-        };
-
-        window.checkAuthAndSell = () => window.toggleSellModal();
-    </script>
-</body>
-</html>
+            document.getElementById('view-img').
