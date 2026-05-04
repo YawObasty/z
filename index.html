@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>NANA OBASTY ELITE | Luxury Marketplace</title>
+    <meta name="description" content="The premier destination for luxury tech and elite fashion curated by Nana Obasty.">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NANA OBASTY ELITE | Luxury Marketplace">
+    <meta property="og:description" content="Shop the finest curated collection of elite tech and fashion.">
+    <meta property="og:image" content="https://i.ibb.co/dZRcM0X/image.jpg">
+    <meta property="og:url" content="https://nanaobastyelite.com">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,1&display=swap" rel="stylesheet">
     <style>
@@ -165,141 +174,5 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDyC4uyc10cXAFOESh4DSUSPXJN4EgVy_I",
-            authDomain: "obasty-market.firebaseapp.com",
-            projectId: "obasty-market",
-            storageBucket: "obasty-market.firebasestorage.app",
-            messagingSenderId: "753490577388",
-            appId: "1:753490577388:web:b091a8f4ba9d88c0e662c9"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-        const storage = getStorage(app);
-        const pRef = collection(db, "products");
-
-        window.isLoggedIn = false;
-
-        onAuthStateChanged(auth, (user) => {
-            window.isLoggedIn = !!user;
-            document.getElementById('user-display').innerText = user ? user.email.split('@')[0].toUpperCase() : "SIGN IN";
-        });
-
-        window.toggleModal = () => document.getElementById('auth-modal').classList.toggle('hidden');
-        window.toggleSellModal = () => document.getElementById('sell-modal').classList.toggle('hidden');
-        window.toggleCart = () => document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
-
-        document.getElementById('authForm').onsubmit = async (e) => {
-            e.preventDefault();
-            try {
-                await signInWithEmailAndPassword(auth, document.getElementById('authEmail').value, document.getElementById('authPass').value);
-                window.toggleModal();
-            } catch(err) { alert(err.message); }
-        };
-
-        document.getElementById('sellForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('sellSubmitBtn');
-            const file = document.getElementById('pFile').files[0];
-            try {
-                btn.innerText = "UPLOADING..."; btn.disabled = true;
-                const fileRef = sRef(storage, `products/${Date.now()}_${file.name}`);
-                const snapshot = await uploadBytes(fileRef, file);
-                const url = await getDownloadURL(snapshot.ref);
-                await addDoc(pRef, {
-                    name: document.getElementById('pName').value,
-                    price: parseFloat(document.getElementById('pPrice').value),
-                    phone: document.getElementById('pPhone').value,
-                    category: document.getElementById('pCat').value,
-                    image: url,
-                    sellerEmail: auth.currentUser.email,
-                    createdAt: Date.now()
-                });
-                window.toggleSellModal();
-                e.target.reset();
-            } catch (err) { alert(err.message); }
-            finally { btn.innerText = "POST LIVE"; btn.disabled = false; }
-        };
-
-        window.deleteProduct = async (id) => {
-            if (confirm("Remove this listing from the Elite gallery?")) {
-                await deleteDoc(doc(db, "products", id));
-            }
-        };
-
-        window.openDetail = (data) => {
-            const p = JSON.parse(decodeURIComponent(data));
-            const message = `Hello Nana Obasty Elite, I am interested in purchasing the *${p.name}* listed for *$${p.price.toLocaleString()}*. Is this still available?`;
-            const encodedMsg = encodeURIComponent(message);
-
-            document.getElementById('detail-img').src = p.image;
-            document.getElementById('detail-name').innerText = p.name;
-            document.getElementById('detail-cat').innerText = p.category;
-            document.getElementById('detail-price').innerText = `$${p.price.toLocaleString()}`;
-            document.getElementById('detail-wa-btn').href = `https://wa.me/${p.phone}?text=${encodedMsg}`;
-            document.getElementById('detail-overlay').classList.remove('hidden');
-        };
-
-        window.closeDetail = () => document.getElementById('detail-overlay').classList.add('hidden');
-
-        onSnapshot(query(pRef, orderBy("createdAt", "desc")), (snap) => {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = '';
-            
-            let totalValue = 0;
-            let count = 0;
-
-            snap.forEach(ds => {
-                const p = ds.data();
-                const id = ds.id;
+        import { getFirestore, collection, addDoc, onSnapshot,
                 
-                // Analytics Calculation
-                totalValue += p.price;
-                count++;
-
-                const isOwner = auth.currentUser && auth.currentUser.email === p.sellerEmail;
-                const dataString = encodeURIComponent(JSON.stringify({...p, id}));
-                const gridMsg = encodeURIComponent(`Quick Inquiry: ${p.name} ($${p.price})`);
-
-                const card = document.createElement('div');
-                card.className = "product-card cursor-pointer";
-                card.setAttribute('data-cat', p.category);
-                card.innerHTML = `
-                    <div class="h-64 overflow-hidden relative" onclick="window.openDetail('${dataString}')">
-                        ${isOwner ? `<button onclick="event.stopPropagation(); window.deleteProduct('${id}')" class="absolute top-3 left-3 z-10 bg-red-600/80 text-white p-2 rounded-full hover:bg-red-600 transition"><span class="material-symbols-outlined text-sm">delete</span></button>` : ''}
-                        <img src="${p.image}" class="w-full h-full object-cover hover:scale-110 transition duration-700">
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="font-bold text-gray-200 text-sm truncate w-2/3">${p.name}</h3>
-                            <p class="text-gold font-black">$${p.price.toLocaleString()}</p>
-                        </div>
-                        <div class="flex gap-4 items-center border-t border-white/5 pt-4">
-                            <button onclick="window.openDetail('${dataString}')" class="text-[9px] font-black uppercase tracking-widest text-gray-500 hover:text-gold transition">Specs</button>
-                            <a href="https://wa.me/${p.phone}?text=${gridMsg}" class="text-[9px] font-black uppercase tracking-widest text-[#25D366] hover:brightness-125 transition">Inquiry</a>
-                        </div>
-                    </div>`;
-                grid.appendChild(card);
-            });
-
-            // Update Analytics UI
-            document.getElementById('stat-count').innerText = count;
-            document.getElementById('stat-value').innerText = `$${totalValue.toLocaleString()}`;
-        });
-
-        window.filterCat = (cat) => {
-            document.querySelectorAll('.product-card').forEach(c => {
-                c.style.display = (cat === 'all' || c.getAttribute('data-cat') === cat) ? 'block' : 'none';
-            });
-        };
-
-        window.checkAuthAndSell = () => window.isLoggedIn ? window.toggleSellModal() : window.toggleModal();
-    </script>
-</body>
-</html>
