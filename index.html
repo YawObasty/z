@@ -12,14 +12,14 @@
         .gold-text { color: var(--accent); }
         .bg-gold { background: var(--accent); }
         .glass-nav { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid #222; }
-        .product-card { background: #1a1a1a; border: 1px solid #222; transition: all 0.4s ease; border-radius: 20px; overflow: hidden; }
+        .product-card { background: #1a1a1a; border: 1px solid #222; transition: all 0.4s ease; border-radius: 20px; overflow: hidden; position: relative; }
         .product-card:hover { border-color: var(--accent); transform: translateY(-10px); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
 
-    <div id="detail-overlay" class="fixed inset-0 bg-[#0d0d0d] z-[3000] hidden flex-col overflow-y-auto">
+    <div id="detail-overlay" class="fixed inset-0 bg-[#0d0d0d] z-[3000] hidden flex flex-col overflow-y-auto">
         <div class="sticky top-0 p-6 flex justify-between items-center bg-[#0d0d0d]/80 backdrop-blur-xl z-10">
             <button onclick="window.closeDetail()" class="w-12 h-12 rounded-full bg-[#1a1a1a] flex items-center justify-center">
                 <span class="material-symbols-outlined">arrow_back</span>
@@ -41,8 +41,10 @@
                     <p id="detail-price" class="text-3xl font-light text-gray-400"></p>
                 </div>
                 <div class="flex gap-4">
-                    <button id="detail-add-btn" class="flex-1 bg-white text-black py-5 rounded-2xl font-black uppercase text-xs hover:bg-gold transition">Add to Bag</button>
-                    <a id="detail-wa-btn" href="#" target="_blank" class="flex-1 bg-[#25D366] text-white py-5 rounded-2xl font-black uppercase text-xs flex items-center justify-center gap-2">Contact Seller</a>
+                    <button class="flex-1 bg-white text-black py-5 rounded-2xl font-black uppercase text-xs hover:bg-gold transition">Add to Bag</button>
+                    <a id="detail-wa-btn" href="#" target="_blank" class="flex-1 bg-[#25D366] text-white py-5 rounded-2xl font-black uppercase text-xs flex items-center justify-center gap-2 transition hover:brightness-110">
+                        Contact Seller
+                    </a>
                 </div>
             </div>
         </div>
@@ -99,7 +101,7 @@
                     </p>
                     <div class="flex flex-wrap justify-center md:justify-start gap-3">
                         <a href="https://instagram.com/nana_obasty" target="_blank" class="px-5 py-2.5 bg-[#161616] border border-white/5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-gold hover:border-gold/50 transition">Instagram</a>
-                        <a href="https://wa.me/233000000000" target="_blank" class="px-5 py-2.5 bg-[#25D366]/10 border border-[#25D366]/20 rounded-full text-[10px] font-black uppercase tracking-widest text-[#25D366] hover:bg-[#25D366] hover:text-white transition">WhatsApp</a>
+                        <a href="https://wa.me/233539547368" target="_blank" class="px-5 py-2.5 bg-[#25D366]/10 border border-[#25D366]/20 rounded-full text-[10px] font-black uppercase tracking-widest text-[#25D366] hover:bg-[#25D366] hover:text-white transition">WhatsApp</a>
                     </div>
                 </div>
             </div>
@@ -212,13 +214,24 @@
             finally { btn.innerText = "POST LIVE"; btn.disabled = false; }
         };
 
+        window.deleteProduct = async (id) => {
+            if (confirm("Remove this listing from the Elite gallery?")) {
+                await deleteDoc(doc(db, "products", id));
+            }
+        };
+
         window.openDetail = (data) => {
             const p = JSON.parse(decodeURIComponent(data));
+            
+            // ELITE WHATSAPP TEMPLATE
+            const message = `Hello Nana Obasty Elite, I am interested in purchasing the *${p.name}* listed for *$${p.price.toLocaleString()}*. Is this still available?`;
+            const encodedMsg = encodeURIComponent(message);
+
             document.getElementById('detail-img').src = p.image;
             document.getElementById('detail-name').innerText = p.name;
             document.getElementById('detail-cat').innerText = p.category;
             document.getElementById('detail-price').innerText = `$${p.price.toLocaleString()}`;
-            document.getElementById('detail-wa-btn').href = `https://wa.me/${p.phone}?text=I'm interested in ${p.name}`;
+            document.getElementById('detail-wa-btn').href = `https://wa.me/${p.phone}?text=${encodedMsg}`;
             document.getElementById('detail-overlay').classList.remove('hidden');
         };
 
@@ -229,17 +242,29 @@
             grid.innerHTML = '';
             snap.forEach(ds => {
                 const p = ds.data();
-                const dataString = encodeURIComponent(JSON.stringify({...p, id: ds.id}));
+                const id = ds.id;
+                const isOwner = auth.currentUser && auth.currentUser.email === p.sellerEmail;
+                const dataString = encodeURIComponent(JSON.stringify({...p, id}));
+                
+                const gridMsg = encodeURIComponent(`Quick Inquiry: I'm interested in the ${p.name} ($${p.price})`);
+
                 const card = document.createElement('div');
                 card.className = "product-card cursor-pointer";
                 card.setAttribute('data-cat', p.category);
                 card.innerHTML = `
-                    <div class="h-64 overflow-hidden" onclick="window.openDetail('${dataString}')">
+                    <div class="h-64 overflow-hidden relative" onclick="window.openDetail('${dataString}')">
+                        ${isOwner ? `<button onclick="event.stopPropagation(); window.deleteProduct('${id}')" class="absolute top-3 left-3 z-10 bg-red-600/80 text-white p-2 rounded-full hover:bg-red-600 transition"><span class="material-symbols-outlined text-sm">delete</span></button>` : ''}
                         <img src="${p.image}" class="w-full h-full object-cover hover:scale-110 transition duration-700">
                     </div>
                     <div class="p-6">
-                        <h3 class="font-bold text-gray-200">${p.name}</h3>
-                        <p class="text-gold font-black">$${p.price}</p>
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-gray-200 text-sm truncate w-2/3">${p.name}</h3>
+                            <p class="text-gold font-black">$${p.price}</p>
+                        </div>
+                        <div class="flex gap-4 items-center border-t border-white/5 pt-4">
+                            <button onclick="window.openDetail('${dataString}')" class="text-[9px] font-black uppercase tracking-widest text-gray-500 hover:text-gold transition">Specs</button>
+                            <a href="https://wa.me/${p.phone}?text=${gridMsg}" class="text-[9px] font-black uppercase tracking-widest text-[#25D366] hover:brightness-125 transition">Inquiry</a>
+                        </div>
                     </div>`;
                 grid.appendChild(card);
             });
