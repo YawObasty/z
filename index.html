@@ -14,6 +14,7 @@
     <meta property="og:url" content="https://nanaobastyelite.com">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,1&display=swap" rel="stylesheet">
     <style>
         :root { --accent: #C5A059; --dark: #121212; }
@@ -25,7 +26,6 @@
         .product-card:hover { border-color: var(--accent); transform: translateY(-10px); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .stat-card { background: linear-gradient(145deg, #1a1a1a, #121212); border: 1px solid #222; border-radius: 24px; }
-        /* Smooth transition for detail page */
         #detail-overlay { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); transform: translateY(100%); }
         #detail-overlay.active { transform: translateY(0); display: flex; }
     </style>
@@ -70,12 +70,13 @@
                     </div>
 
                     <div class="flex flex-col gap-4 pt-4">
+                        <button id="pay-button" class="w-full bg-gold text-black py-5 rounded-2xl font-black uppercase text-xs hover:scale-[1.02] transition flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">credit_card</span> Buy & Pay Now
+                        </button>
+
                         <a id="detail-wa-btn" href="#" target="_blank" class="w-full bg-[#25D366] text-white py-5 rounded-2xl font-black uppercase text-xs flex items-center justify-center gap-3 transition hover:scale-[1.02]">
                             <span class="material-symbols-outlined">chat</span> Inquiry on WhatsApp
                         </a>
-                        <button class="w-full border border-white/10 text-white py-5 rounded-2xl font-black uppercase text-xs hover:bg-white hover:text-black transition">
-                            Add to Bag
-                        </button>
                     </div>
                 </div>
             </div>
@@ -85,8 +86,7 @@
                     <h3 class="text-xl font-black uppercase italic tracking-tighter">Similar Recommendations</h3>
                     <div class="h-[2px] flex-1 bg-gold/20 mx-6"></div>
                 </div>
-                <div id="similar-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                    </div>
+                <div id="similar-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
             </div>
         </div>
     </div>
@@ -224,8 +224,7 @@
         const storage = getStorage(app);
         const pRef = collection(db, "products");
 
-        let allProducts = []; // To store products for "Similar" search
-
+        let allProducts = [];
         window.isLoggedIn = false;
 
         onAuthStateChanged(auth, (user) => {
@@ -269,18 +268,42 @@
             finally { btn.innerText = "POST LIVE"; btn.disabled = false; }
         };
 
+        // --- ADDED: DELETE FUNCTION ---
+        window.deleteProduct = async (id) => {
+            if (confirm("Permanently remove this luxury listing?")) {
+                try {
+                    await deleteDoc(doc(db, "products", id));
+                } catch(err) { alert("Error deleting: " + err.message); }
+            }
+        };
+
+        // --- ADDED: PAYSTACK FUNCTION ---
+        window.initiatePayment = (p) => {
+            if(!window.isLoggedIn) { alert("Please Sign In to purchase."); window.toggleModal(); return; }
+            const handler = PaystackPop.setup({
+                key: 'pk_test_fd948c38f7e164563aef8a2ce72b8ceb627932cd',
+                email: auth.currentUser.email,
+                amount: Math.round(p.price * 15 * 100), // USD to GHS conversion
+                currency: 'GHS',
+                ref: 'ELITE_' + Date.now(),
+                callback: (response) => alert('Elite Transaction Successful! Ref: ' + response.reference)
+            });
+            handler.openIframe();
+        };
+
         window.openDetail = (data) => {
             const p = JSON.parse(decodeURIComponent(data));
             const message = `Hello Nana Obasty Elite, I am interested in purchasing the *${p.name}* listed for *$${p.price.toLocaleString()}*. Is this still available?`;
             
-            // Populate Fields
             document.getElementById('detail-img').src = p.image;
             document.getElementById('detail-name').innerText = p.name;
             document.getElementById('detail-cat').innerText = p.category;
             document.getElementById('detail-price').innerText = `$${p.price.toLocaleString()}`;
             document.getElementById('detail-wa-btn').href = `https://wa.me/${p.phone}?text=${encodeURIComponent(message)}`;
             
-            // Generate Similar Products (Jumia style)
+            // Link the Paystack button
+            document.getElementById('pay-button').onclick = () => window.initiatePayment(p);
+
             const similarGrid = document.getElementById('similar-grid');
             similarGrid.innerHTML = '';
             const similarItems = allProducts.filter(item => item.category === p.category && item.id !== p.id).slice(0, 5);
@@ -302,7 +325,6 @@
                 similarGrid.appendChild(div);
             });
 
-            // Show Overlay
             const overlay = document.getElementById('detail-overlay');
             overlay.classList.remove('hidden');
             setTimeout(() => overlay.classList.add('active'), 10);
@@ -338,18 +360,18 @@
                 card.className = "product-card cursor-pointer";
                 card.setAttribute('data-cat', p.category);
                 card.innerHTML = `
-                    <div class="h-64 overflow-hidden relative" onclick="window.openDetail('${dataString}')">
-                        ${isOwner ? `<button onclick="event.stopPropagation(); window.deleteProduct('${id}')" class="absolute top-3 left-3 z-10 bg-red-600/80 text-white p-2 rounded-full hover:bg-red-600 transition"><span class="material-symbols-outlined text-sm">delete</span></button>` : ''}
-                        <img src="${p.image}" class="w-full h-full object-cover hover:scale-110 transition duration-700">
+                    <div class="h-64 overflow-hidden relative">
+                        ${isOwner ? `<button onclick="event.stopPropagation(); window.deleteProduct('${id}')" class="absolute top-3 left-3 z-20 bg-red-600/80 text-white p-2 rounded-full hover:bg-red-600 transition"><span class="material-symbols-outlined text-sm">delete</span></button>` : ''}
+                        <img src="${p.image}" class="w-full h-full object-cover hover:scale-110 transition duration-700" onclick="window.openDetail('${dataString}')">
                     </div>
-                    <div class="p-6">
+                    <div class="p-6" onclick="window.openDetail('${dataString}')">
                         <div class="flex justify-between items-start mb-4">
                             <h3 class="font-bold text-gray-200 text-sm truncate w-2/3">${p.name}</h3>
                             <p class="text-gold font-black">$${p.price.toLocaleString()}</p>
                         </div>
                         <div class="flex gap-4 items-center border-t border-white/5 pt-4">
-                            <button onclick="window.openDetail('${dataString}')" class="text-[9px] font-black uppercase tracking-widest text-gray-500 hover:text-gold transition">Specs</button>
-                            <a href="https://wa.me/${p.phone}?text=${gridMsg}" class="text-[9px] font-black uppercase tracking-widest text-[#25D366] hover:brightness-125 transition">Inquiry</a>
+                            <button class="text-[9px] font-black uppercase tracking-widest text-gray-500 hover:text-gold transition">Specs</button>
+                            <a href="https://wa.me/${p.phone}?text=${gridMsg}" class="text-[9px] font-black uppercase tracking-widest text-[#25D366] hover:brightness-125 transition" onclick="event.stopPropagation()">Inquiry</a>
                         </div>
                     </div>`;
                 grid.appendChild(card);
@@ -360,7 +382,7 @@
         });
 
         window.filterCat = (cat) => {
-            document.querySelectorAll('.product-grid > div').forEach(c => {
+            document.querySelectorAll('#product-grid > div').forEach(c => {
                 c.style.display = (cat === 'all' || c.getAttribute('data-cat') === cat) ? 'block' : 'none';
             });
         };
