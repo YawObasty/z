@@ -73,7 +73,6 @@
                         <button id="pay-button" class="w-full bg-gold text-black py-5 rounded-2xl font-black uppercase text-xs hover:scale-[1.02] transition flex items-center justify-center gap-2">
                             <span class="material-symbols-outlined">credit_card</span> Buy & Pay Now
                         </button>
-
                         <a id="detail-wa-btn" href="#" target="_blank" class="w-full bg-[#25D366] text-white py-5 rounded-2xl font-black uppercase text-xs flex items-center justify-center gap-3 transition hover:scale-[1.02]">
                             <span class="material-symbols-outlined">chat</span> Inquiry on WhatsApp
                         </a>
@@ -97,9 +96,13 @@
                 NANA OBASTY <span class="bg-gold text-black px-2 py-0.5 rounded italic text-xl">ELITE</span>
             </a>
             <div class="flex items-center space-x-6">
-                <button onclick="window.toggleModal()" class="flex items-center gap-2">
-                    <p id="user-display" class="text-[11px] font-black uppercase tracking-widest">Sign In</p>
-                </button>
+                <div id="auth-controls" class="flex items-center gap-4">
+                    <button id="auth-btn" onclick="window.toggleModal()" class="flex items-center gap-2">
+                        <p id="user-display" class="text-[11px] font-black uppercase tracking-widest">Sign In</p>
+                    </button>
+                    <button id="logout-btn" onclick="window.handleLogout()" class="hidden text-[10px] font-black uppercase text-red-500 border border-red-500/30 px-3 py-1 rounded-full hover:bg-red-500 hover:text-white transition">Logout</button>
+                </div>
+                
                 <div class="relative cursor-pointer" onclick="window.toggleCart()">
                     <span class="material-symbols-outlined text-2xl hover:text-gold transition">shopping_cart</span>
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-black text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-black">0</span>
@@ -227,10 +230,19 @@
         let allProducts = [];
         window.isLoggedIn = false;
 
+        // AUTH LOGIC
         onAuthStateChanged(auth, (user) => {
             window.isLoggedIn = !!user;
             document.getElementById('user-display').innerText = user ? user.email.split('@')[0].toUpperCase() : "SIGN IN";
+            document.getElementById('logout-btn').classList.toggle('hidden', !user);
         });
+
+        window.handleLogout = async () => {
+            if(confirm("Sign out of Elite Access?")) {
+                await signOut(auth);
+                location.reload();
+            }
+        };
 
         window.toggleModal = () => document.getElementById('auth-modal').classList.toggle('hidden');
         window.toggleSellModal = () => document.getElementById('sell-modal').classList.toggle('hidden');
@@ -244,6 +256,7 @@
             } catch(err) { alert(err.message); }
         };
 
+        // SELL LOGIC
         document.getElementById('sellForm').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('sellSubmitBtn');
@@ -268,29 +281,28 @@
             finally { btn.innerText = "POST LIVE"; btn.disabled = false; }
         };
 
-        // --- ADDED: DELETE FUNCTION ---
+        // DELETE
         window.deleteProduct = async (id) => {
             if (confirm("Permanently remove this luxury listing?")) {
-                try {
-                    await deleteDoc(doc(db, "products", id));
-                } catch(err) { alert("Error deleting: " + err.message); }
+                await deleteDoc(doc(db, "products", id));
             }
         };
 
-        // --- ADDED: PAYSTACK FUNCTION ---
+        // PAYSTACK
         window.initiatePayment = (p) => {
-            if(!window.isLoggedIn) { alert("Please Sign In to purchase."); window.toggleModal(); return; }
+            if(!window.isLoggedIn) { alert("Please Sign In first."); window.toggleModal(); return; }
             const handler = PaystackPop.setup({
                 key: 'pk_test_fd948c38f7e164563aef8a2ce72b8ceb627932cd',
                 email: auth.currentUser.email,
-                amount: Math.round(p.price * 15 * 100), // USD to GHS conversion
+                amount: Math.round(p.price * 15 * 100),
                 currency: 'GHS',
                 ref: 'ELITE_' + Date.now(),
-                callback: (response) => alert('Elite Transaction Successful! Ref: ' + response.reference)
+                callback: (response) => alert('Payment Successful! Ref: ' + response.reference)
             });
             handler.openIframe();
         };
 
+        // DETAIL PAGE
         window.openDetail = (data) => {
             const p = JSON.parse(decodeURIComponent(data));
             const message = `Hello Nana Obasty Elite, I am interested in purchasing the *${p.name}* listed for *$${p.price.toLocaleString()}*. Is this still available?`;
@@ -300,8 +312,6 @@
             document.getElementById('detail-cat').innerText = p.category;
             document.getElementById('detail-price').innerText = `$${p.price.toLocaleString()}`;
             document.getElementById('detail-wa-btn').href = `https://wa.me/${p.phone}?text=${encodeURIComponent(message)}`;
-            
-            // Link the Paystack button
             document.getElementById('pay-button').onclick = () => window.initiatePayment(p);
 
             const similarGrid = document.getElementById('similar-grid');
@@ -337,6 +347,7 @@
             setTimeout(() => overlay.classList.add('hidden'), 400);
         };
 
+        // REAL-TIME UPDATES
         onSnapshot(query(pRef, orderBy("createdAt", "desc")), (snap) => {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
@@ -346,48 +357,4 @@
 
             snap.forEach(ds => {
                 const p = ds.data();
-                const id = ds.id;
-                const productWithId = {...p, id};
-                allProducts.push(productWithId);
-                totalValue += p.price;
-                count++;
-
-                const isOwner = auth.currentUser && auth.currentUser.email === p.sellerEmail;
-                const dataString = encodeURIComponent(JSON.stringify(productWithId));
-                const gridMsg = encodeURIComponent(`Quick Inquiry: ${p.name} ($${p.price})`);
-
-                const card = document.createElement('div');
-                card.className = "product-card cursor-pointer";
-                card.setAttribute('data-cat', p.category);
-                card.innerHTML = `
-                    <div class="h-64 overflow-hidden relative">
-                        ${isOwner ? `<button onclick="event.stopPropagation(); window.deleteProduct('${id}')" class="absolute top-3 left-3 z-20 bg-red-600/80 text-white p-2 rounded-full hover:bg-red-600 transition"><span class="material-symbols-outlined text-sm">delete</span></button>` : ''}
-                        <img src="${p.image}" class="w-full h-full object-cover hover:scale-110 transition duration-700" onclick="window.openDetail('${dataString}')">
-                    </div>
-                    <div class="p-6" onclick="window.openDetail('${dataString}')">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="font-bold text-gray-200 text-sm truncate w-2/3">${p.name}</h3>
-                            <p class="text-gold font-black">$${p.price.toLocaleString()}</p>
-                        </div>
-                        <div class="flex gap-4 items-center border-t border-white/5 pt-4">
-                            <button class="text-[9px] font-black uppercase tracking-widest text-gray-500 hover:text-gold transition">Specs</button>
-                            <a href="https://wa.me/${p.phone}?text=${gridMsg}" class="text-[9px] font-black uppercase tracking-widest text-[#25D366] hover:brightness-125 transition" onclick="event.stopPropagation()">Inquiry</a>
-                        </div>
-                    </div>`;
-                grid.appendChild(card);
-            });
-
-            document.getElementById('stat-count').innerText = count;
-            document.getElementById('stat-value').innerText = `$${totalValue.toLocaleString()}`;
-        });
-
-        window.filterCat = (cat) => {
-            document.querySelectorAll('#product-grid > div').forEach(c => {
-                c.style.display = (cat === 'all' || c.getAttribute('data-cat') === cat) ? 'block' : 'none';
-            });
-        };
-
-        window.checkAuthAndSell = () => window.isLoggedIn ? window.toggleSellModal() : window.toggleModal();
-    </script>
-</body>
-</html>
+                const id
