@@ -3,170 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>NANA OBASTY ELITE | Luxury Marketplace</title>
+    <meta name="description" content="The premier destination for luxury tech and elite fashion curated by Nana Obasty.">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NANA OBASTY ELITE | Luxury Marketplace">
+    <meta property="og:description" content="Shop the finest curated collection of elite tech and fashion.">
+    <meta property="og:image" content="https://i.ibb.co/dZRcM0X/image.jpg">
+    <meta property="og:url" content="https://nanaobastyelite.com">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,1&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #C5A059; --dark: #0d0d0d; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--dark); color: #fff; scroll-behavior: smooth; }
+        :root { --accent: #C5A059; --dark: #121212; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0d0d0d; color: #fff; }
         .gold-text { color: var(--accent); }
         .bg-gold { background: var(--accent); }
-        .glass-nav { background: rgba(13, 13, 13, 0.9); backdrop-filter: blur(20px); border-bottom: 1px solid #222; }
-        .product-card { background: #161616; border: 1px solid #222; transition: all 0.4s ease; border-radius: 24px; overflow: hidden; }
-        .product-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .glass-nav { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid #222; }
+        .product-card { background: #1a1a1a; border: 1px solid #222; transition: all 0.4s ease; border-radius: 20px; overflow: hidden; position: relative; }
+        .product-card:hover { border-color: var(--accent); transform: translateY(-10px); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .stat-card { background: #161616; border: 1px solid #222; border-radius: 20px; }
-        #product-page { display: none; min-height: 100vh; background: var(--dark); z-index: 2000; position: absolute; top: 0; left: 0; width: 100%; }
+        .stat-card { background: linear-gradient(145deg, #1a1a1a, #121212); border: 1px solid #222; border-radius: 24px; }
     </style>
 </head>
 <body>
 
-    <nav class="glass-nav sticky top-0 z-[100] px-6 py-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="javascript:location.reload()" class="text-2xl font-black tracking-tighter flex items-center gap-2">
-                NANA OBASTY <span class="bg-gold text-black px-2 py-0.5 rounded italic text-xl">ELITE</span>
-            </a>
-            <div class="flex items-center space-x-6">
-                <button onclick="window.toggleModal()" id="user-display" class="text-[11px] font-black uppercase tracking-widest text-gray-400">Sign In</button>
-                <button onclick="window.checkAuthAndSell()" class="bg-white text-black p-2 rounded-full flex items-center justify-center hover:bg-gold transition">
-                    <span class="material-symbols-outlined text-2xl">add</span>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <div id="home-view">
-        <section class="container mx-auto px-6 pt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="stat-card p-6 border-l-4 border-gold">
-                <p class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1">Elite Inventory</p>
-                <h4 id="stat-count" class="text-2xl font-black italic">0</h4>
-            </div>
-            <div class="stat-card p-6 border-l-4 border-white/10">
-                <p class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1">Market Value</p>
-                <h4 id="stat-value" class="text-2xl font-black italic text-gold">$0</h4>
-            </div>
-        </section>
-
-        <section class="container mx-auto px-6 py-8 flex gap-4 overflow-x-auto no-scrollbar">
-            <button onclick="window.filterCat('all')" class="px-8 py-3 rounded-full bg-gold text-black font-black text-[10px] uppercase tracking-widest">All</button>
-            <button onclick="window.filterCat('tech')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] font-bold text-[10px] uppercase tracking-widest hover:border-gold transition">Tech</button>
-            <button onclick="window.filterCat('style')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] font-bold text-[10px] uppercase tracking-widest hover:border-gold transition">Fashion</button>
-        </section>
-
-        <main class="container mx-auto px-6 pb-20">
-            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
-        </main>
-
-        <footer class="bg-[#0a0a0a] border-t border-white/5 pt-20 pb-10 mt-20">
-            <div class="container mx-auto px-6">
-                <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
-                    <div class="relative">
-                        <div class="w-40 h-40 md:w-48 md:h-48 rounded-full border-2 border-gold p-1 shadow-[0_0_30px_rgba(197,160,89,0.2)]">
-                            <div class="w-full h-full rounded-full bg-[#1a1a1a] flex items-center justify-center overflow-hidden">
-                                <img src="https://i.ibb.co/dZRcM0X/image.jpg" alt="Nana Obasty" class="w-full h-full object-cover">
-                            </div>
-                        </div>
-                        <div class="absolute bottom-2 right-2 bg-gold text-black p-1.5 rounded-full flex items-center justify-center border-4 border-[#0a0a0a]">
-                            <span class="material-symbols-outlined text-sm font-black">verified</span>
-                        </div>
-                    </div>
-                    <div class="flex-1 text-center md:text-left">
-                        <h2 class="text-[10px] font-black uppercase tracking-[0.4em] text-gold mb-2">Founder & Curator</h2>
-                        <h3 class="text-4xl font-black uppercase text-white mb-4 tracking-tighter">Nana Obasty</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-8 font-medium italic">
-                            "I created Nana Obasty Elite to bridge the gap between luxury and accessibility. Every item is a reflection of my commitment to excellence."
-                        </p>
-                        <div class="flex flex-wrap justify-center md:justify-start gap-3">
-                            <a href="https://instagram.com/nana_obasty" target="_blank" class="px-5 py-2.5 bg-[#161616] border border-white/5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-gold hover:border-gold/50 transition">Instagram</a>
-                            <a href="https://wa.me/233539547368" target="_blank" class="px-5 py-2.5 bg-[#25D366]/10 border border-[#25D366]/20 rounded-full text-[10px] font-black uppercase tracking-widest text-[#25D366] hover:bg-[#25D366] hover:text-white transition">WhatsApp</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-20 pt-8 border-t border-white/5 text-center">
-                    <p class="text-[9px] text-gray-600 font-bold uppercase tracking-[0.5em]">&copy; 2026 NANA OBASTY ELITE</p>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <div id="product-page">
-        <div class="container mx-auto px-6 py-10">
-            <button onclick="window.closeProductPage()" class="mb-8 flex items-center gap-2 text-gray-400 hover:text-gold transition font-bold uppercase text-[10px] tracking-widest">
-                <span class="material-symbols-outlined">arrow_back</span> Back to Gallery
+    <div id="detail-overlay" class="fixed inset-0 bg-[#0d0d0d] z-[3000] hidden flex flex-col overflow-y-auto">
+        <div class="sticky top-0 p-6 flex justify-between items-center bg-[#0d0d0d]/80 backdrop-blur-xl z-10">
+            <button onclick="window.closeDetail()" class="w-12 h-12 rounded-full bg-[#1a1a1a] flex items-center justify-center">
+                <span class="material-symbols-outlined">arrow_back</span>
             </button>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-                <div class="rounded-[40px] overflow-hidden bg-[#161616] border border-white/5 sticky top-28">
-                    <img id="view-img" src="" class="w-full aspect-square object-cover">
+            <h2 class="text-[10px] font-black uppercase tracking-[0.3em] gold-text">Item Specification</h2>
+            <button class="w-12 h-12 rounded-full bg-[#1a1a1a] flex items-center justify-center">
+                <span class="material-symbols-outlined">share</span>
+            </button>
+        </div>
+
+        <div class="container mx-auto px-6 py-4 flex flex-col lg:flex-row gap-12">
+            <div class="w-full lg:w-2/3 rounded-[40px] overflow-hidden bg-[#1a1a1a] aspect-square lg:aspect-video">
+                <img id="detail-img" src="" class="w-full h-full object-cover">
+            </div>
+            <div class="w-full lg:w-1/3 space-y-8">
+                <div>
+                    <p id="detail-cat" class="text-gold font-black text-[10px] uppercase tracking-widest mb-2"></p>
+                    <h1 id="detail-name" class="text-4xl font-black uppercase leading-tight mb-4"></h1>
+                    <p id="detail-price" class="text-3xl font-light text-gray-400"></p>
                 </div>
-                <div class="space-y-10">
-                    <div>
-                        <span id="view-cat" class="text-gold font-black text-xs uppercase tracking-[0.3em]"></span>
-                        <h1 id="view-name" class="text-5xl font-black uppercase mt-4 tracking-tighter leading-none"></h1>
-                        <p id="view-price" class="text-4xl text-gray-400 mt-6 font-light"></p>
-                    </div>
-                    <div class="p-8 rounded-3xl bg-[#161616] border border-white/5 space-y-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center">
-                                <span class="material-symbols-outlined gold-text">verified_user</span>
-                            </div>
-                            <div>
-                                <p class="text-[10px] text-gray-500 uppercase font-black tracking-widest">Official Curator</p>
-                                <p class="font-bold">Nana Obasty Elite</p>
-                            </div>
-                        </div>
-                    </div>
-                    <a id="view-wa-btn" href="#" target="_blank" class="block w-full bg-[#25D366] text-white py-6 rounded-2xl font-black uppercase text-center hover:brightness-110 transition">
+                <div class="flex gap-4">
+                    <button class="flex-1 bg-white text-black py-5 rounded-2xl font-black uppercase text-xs hover:bg-gold transition">Add to Bag</button>
+                    <a id="detail-wa-btn" href="#" target="_blank" class="flex-1 bg-[#25D366] text-white py-5 rounded-2xl font-black uppercase text-xs flex items-center justify-center gap-2 transition hover:brightness-110">
                         Contact Seller
                     </a>
                 </div>
             </div>
-            <div class="mt-32">
-                <h3 class="text-2xl font-black uppercase italic mb-8">You May Also Like</h3>
-                <div id="similar-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
-            </div>
         </div>
     </div>
 
-    <div id="sell-modal" class="fixed inset-0 bg-black/98 z-[3000] hidden flex items-center justify-center p-4">
-        <div class="bg-[#161616] w-full max-w-md rounded-[40px] p-10 border border-white/5 relative">
-            <button onclick="window.toggleSellModal()" class="absolute top-8 right-8 material-symbols-outlined text-gray-500">close</button>
-            <div id="payment-gate" class="text-center py-6">
-                <div class="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <span class="material-symbols-outlined gold-text text-4xl">payments</span>
+    <nav class="glass-nav sticky top-0 z-[100] px-6 py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-black tracking-tighter flex items-center gap-2">
+                NANA OBASTY <span class="bg-gold text-black px-2 py-0.5 rounded italic text-xl">ELITE</span>
+            </a>
+            <div class="flex items-center space-x-6">
+                <button onclick="window.toggleModal()" class="flex items-center gap-2">
+                    <p id="user-display" class="text-[11px] font-black uppercase tracking-widest">Sign In</p>
+                </button>
+                <div class="relative cursor-pointer" onclick="window.toggleCart()">
+                    <span class="material-symbols-outlined text-2xl hover:text-gold transition">shopping_cart</span>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-black text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-black">0</span>
                 </div>
-                <h2 class="text-2xl font-black uppercase italic mb-2">Listing Fee</h2>
-                <p class="text-gray-400 text-sm mb-8">Pay GHS 50.00 to unlock your luxury listing slot.</p>
-                <button onclick="window.startPaymentProcess()" class="w-full bg-white text-black py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-gold transition">Pay to Unlock</button>
             </div>
-            <form id="sellForm" class="space-y-4 hidden">
+        </div>
+    </nav>
+
+    <section class="container mx-auto px-6 pt-10">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="stat-card p-6 border-l-4 border-gold">
+                <p class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1">Elite Inventory</p>
+                <h4 id="stat-count" class="text-2xl font-black italic">0</h4>
+            </div>
+            <div class="stat-card p-6 border-l-4 border-white/20">
+                <p class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1">Market Value</p>
+                <h4 id="stat-value" class="text-2xl font-black italic text-gold">$0</h4>
+            </div>
+        </div>
+    </section>
+
+    <section class="container mx-auto px-6 py-8 flex gap-4 overflow-x-auto no-scrollbar">
+        <button onclick="window.filterCat('all')" class="px-8 py-3 rounded-full bg-gold text-black font-black text-[10px] uppercase tracking-widest">All</button>
+        <button onclick="window.filterCat('tech')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] font-bold text-[10px] uppercase tracking-widest">Tech</button>
+        <button onclick="window.filterCat('style')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] font-bold text-[10px] uppercase tracking-widest">Fashion</button>
+        <button onclick="window.checkAuthAndSell()" class="px-8 py-3 rounded-full bg-white text-black font-black text-[10px] uppercase tracking-widest flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">add_a_photo</span> Sell Item
+        </button>
+    </section>
+
+    <main class="container mx-auto px-6 pb-20">
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
+    </main>
+
+    <footer class="bg-[#0a0a0a] border-t border-white/5 pt-20 pb-10 mt-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
+                <div class="relative">
+                    <div class="w-40 h-40 md:w-48 md:h-48 rounded-full border-2 border-gold p-1 shadow-[0_0_30px_rgba(197,160,89,0.2)]">
+                        <div class="w-full h-full rounded-full bg-[#1a1a1a] flex items-center justify-center overflow-hidden">
+                            <img src="https://i.ibb.co/dZRcM0X/image.jpg" alt="Nana Obasty" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="absolute bottom-2 right-2 bg-gold text-black p-1.5 rounded-full flex items-center justify-center border-4 border-[#0a0a0a]">
+                        <span class="material-symbols-outlined text-sm font-black">verified</span>
+                    </div>
+                </div>
+                <div class="flex-1 text-center md:text-left">
+                    <h2 class="text-[10px] font-black uppercase tracking-[0.4em] text-gold mb-2">Founder & Curator</h2>
+                    <h3 class="text-4xl font-black uppercase text-white mb-4 tracking-tighter">Nana Obasty</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-8 font-medium italic">
+                        "I created Nana Obasty Elite to bridge the gap between luxury and accessibility. Every item is a reflection of my commitment to excellence."
+                    </p>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-3">
+                        <a href="https://instagram.com/nana_obasty" target="_blank" class="px-5 py-2.5 bg-[#161616] border border-white/5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-gold hover:border-gold/50 transition">Instagram</a>
+                        <a href="https://wa.me/233539547368" target="_blank" class="px-5 py-2.5 bg-[#25D366]/10 border border-[#25D366]/20 rounded-full text-[10px] font-black uppercase tracking-widest text-[#25D366] hover:bg-[#25D366] hover:text-white transition">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-20 pt-8 border-t border-white/5 text-center">
+                <p class="text-[9px] text-gray-600 font-bold uppercase tracking-[0.5em]">&copy; 2026 NANA OBASTY ELITE</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="auth-modal" class="fixed inset-0 bg-black/95 z-[2000] hidden flex items-center justify-center p-4">
+        <div class="bg-[#1a1a1a] w-full max-w-md rounded-[30px] p-10 border border-[#333] relative">
+            <button onclick="window.toggleModal()" class="absolute top-6 right-6 material-symbols-outlined">close</button>
+            <form id="authForm" class="space-y-4">
+                <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">Elite Access</h2>
+                <input type="email" id="authEmail" placeholder="Email" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none">
+                <input type="password" id="authPass" placeholder="Password" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none">
+                <button type="submit" class="w-full bg-gold text-black py-4 rounded-xl font-black uppercase">Enter</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="sell-modal" class="fixed inset-0 bg-black/95 z-[2000] hidden flex items-center justify-center p-4">
+        <div class="bg-[#1a1a1a] w-full max-w-md rounded-[30px] p-10 border border-[#333] relative">
+            <button onclick="window.toggleSellModal()" class="absolute top-6 right-6 material-symbols-outlined">close</button>
+            <form id="sellForm" class="space-y-4">
+                <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">List Luxury</h2>
                 <input type="text" id="pName" placeholder="Item Name" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
                 <input type="number" id="pPrice" placeholder="Price ($)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
+                <input type="tel" id="pPhone" placeholder="WhatsApp (233...)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
                 <select id="pCat" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-gray-400 outline-none">
                     <option value="tech">Technology</option>
                     <option value="style">Fashion</option>
                 </select>
-                <input type="file" id="pFile" accept="image/*" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white" required>
-                <button type="submit" id="sellSubmitBtn" class="w-full bg-gold text-black py-5 rounded-2xl font-black uppercase tracking-widest">Post Live</button>
+                <input type="file" id="pFile" accept="image/*" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white cursor-pointer" required>
+                <button type="submit" id="sellSubmitBtn" class="w-full bg-gold text-black py-4 rounded-xl font-black uppercase">Post Live</button>
             </form>
         </div>
     </div>
 
-    <div id="auth-modal" class="fixed inset-0 bg-black/95 z-[3000] hidden flex items-center justify-center p-4">
-        <div class="bg-[#161616] w-full max-w-md rounded-[40px] p-10 border border-[#333] relative">
-            <button onclick="window.toggleModal()" class="absolute top-8 right-8 material-symbols-outlined">close</button>
-            <form id="authForm" class="space-y-4">
-                <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">Admin Access</h2>
-                <input type="email" id="authEmail" placeholder="Email" class="w-full p-5 bg-[#0d0d0d] border border-[#333] rounded-2xl text-white outline-none">
-                <input type="password" id="authPass" placeholder="Password" class="w-full p-5 bg-[#0d0d0d] border border-[#333] rounded-2xl text-white outline-none">
-                <button type="submit" class="w-full bg-gold text-black py-5 rounded-2xl font-black uppercase">Login</button>
-            </form>
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full max-w-md bg-[#121212] z-[151] translate-x-full transition-transform duration-500 border-l border-[#333] flex flex-col">
+        <div class="p-8 border-b border-[#222] flex justify-between items-center">
+            <h2 class="text-xl font-black uppercase gold-text">Selection</h2>
+            <button onclick="window.toggleCart()" class="material-symbols-outlined">close</button>
         </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-4"></div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         const firebaseConfig = {
@@ -184,33 +193,119 @@
         const storage = getStorage(app);
         const pRef = collection(db, "products");
 
-        let allProducts = [];
         window.isLoggedIn = false;
 
         onAuthStateChanged(auth, (user) => {
             window.isLoggedIn = !!user;
-            document.getElementById('user-display').innerText = user ? "ADMIN LOGGED" : "SIGN IN";
+            document.getElementById('user-display').innerText = user ? user.email.split('@')[0].toUpperCase() : "SIGN IN";
         });
 
         window.toggleModal = () => document.getElementById('auth-modal').classList.toggle('hidden');
-        window.toggleSellModal = () => {
-            document.getElementById('sell-modal').classList.toggle('hidden');
-            document.getElementById('payment-gate').classList.remove('hidden');
-            document.getElementById('sellForm').classList.add('hidden');
+        window.toggleSellModal = () => document.getElementById('sell-modal').classList.toggle('hidden');
+        window.toggleCart = () => document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+
+        document.getElementById('authForm').onsubmit = async (e) => {
+            e.preventDefault();
+            try {
+                await signInWithEmailAndPassword(auth, document.getElementById('authEmail').value, document.getElementById('authPass').value);
+                window.toggleModal();
+            } catch(err) { alert(err.message); }
         };
-        window.startPaymentProcess = () => {
-            alert("Redirecting to MoMo Gateway...");
-            document.getElementById('payment-gate').classList.add('hidden');
-            document.getElementById('sellForm').classList.remove('hidden');
+
+        document.getElementById('sellForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('sellSubmitBtn');
+            const file = document.getElementById('pFile').files[0];
+            try {
+                btn.innerText = "UPLOADING..."; btn.disabled = true;
+                const fileRef = sRef(storage, `products/${Date.now()}_${file.name}`);
+                const snapshot = await uploadBytes(fileRef, file);
+                const url = await getDownloadURL(snapshot.ref);
+                await addDoc(pRef, {
+                    name: document.getElementById('pName').value,
+                    price: parseFloat(document.getElementById('pPrice').value),
+                    phone: document.getElementById('pPhone').value,
+                    category: document.getElementById('pCat').value,
+                    image: url,
+                    sellerEmail: auth.currentUser.email,
+                    createdAt: Date.now()
+                });
+                window.toggleSellModal();
+                e.target.reset();
+            } catch (err) { alert(err.message); }
+            finally { btn.innerText = "POST LIVE"; btn.disabled = false; }
         };
-        window.closeProductPage = () => {
-            document.getElementById('home-view').style.display = 'block';
-            document.getElementById('product-page').style.display = 'none';
+
+        window.deleteProduct = async (id) => {
+            if (confirm("Remove this listing from the Elite gallery?")) {
+                await deleteDoc(doc(db, "products", id));
+            }
         };
-        window.viewProduct = (id) => {
-            const p = allProducts.find(item => item.id === id);
-            if (!p) return;
-            document.getElementById('home-view').style.display = 'none';
-            document.getElementById('product-page').style.display = 'block';
-            window.scrollTo(0,0);
-            document.getElementById('view-img').
+
+        window.openDetail = (data) => {
+            const p = JSON.parse(decodeURIComponent(data));
+            const message = `Hello Nana Obasty Elite, I am interested in purchasing the *${p.name}* listed for *$${p.price.toLocaleString()}*. Is this still available?`;
+            const encodedMsg = encodeURIComponent(message);
+
+            document.getElementById('detail-img').src = p.image;
+            document.getElementById('detail-name').innerText = p.name;
+            document.getElementById('detail-cat').innerText = p.category;
+            document.getElementById('detail-price').innerText = `$${p.price.toLocaleString()}`;
+            document.getElementById('detail-wa-btn').href = `https://wa.me/${p.phone}?text=${encodedMsg}`;
+            document.getElementById('detail-overlay').classList.remove('hidden');
+        };
+
+        window.closeDetail = () => document.getElementById('detail-overlay').classList.add('hidden');
+
+        onSnapshot(query(pRef, orderBy("createdAt", "desc")), (snap) => {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+            
+            let totalValue = 0;
+            let count = 0;
+
+            snap.forEach(ds => {
+                const p = ds.data();
+                const id = ds.id;
+                totalValue += p.price;
+                count++;
+
+                const isOwner = auth.currentUser && auth.currentUser.email === p.sellerEmail;
+                const dataString = encodeURIComponent(JSON.stringify({...p, id}));
+                const gridMsg = encodeURIComponent(`Quick Inquiry: ${p.name} ($${p.price})`);
+
+                const card = document.createElement('div');
+                card.className = "product-card cursor-pointer";
+                card.setAttribute('data-cat', p.category);
+                card.innerHTML = `
+                    <div class="h-64 overflow-hidden relative" onclick="window.openDetail('${dataString}')">
+                        ${isOwner ? `<button onclick="event.stopPropagation(); window.deleteProduct('${id}')" class="absolute top-3 left-3 z-10 bg-red-600/80 text-white p-2 rounded-full hover:bg-red-600 transition"><span class="material-symbols-outlined text-sm">delete</span></button>` : ''}
+                        <img src="${p.image}" class="w-full h-full object-cover hover:scale-110 transition duration-700">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-gray-200 text-sm truncate w-2/3">${p.name}</h3>
+                            <p class="text-gold font-black">$${p.price.toLocaleString()}</p>
+                        </div>
+                        <div class="flex gap-4 items-center border-t border-white/5 pt-4">
+                            <button onclick="window.openDetail('${dataString}')" class="text-[9px] font-black uppercase tracking-widest text-gray-500 hover:text-gold transition">Specs</button>
+                            <a href="https://wa.me/${p.phone}?text=${gridMsg}" class="text-[9px] font-black uppercase tracking-widest text-[#25D366] hover:brightness-125 transition">Inquiry</a>
+                        </div>
+                    </div>`;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('stat-count').innerText = count;
+            document.getElementById('stat-value').innerText = `$${totalValue.toLocaleString()}`;
+        });
+
+        window.filterCat = (cat) => {
+            document.querySelectorAll('.product-card').forEach(c => {
+                c.style.display = (cat === 'all' || c.getAttribute('data-cat') === cat) ? 'block' : 'none';
+            });
+        };
+
+        window.checkAuthAndSell = () => window.isLoggedIn ? window.toggleSellModal() : window.toggleModal();
+    </script>
+</body>
+</html>
