@@ -15,6 +15,7 @@
         .product-card { background: #1a1a1a; border: 1px solid #222; transition: all 0.4s ease; border-radius: 20px; overflow: hidden; position: relative; }
         .product-card:hover { border-color: var(--accent); transform: translateY(-10px); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .stat-card { background: linear-gradient(145deg, #1a1a1a, #121212); border: 1px solid #222; border-radius: 24px; }
     </style>
 </head>
 <body>
@@ -66,6 +67,19 @@
             </div>
         </div>
     </nav>
+
+    <section class="container mx-auto px-6 pt-10">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="stat-card p-6 border-l-4 border-gold">
+                <p class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1">Elite Inventory</p>
+                <h4 id="stat-count" class="text-2xl font-black italic">0</h4>
+            </div>
+            <div class="stat-card p-6 border-l-4 border-white/20">
+                <p class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1">Market Value</p>
+                <h4 id="stat-value" class="text-2xl font-black italic text-gold">$0</h4>
+            </div>
+        </div>
+    </section>
 
     <section class="container mx-auto px-6 py-8 flex gap-4 overflow-x-auto no-scrollbar">
         <button onclick="window.filterCat('all')" class="px-8 py-3 rounded-full bg-gold text-black font-black text-[10px] uppercase tracking-widest">All</button>
@@ -170,7 +184,6 @@
         const storage = getStorage(app);
         const pRef = collection(db, "products");
 
-        let cart = [];
         window.isLoggedIn = false;
 
         onAuthStateChanged(auth, (user) => {
@@ -222,8 +235,6 @@
 
         window.openDetail = (data) => {
             const p = JSON.parse(decodeURIComponent(data));
-            
-            // ELITE WHATSAPP TEMPLATE
             const message = `Hello Nana Obasty Elite, I am interested in purchasing the *${p.name}* listed for *$${p.price.toLocaleString()}*. Is this still available?`;
             const encodedMsg = encodeURIComponent(message);
 
@@ -240,13 +251,21 @@
         onSnapshot(query(pRef, orderBy("createdAt", "desc")), (snap) => {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
+            
+            let totalValue = 0;
+            let count = 0;
+
             snap.forEach(ds => {
                 const p = ds.data();
                 const id = ds.id;
+                
+                // Analytics Calculation
+                totalValue += p.price;
+                count++;
+
                 const isOwner = auth.currentUser && auth.currentUser.email === p.sellerEmail;
                 const dataString = encodeURIComponent(JSON.stringify({...p, id}));
-                
-                const gridMsg = encodeURIComponent(`Quick Inquiry: I'm interested in the ${p.name} ($${p.price})`);
+                const gridMsg = encodeURIComponent(`Quick Inquiry: ${p.name} ($${p.price})`);
 
                 const card = document.createElement('div');
                 card.className = "product-card cursor-pointer";
@@ -259,7 +278,7 @@
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-4">
                             <h3 class="font-bold text-gray-200 text-sm truncate w-2/3">${p.name}</h3>
-                            <p class="text-gold font-black">$${p.price}</p>
+                            <p class="text-gold font-black">$${p.price.toLocaleString()}</p>
                         </div>
                         <div class="flex gap-4 items-center border-t border-white/5 pt-4">
                             <button onclick="window.openDetail('${dataString}')" class="text-[9px] font-black uppercase tracking-widest text-gray-500 hover:text-gold transition">Specs</button>
@@ -268,6 +287,10 @@
                     </div>`;
                 grid.appendChild(card);
             });
+
+            // Update Analytics UI
+            document.getElementById('stat-count').innerText = count;
+            document.getElementById('stat-value').innerText = `$${totalValue.toLocaleString()}`;
         });
 
         window.filterCat = (cat) => {
