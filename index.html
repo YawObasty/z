@@ -27,8 +27,10 @@
                 NANA OBASTY <span class="bg-gold text-black px-2 py-0.5 rounded italic text-xl">ELITE</span>
             </a>
             <div class="flex items-center space-x-6">
-                <button onclick="window.toggleModal()" id="user-display" class="text-[11px] font-black uppercase tracking-widest">Sign In</button>
-                <span class="material-symbols-outlined text-2xl cursor-pointer hover:text-gold" onclick="window.checkAuthAndSell()">add_circle</span>
+                <button onclick="window.toggleModal()" id="user-display" class="text-[11px] font-black uppercase tracking-widest text-gray-400">Sign In</button>
+                <button onclick="window.checkAuthAndSell()" class="bg-white text-black p-2 rounded-full flex items-center justify-center hover:bg-gold transition">
+                    <span class="material-symbols-outlined text-2xl">add</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -47,8 +49,8 @@
 
         <section class="container mx-auto px-6 py-8 flex gap-4 overflow-x-auto no-scrollbar">
             <button onclick="window.filterCat('all')" class="px-8 py-3 rounded-full bg-gold text-black font-black text-[10px] uppercase tracking-widest">All</button>
-            <button onclick="window.filterCat('tech')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] font-bold text-[10px] uppercase tracking-widest">Tech</button>
-            <button onclick="window.filterCat('style')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] font-bold text-[10px] uppercase tracking-widest">Fashion</button>
+            <button onclick="window.filterCat('tech')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] font-bold text-[10px] uppercase tracking-widest hover:border-gold transition">Tech</button>
+            <button onclick="window.filterCat('style')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] font-bold text-[10px] uppercase tracking-widest hover:border-gold transition">Fashion</button>
         </section>
 
         <main class="container mx-auto px-6 pb-20">
@@ -56,9 +58,9 @@
         </main>
     </div>
 
-    <div id="product-page" class="animate-in fade-in duration-500">
+    <div id="product-page">
         <div class="container mx-auto px-6 py-10">
-            <button onclick="window.closeProductPage()" class="mb-8 flex items-center gap-2 text-gray-400 hover:text-gold transition font-bold uppercase text-xs">
+            <button onclick="window.closeProductPage()" class="mb-8 flex items-center gap-2 text-gray-400 hover:text-gold transition font-bold uppercase text-[10px] tracking-widest">
                 <span class="material-symbols-outlined">arrow_back</span> Back to Gallery
             </button>
 
@@ -80,18 +82,16 @@
                                 <span class="material-symbols-outlined gold-text">verified_user</span>
                             </div>
                             <div>
-                                <p class="text-[10px] text-gray-500 uppercase font-black tracking-widest">Official Seller</p>
+                                <p class="text-[10px] text-gray-500 uppercase font-black tracking-widest">Official Curator</p>
                                 <p class="font-bold">Nana Obasty Elite</p>
                             </div>
                         </div>
-                        <p class="text-sm text-gray-400 leading-relaxed italic">This item has been inspected for quality and authenticity by the Elite curation team.</p>
+                        <p class="text-sm text-gray-400 leading-relaxed italic">This listing is authenticated and secured by our luxury standard.</p>
                     </div>
 
-                    <div class="flex gap-4">
-                        <a id="view-wa-btn" href="#" target="_blank" class="flex-1 bg-[#25D366] text-white py-6 rounded-2xl font-black uppercase text-center hover:scale-[1.02] transition-transform">
-                            Contact via WhatsApp
-                        </a>
-                    </div>
+                    <a id="view-wa-btn" href="#" target="_blank" class="block w-full bg-[#25D366] text-white py-6 rounded-2xl font-black uppercase text-center hover:brightness-110 transition">
+                        Contact Seller
+                    </a>
                 </div>
             </div>
 
@@ -102,32 +102,43 @@
         </div>
     </div>
 
-    <div id="auth-modal" class="fixed inset-0 bg-black/95 z-[3000] hidden flex items-center justify-center p-4">
-        <div class="bg-[#161616] w-full max-w-md rounded-[40px] p-10 border border-[#333] relative">
-            <button onclick="window.toggleModal()" class="absolute top-8 right-8 material-symbols-outlined">close</button>
-            <form id="authForm" class="space-y-4">
-                <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">Elite Access</h2>
-                <input type="email" id="authEmail" placeholder="Email" class="w-full p-5 bg-[#0d0d0d] border border-[#333] rounded-2xl text-white outline-none">
-                <input type="password" id="authPass" placeholder="Password" class="w-full p-5 bg-[#0d0d0d] border border-[#333] rounded-2xl text-white outline-none">
-                <button type="submit" class="w-full bg-gold text-black py-5 rounded-2xl font-black uppercase tracking-widest">Enter</button>
-            </form>
-        </div>
-    </div>
+    <div id="sell-modal" class="fixed inset-0 bg-black/98 z-[3000] hidden flex items-center justify-center p-4">
+        <div class="bg-[#161616] w-full max-w-md rounded-[40px] p-10 border border-white/5 relative">
+            <button onclick="window.toggleSellModal()" class="absolute top-8 right-8 material-symbols-outlined text-gray-500">close</button>
 
-    <div id="sell-modal" class="fixed inset-0 bg-black/95 z-[3000] hidden flex items-center justify-center p-4">
-        <div class="bg-[#161616] w-full max-w-md rounded-[40px] p-10 border border-[#333] relative">
-            <button onclick="window.toggleSellModal()" class="absolute top-8 right-8 material-symbols-outlined">close</button>
-            <form id="sellForm" class="space-y-4">
-                <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">List Luxury</h2>
+            <div id="payment-gate" class="text-center py-6">
+                <div class="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="material-symbols-outlined gold-text text-4xl">payments</span>
+                </div>
+                <h2 class="text-2xl font-black uppercase italic mb-2">Listing Fee</h2>
+                <p class="text-gray-400 text-sm mb-8">Pay GHS 50.00 to unlock your luxury listing slot.</p>
+                <button onclick="window.startPaymentProcess()" class="w-full bg-white text-black py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-gold transition">
+                    Pay to Unlock
+                </button>
+            </div>
+
+            <form id="sellForm" class="space-y-4 hidden">
+                <h2 class="text-xl font-black uppercase italic mb-6">Upload Item</h2>
                 <input type="text" id="pName" placeholder="Item Name" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
                 <input type="number" id="pPrice" placeholder="Price ($)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
-                <input type="tel" id="pPhone" value="233539547368" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
                 <select id="pCat" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-gray-400 outline-none">
                     <option value="tech">Technology</option>
                     <option value="style">Fashion</option>
                 </select>
-                <input type="file" id="pFile" accept="image/*" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
+                <input type="file" id="pFile" accept="image/*" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white" required>
                 <button type="submit" id="sellSubmitBtn" class="w-full bg-gold text-black py-5 rounded-2xl font-black uppercase tracking-widest">Post Live</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="fixed inset-0 bg-black/95 z-[3000] hidden flex items-center justify-center p-4">
+        <div class="bg-[#161616] w-full max-w-md rounded-[40px] p-10 border border-[#333] relative">
+            <button onclick="window.toggleModal()" class="absolute top-8 right-8 material-symbols-outlined">close</button>
+            <form id="authForm" class="space-y-4">
+                <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">Admin Access</h2>
+                <input type="email" id="authEmail" placeholder="Email" class="w-full p-5 bg-[#0d0d0d] border border-[#333] rounded-2xl text-white outline-none">
+                <input type="password" id="authPass" placeholder="Password" class="w-full p-5 bg-[#0d0d0d] border border-[#333] rounded-2xl text-white outline-none">
+                <button type="submit" class="w-full bg-gold text-black py-5 rounded-2xl font-black uppercase">Login</button>
             </form>
         </div>
     </div>
@@ -158,18 +169,52 @@
 
         onAuthStateChanged(auth, (user) => {
             window.isLoggedIn = !!user;
-            document.getElementById('user-display').innerText = user ? "ELITE ADMIN" : "SIGN IN";
+            document.getElementById('user-display').innerText = user ? "ADMIN LOGGED" : "SIGN IN";
         });
 
+        // UI ACTIONS
         window.toggleModal = () => document.getElementById('auth-modal').classList.toggle('hidden');
-        window.toggleSellModal = () => document.getElementById('sell-modal').classList.toggle('hidden');
+        window.toggleSellModal = () => {
+            document.getElementById('sell-modal').classList.toggle('hidden');
+            // Reset to Payment Gate when closing/opening
+            document.getElementById('payment-gate').classList.remove('hidden');
+            document.getElementById('sellForm').classList.add('hidden');
+        };
 
+        window.startPaymentProcess = () => {
+            alert("Redirecting to Mobile Money Gateway... (Demo OK)");
+            document.getElementById('payment-gate').classList.add('hidden');
+            document.getElementById('sellForm').classList.remove('hidden');
+        };
+
+        window.closeProductPage = () => {
+            document.getElementById('home-view').style.display = 'block';
+            document.getElementById('product-page').style.display = 'none';
+        };
+
+        window.viewProduct = (id) => {
+            const p = allProducts.find(item => item.id === id);
+            if (!p) return;
+            document.getElementById('home-view').style.display = 'none';
+            document.getElementById('product-page').style.display = 'block';
+            window.scrollTo(0,0);
+            document.getElementById('view-img').src = p.image;
+            document.getElementById('view-name').innerText = p.name;
+            document.getElementById('view-cat').innerText = p.category;
+            document.getElementById('view-price').innerText = `$${p.price.toLocaleString()}`;
+            document.getElementById('view-wa-btn').href = `https://wa.me/233539547368?text=Interested in ${p.name}`;
+            
+            const similar = allProducts.filter(item => item.category === p.category && item.id !== p.id).slice(0, 4);
+            document.getElementById('similar-grid').innerHTML = similar.map(p => createCardHTML(p)).join('');
+        };
+
+        // DATABASE ACTIONS
         document.getElementById('authForm').onsubmit = async (e) => {
             e.preventDefault();
             try {
                 await signInWithEmailAndPassword(auth, document.getElementById('authEmail').value, document.getElementById('authPass').value);
                 window.toggleModal();
-            } catch(err) { alert("Access Denied"); }
+            } catch(err) { alert("Invalid Credentials"); }
         };
 
         document.getElementById('sellForm').onsubmit = async (e) => {
@@ -184,10 +229,10 @@
                 await addDoc(pRef, {
                     name: document.getElementById('pName').value,
                     price: parseFloat(document.getElementById('pPrice').value),
-                    phone: document.getElementById('pPhone').value,
+                    phone: "233539547368",
                     category: document.getElementById('pCat').value,
                     image: url,
-                    sellerEmail: auth.currentUser.email,
+                    sellerEmail: auth.currentUser?.email || "public@user.com",
                     createdAt: Date.now()
                 });
                 window.toggleSellModal();
@@ -196,38 +241,9 @@
             finally { btn.innerText = "POST LIVE"; btn.disabled = false; }
         };
 
-        window.viewProduct = (id) => {
-            const p = allProducts.find(item => item.id === id);
-            if (!p) return;
-
-            document.getElementById('home-view').style.display = 'none';
-            document.getElementById('product-page').style.display = 'block';
-            window.scrollTo(0,0);
-
-            document.getElementById('view-img').src = p.image;
-            document.getElementById('view-name').innerText = p.name;
-            document.getElementById('view-cat').innerText = p.category;
-            document.getElementById('view-price').innerText = `$${p.price.toLocaleString()}`;
-            
-            const msg = encodeURIComponent(`Hello, I'm interested in the ${p.name} ($${p.price}) on Nana Obasty Elite.`);
-            document.getElementById('view-wa-btn').href = `https://wa.me/${p.phone}?text=${msg}`;
-
-            // Load Similar
-            const similar = allProducts.filter(item => item.category === p.category && item.id !== p.id).slice(0, 4);
-            const simGrid = document.getElementById('similar-grid');
-            simGrid.innerHTML = similar.map(item => createCardHTML(item)).join('');
-        };
-
-        window.closeProductPage = () => {
-            document.getElementById('home-view').style.display = 'block';
-            document.getElementById('product-page').style.display = 'none';
-        };
-
         window.deleteProduct = async (e, id) => {
             e.stopPropagation();
-            if (confirm("Remove this item?")) {
-                await deleteDoc(doc(db, "products", id));
-            }
+            if (confirm("Remove item?")) await deleteDoc(doc(db, "products", id));
         };
 
         function createCardHTML(p) {
@@ -252,13 +268,11 @@
             const grid = document.getElementById('product-grid');
             allProducts = [];
             let total = 0;
-            
             snap.forEach(ds => {
                 const data = {id: ds.id, ...ds.data()};
                 allProducts.push(data);
                 total += data.price;
             });
-
             grid.innerHTML = allProducts.map(p => createCardHTML(p)).join('');
             document.getElementById('stat-count').innerText = allProducts.length;
             document.getElementById('stat-value').innerText = `$${total.toLocaleString()}`;
@@ -269,7 +283,7 @@
             document.getElementById('product-grid').innerHTML = filtered.map(p => createCardHTML(p)).join('');
         };
 
-        window.checkAuthAndSell = () => window.isLoggedIn ? window.toggleSellModal() : window.toggleModal();
+        window.checkAuthAndSell = () => window.toggleSellModal();
     </script>
 </body>
 </html>
