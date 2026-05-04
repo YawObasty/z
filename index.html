@@ -3,90 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>NANA OBASTY ELITE | Luxury Marketplace</title>
+    <meta name="description" content="The premier destination for luxury tech and elite fashion curated by Nana Obasty.">
     
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NANA OBASTY ELITE | Luxury Marketplace">
+    <meta property="og:description" content="Shop the finest curated collection of elite tech and fashion.">
+    <meta property="og:image" content="https://i.ibb.co/dZRcM0X/image.jpg">
+    <meta property="og:url" content="https://nanaobastyelite.com">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://js.paystack.co/v1/inline.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,1&display=swap" rel="stylesheet">
-    
     <style>
         :root { --accent: #C5A059; --dark: #121212; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0d0d0d; color: #fff; overflow-x: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0d0d0d; color: #fff; }
         .gold-text { color: var(--accent); }
         .bg-gold { background: var(--accent); }
         .glass-nav { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid #222; }
-        .product-card { background: #1a1a1a; border: 1px solid #222; transition: all 0.4s ease; border-radius: 20px; overflow: hidden; }
+        .product-card { background: #1a1a1a; border: 1px solid #222; transition: all 0.4s ease; border-radius: 20px; overflow: hidden; position: relative; }
         .product-card:hover { border-color: var(--accent); transform: translateY(-10px); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        #detail-overlay { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); transform: translateY(100%); z-index: 5000; }
+        .stat-card { background: linear-gradient(145deg, #1a1a1a, #121212); border: 1px solid #222; border-radius: 24px; }
+        /* Smooth transition for detail page */
+        #detail-overlay { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); transform: translateY(100%); }
         #detail-overlay.active { transform: translateY(0); display: flex; }
     </style>
 </head>
 <body>
 
-    <div id="detail-overlay" class="fixed inset-0 bg-[#0d0d0d] hidden flex flex-col overflow-y-auto">
-        <div class="sticky top-0 p-6 flex justify-between items-center bg-[#0d0d0d]/95 backdrop-blur-xl z-[5001] border-b border-white/5">
+    <div id="detail-overlay" class="fixed inset-0 bg-[#0d0d0d] z-[3000] hidden flex flex-col overflow-y-auto">
+        <div class="sticky top-0 p-6 flex justify-between items-center bg-[#0d0d0d]/90 backdrop-blur-xl z-[3001] border-b border-white/5">
             <button onclick="window.closeDetail()" class="w-12 h-12 rounded-full bg-[#1a1a1a] flex items-center justify-center hover:bg-gold hover:text-black transition">
                 <span class="material-symbols-outlined">arrow_back</span>
             </button>
-            <h2 class="text-[10px] font-black uppercase tracking-[0.3em] gold-text">Product View</h2>
-            <div class="w-12"></div>
+            <h2 class="text-[10px] font-black uppercase tracking-[0.3em] gold-text">Product Details</h2>
+            <button class="w-12 h-12 rounded-full bg-[#1a1a1a] flex items-center justify-center">
+                <span class="material-symbols-outlined">share</span>
+            </button>
         </div>
 
         <div class="container mx-auto px-6 py-8">
             <div class="flex flex-col lg:flex-row gap-12">
-                <div class="w-full lg:w-2/3 rounded-[40px] overflow-hidden bg-[#1a1a1a]">
-                    <img id="detail-img" src="" class="w-full h-full object-cover shadow-2xl">
+                <div class="w-full lg:w-2/3 rounded-[40px] overflow-hidden bg-[#1a1a1a] border border-white/5 shadow-2xl">
+                    <img id="detail-img" src="" class="w-full h-full object-cover">
                 </div>
+
                 <div class="w-full lg:w-1/3 space-y-8">
                     <div>
                         <p id="detail-cat" class="text-gold font-black text-[10px] uppercase tracking-widest mb-2"></p>
                         <h1 id="detail-name" class="text-4xl font-black uppercase leading-tight mb-4 tracking-tighter"></h1>
                         <p id="detail-price" class="text-3xl font-light text-gray-400"></p>
                     </div>
-                    <div class="flex flex-col gap-4">
-                        <button id="pay-button" class="w-full bg-gold text-black py-5 rounded-2xl font-black uppercase text-xs hover:scale-[1.02] transition flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined">credit_card</span> Buy & Pay Now
-                        </button>
-                        <a id="detail-wa-btn" href="#" target="_blank" class="w-full border border-white/10 text-white py-5 rounded-2xl font-black uppercase text-xs flex items-center justify-center gap-3 transition hover:bg-white hover:text-black">
-                            <span class="material-symbols-outlined">chat</span> Chat with Seller
+
+                    <div class="bg-[#161616] p-6 rounded-3xl border border-white/5 space-y-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center">
+                                <span class="material-symbols-outlined gold-text">verified_user</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-black uppercase tracking-widest text-gray-400">Verified Seller</h4>
+                                <p class="text-sm font-bold">Nana Obasty Elite Partner</p>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-gray-500 italic">This item is inspected and guaranteed by the Nana Obasty Elite curation team.</p>
+                    </div>
+
+                    <div class="flex flex-col gap-4 pt-4">
+                        <a id="detail-wa-btn" href="#" target="_blank" class="w-full bg-[#25D366] text-white py-5 rounded-2xl font-black uppercase text-xs flex items-center justify-center gap-3 transition hover:scale-[1.02]">
+                            <span class="material-symbols-outlined">chat</span> Inquiry on WhatsApp
                         </a>
+                        <button class="w-full border border-white/10 text-white py-5 rounded-2xl font-black uppercase text-xs hover:bg-white hover:text-black transition">
+                            Add to Bag
+                        </button>
                     </div>
                 </div>
+            </div>
+
+            <div class="mt-24 border-t border-white/5 pt-12 pb-20">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-xl font-black uppercase italic tracking-tighter">Similar Recommendations</h3>
+                    <div class="h-[2px] flex-1 bg-gold/20 mx-6"></div>
+                </div>
+                <div id="similar-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                    </div>
             </div>
         </div>
     </div>
 
     <nav class="glass-nav sticky top-0 z-[100] px-6 py-4">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="#" class="text-2xl font-black tracking-tighter">
+            <a href="#" class="text-2xl font-black tracking-tighter flex items-center gap-2">
                 NANA OBASTY <span class="bg-gold text-black px-2 py-0.5 rounded italic text-xl">ELITE</span>
             </a>
             <div class="flex items-center space-x-6">
                 <button onclick="window.toggleModal()" class="flex items-center gap-2">
                     <p id="user-display" class="text-[11px] font-black uppercase tracking-widest">Sign In</p>
                 </button>
-                <span class="material-symbols-outlined text-2xl cursor-pointer hover:text-gold" onclick="window.toggleCart()">shopping_cart</span>
+                <div class="relative cursor-pointer" onclick="window.toggleCart()">
+                    <span class="material-symbols-outlined text-2xl hover:text-gold transition">shopping_cart</span>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-black text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-black">0</span>
+                </div>
             </div>
         </div>
     </nav>
 
-    <section class="container mx-auto px-6 pt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bg-[#1a1a1a] p-6 rounded-3xl border-l-4 border-gold">
-            <p class="text-[9px] font-black uppercase text-gray-500 mb-1">Listings</p>
-            <h4 id="stat-count" class="text-2xl font-black italic">0</h4>
-        </div>
-        <div class="bg-[#1a1a1a] p-6 rounded-3xl border-l-4 border-white/20">
-            <p class="text-[9px] font-black uppercase text-gray-500 mb-1">Total Value</p>
-            <h4 id="stat-value" class="text-2xl font-black italic text-gold">$0</h4>
+    <section class="container mx-auto px-6 pt-10">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="stat-card p-6 border-l-4 border-gold">
+                <p class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1">Elite Inventory</p>
+                <h4 id="stat-count" class="text-2xl font-black italic">0</h4>
+            </div>
+            <div class="stat-card p-6 border-l-4 border-white/20">
+                <p class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-1">Market Value</p>
+                <h4 id="stat-value" class="text-2xl font-black italic text-gold">$0</h4>
+            </div>
         </div>
     </section>
 
     <section class="container mx-auto px-6 py-8 flex gap-4 overflow-x-auto no-scrollbar">
         <button onclick="window.filterCat('all')" class="px-8 py-3 rounded-full bg-gold text-black font-black text-[10px] uppercase tracking-widest">All</button>
-        <button onclick="window.filterCat('tech')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] font-bold text-[10px] uppercase">Tech</button>
-        <button onclick="window.filterCat('style')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] font-bold text-[10px] uppercase">Fashion</button>
-        <button onclick="window.checkAuthAndSell()" class="px-8 py-3 rounded-full bg-white text-black font-black text-[10px] uppercase flex items-center gap-2 ml-auto">
+        <button onclick="window.filterCat('tech')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] font-bold text-[10px] uppercase tracking-widest">Tech</button>
+        <button onclick="window.filterCat('style')" class="px-8 py-3 rounded-full bg-[#1a1a1a] border border-[#333] font-bold text-[10px] uppercase tracking-widest">Fashion</button>
+        <button onclick="window.checkAuthAndSell()" class="px-8 py-3 rounded-full bg-white text-black font-black text-[10px] uppercase tracking-widest flex items-center gap-2">
             <span class="material-symbols-outlined text-sm">add_a_photo</span> Sell Item
         </button>
     </section>
@@ -95,7 +134,38 @@
         <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
     </main>
 
-    <div id="auth-modal" class="fixed inset-0 bg-black/95 z-[6000] hidden flex items-center justify-center p-4">
+    <footer class="bg-[#0a0a0a] border-t border-white/5 pt-20 pb-10 mt-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
+                <div class="relative">
+                    <div class="w-40 h-40 md:w-48 md:h-48 rounded-full border-2 border-gold p-1 shadow-[0_0_30px_rgba(197,160,89,0.2)]">
+                        <div class="w-full h-full rounded-full bg-[#1a1a1a] flex items-center justify-center overflow-hidden">
+                            <img src="https://i.ibb.co/dZRcM0X/image.jpg" alt="Nana Obasty" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="absolute bottom-2 right-2 bg-gold text-black p-1.5 rounded-full flex items-center justify-center border-4 border-[#0a0a0a]">
+                        <span class="material-symbols-outlined text-sm font-black">verified</span>
+                    </div>
+                </div>
+                <div class="flex-1 text-center md:text-left">
+                    <h2 class="text-[10px] font-black uppercase tracking-[0.4em] text-gold mb-2">Founder & Curator</h2>
+                    <h3 class="text-4xl font-black uppercase text-white mb-4 tracking-tighter">Nana Obasty</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-8 font-medium italic">
+                        "I created Nana Obasty Elite to bridge the gap between luxury and accessibility. Every item is a reflection of my commitment to excellence."
+                    </p>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-3">
+                        <a href="https://instagram.com/nana_obasty" target="_blank" class="px-5 py-2.5 bg-[#161616] border border-white/5 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-gold hover:border-gold/50 transition">Instagram</a>
+                        <a href="https://wa.me/233539547368" target="_blank" class="px-5 py-2.5 bg-[#25D366]/10 border border-[#25D366]/20 rounded-full text-[10px] font-black uppercase tracking-widest text-[#25D366] hover:bg-[#25D366] hover:text-white transition">WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-20 pt-8 border-t border-white/5 text-center">
+                <p class="text-[9px] text-gray-600 font-bold uppercase tracking-[0.5em]">&copy; 2026 NANA OBASTY ELITE</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="auth-modal" class="fixed inset-0 bg-black/95 z-[4000] hidden flex items-center justify-center p-4">
         <div class="bg-[#1a1a1a] w-full max-w-md rounded-[30px] p-10 border border-[#333] relative">
             <button onclick="window.toggleModal()" class="absolute top-6 right-6 material-symbols-outlined">close</button>
             <form id="authForm" class="space-y-4">
@@ -107,28 +177,36 @@
         </div>
     </div>
 
-    <div id="sell-modal" class="fixed inset-0 bg-black/95 z-[6000] hidden flex items-center justify-center p-4">
+    <div id="sell-modal" class="fixed inset-0 bg-black/95 z-[4000] hidden flex items-center justify-center p-4">
         <div class="bg-[#1a1a1a] w-full max-w-md rounded-[30px] p-10 border border-[#333] relative">
             <button onclick="window.toggleSellModal()" class="absolute top-6 right-6 material-symbols-outlined">close</button>
             <form id="sellForm" class="space-y-4">
-                <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">New Listing</h2>
+                <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">List Luxury</h2>
                 <input type="text" id="pName" placeholder="Item Name" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
                 <input type="number" id="pPrice" placeholder="Price ($)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
-                <input type="tel" id="pPhone" placeholder="WhatsApp (e.g. 233...)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
+                <input type="tel" id="pPhone" placeholder="WhatsApp (233...)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
                 <select id="pCat" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-gray-400 outline-none">
                     <option value="tech">Technology</option>
                     <option value="style">Fashion</option>
                 </select>
-                <input type="file" id="pFile" accept="image/*" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white" required>
+                <input type="file" id="pFile" accept="image/*" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white cursor-pointer" required>
                 <button type="submit" id="sellSubmitBtn" class="w-full bg-gold text-black py-4 rounded-xl font-black uppercase">Post Live</button>
             </form>
         </div>
     </div>
 
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-full max-w-md bg-[#121212] z-[151] translate-x-full transition-transform duration-500 border-l border-[#333] flex flex-col">
+        <div class="p-8 border-b border-[#222] flex justify-between items-center">
+            <h2 class="text-xl font-black uppercase gold-text">Selection</h2>
+            <button onclick="window.toggleCart()" class="material-symbols-outlined">close</button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-4"></div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         const firebaseConfig = {
@@ -146,21 +224,19 @@
         const storage = getStorage(app);
         const pRef = collection(db, "products");
 
-        let allProducts = [];
+        let allProducts = []; // To store products for "Similar" search
+
         window.isLoggedIn = false;
 
-        // UI Helpers
-        window.toggleModal = () => document.getElementById('auth-modal').classList.toggle('hidden');
-        window.toggleSellModal = () => document.getElementById('sell-modal').classList.toggle('hidden');
-        window.checkAuthAndSell = () => window.isLoggedIn ? window.toggleSellModal() : window.toggleModal();
-
-        // Auth Listener
         onAuthStateChanged(auth, (user) => {
             window.isLoggedIn = !!user;
             document.getElementById('user-display').innerText = user ? user.email.split('@')[0].toUpperCase() : "SIGN IN";
         });
 
-        // Sign In Form
+        window.toggleModal = () => document.getElementById('auth-modal').classList.toggle('hidden');
+        window.toggleSellModal = () => document.getElementById('sell-modal').classList.toggle('hidden');
+        window.toggleCart = () => document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+
         document.getElementById('authForm').onsubmit = async (e) => {
             e.preventDefault();
             try {
@@ -169,7 +245,6 @@
             } catch(err) { alert(err.message); }
         };
 
-        // Sell Form (Image Upload + Firestore)
         document.getElementById('sellForm').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('sellSubmitBtn');
@@ -194,40 +269,44 @@
             finally { btn.innerText = "POST LIVE"; btn.disabled = false; }
         };
 
-        // Delete Function
-        window.deleteProduct = async (id) => {
-            if (confirm("Permanently delete this elite listing?")) {
-                await deleteDoc(doc(db, "products", id));
-            }
-        };
-
-        // Paystack Integration
-        window.initiatePayment = (p) => {
-            if(!window.isLoggedIn) { alert("Please Sign In to purchase."); window.toggleModal(); return; }
-            const handler = PaystackPop.setup({
-                key: 'pk_test_fd948c38f7e164563aef8a2ce72b8ceb627932cd',
-                email: auth.currentUser.email,
-                amount: Math.round(p.price * 15 * 100), // Calculation: $Price * 15 rate * 100 pesewas
-                currency: 'GHS',
-                ref: 'ELITE_' + Date.now(),
-                callback: (response) => alert('Transaction Successful! Ref: ' + response.reference)
-            });
-            handler.openIframe();
-        };
-
-        // Detail Page Logic
         window.openDetail = (data) => {
             const p = JSON.parse(decodeURIComponent(data));
+            const message = `Hello Nana Obasty Elite, I am interested in purchasing the *${p.name}* listed for *$${p.price.toLocaleString()}*. Is this still available?`;
+            
+            // Populate Fields
             document.getElementById('detail-img').src = p.image;
             document.getElementById('detail-name').innerText = p.name;
             document.getElementById('detail-cat').innerText = p.category;
             document.getElementById('detail-price').innerText = `$${p.price.toLocaleString()}`;
-            document.getElementById('pay-button').onclick = () => window.initiatePayment(p);
-            document.getElementById('detail-wa-btn').href = `https://wa.me/${p.phone}?text=I'm interested in the ${p.name}`;
+            document.getElementById('detail-wa-btn').href = `https://wa.me/${p.phone}?text=${encodeURIComponent(message)}`;
             
+            // Generate Similar Products (Jumia style)
+            const similarGrid = document.getElementById('similar-grid');
+            similarGrid.innerHTML = '';
+            const similarItems = allProducts.filter(item => item.category === p.category && item.id !== p.id).slice(0, 5);
+            
+            similarItems.forEach(item => {
+                const itemData = encodeURIComponent(JSON.stringify(item));
+                const div = document.createElement('div');
+                div.className = "product-card p-4 flex flex-col gap-3 cursor-pointer group";
+                div.onclick = () => window.openDetail(itemData);
+                div.innerHTML = `
+                    <div class="h-32 overflow-hidden rounded-xl">
+                        <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-110 transition">
+                    </div>
+                    <div>
+                        <h4 class="text-[10px] font-bold truncate text-gray-400">${item.name}</h4>
+                        <p class="text-xs gold-text font-black">$${item.price.toLocaleString()}</p>
+                    </div>
+                `;
+                similarGrid.appendChild(div);
+            });
+
+            // Show Overlay
             const overlay = document.getElementById('detail-overlay');
             overlay.classList.remove('hidden');
             setTimeout(() => overlay.classList.add('active'), 10);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.closeDetail = () => {
@@ -236,46 +315,57 @@
             setTimeout(() => overlay.classList.add('hidden'), 400);
         };
 
-        // Real-time listener for Product Grid
         onSnapshot(query(pRef, orderBy("createdAt", "desc")), (snap) => {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
-            let totalVal = 0;
             allProducts = [];
+            let totalValue = 0;
+            let count = 0;
 
             snap.forEach(ds => {
-                const p = ds.data(); const id = ds.id;
-                const prod = {...p, id};
-                allProducts.push(prod);
-                totalVal += p.price;
+                const p = ds.data();
+                const id = ds.id;
+                const productWithId = {...p, id};
+                allProducts.push(productWithId);
+                totalValue += p.price;
+                count++;
+
                 const isOwner = auth.currentUser && auth.currentUser.email === p.sellerEmail;
-                const dataStr = encodeURIComponent(JSON.stringify(prod));
+                const dataString = encodeURIComponent(JSON.stringify(productWithId));
+                const gridMsg = encodeURIComponent(`Quick Inquiry: ${p.name} ($${p.price})`);
 
                 const card = document.createElement('div');
                 card.className = "product-card cursor-pointer";
                 card.setAttribute('data-cat', p.category);
                 card.innerHTML = `
-                    <div class="h-64 overflow-hidden relative">
-                        ${isOwner ? `<button onclick="event.stopPropagation(); window.deleteProduct('${id}')" class="absolute top-3 left-3 z-20 bg-red-600/80 p-2 rounded-full hover:bg-red-600 transition"><span class="material-symbols-outlined text-sm">delete</span></button>` : ''}
-                        <img src="${p.image}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110" onclick="window.openDetail('${dataStr}')">
+                    <div class="h-64 overflow-hidden relative" onclick="window.openDetail('${dataString}')">
+                        ${isOwner ? `<button onclick="event.stopPropagation(); window.deleteProduct('${id}')" class="absolute top-3 left-3 z-10 bg-red-600/80 text-white p-2 rounded-full hover:bg-red-600 transition"><span class="material-symbols-outlined text-sm">delete</span></button>` : ''}
+                        <img src="${p.image}" class="w-full h-full object-cover hover:scale-110 transition duration-700">
                     </div>
-                    <div class="p-6" onclick="window.openDetail('${dataStr}')">
-                        <div class="flex justify-between items-start">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
                             <h3 class="font-bold text-gray-200 text-sm truncate w-2/3">${p.name}</h3>
                             <p class="text-gold font-black">$${p.price.toLocaleString()}</p>
+                        </div>
+                        <div class="flex gap-4 items-center border-t border-white/5 pt-4">
+                            <button onclick="window.openDetail('${dataString}')" class="text-[9px] font-black uppercase tracking-widest text-gray-500 hover:text-gold transition">Specs</button>
+                            <a href="https://wa.me/${p.phone}?text=${gridMsg}" class="text-[9px] font-black uppercase tracking-widest text-[#25D366] hover:brightness-125 transition">Inquiry</a>
                         </div>
                     </div>`;
                 grid.appendChild(card);
             });
-            document.getElementById('stat-count').innerText = allProducts.length;
-            document.getElementById('stat-value').innerText = `$${totalVal.toLocaleString()}`;
+
+            document.getElementById('stat-count').innerText = count;
+            document.getElementById('stat-value').innerText = `$${totalValue.toLocaleString()}`;
         });
 
         window.filterCat = (cat) => {
-            document.querySelectorAll('.product-card').forEach(c => {
+            document.querySelectorAll('.product-grid > div').forEach(c => {
                 c.style.display = (cat === 'all' || c.getAttribute('data-cat') === cat) ? 'block' : 'none';
             });
         };
+
+        window.checkAuthAndSell = () => window.isLoggedIn ? window.toggleSellModal() : window.toggleModal();
     </script>
 </body>
 </html>
