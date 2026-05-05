@@ -197,7 +197,7 @@
     </div>
 
     <div id="sell-modal" class="fixed inset-0 bg-black/95 z-[4000] hidden flex items-center justify-center p-4">
-        <div class="bg-[#1a1a1a] w-full max-w-md rounded-[30px] p-10 border border-[#333] relative">
+        <div class="bg-[#1a1a1a] w-full max-w-md rounded-[30px] p-10 border border-[#333] relative overflow-y-auto max-h-[90vh]">
             <button onclick="window.toggleSellModal()" class="absolute top-6 right-6 material-symbols-outlined">close</button>
             <form id="sellForm" class="space-y-4">
                 <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">List Luxury</h2>
@@ -208,7 +208,13 @@
                     <option value="tech">Technology</option>
                     <option value="style">Fashion</option>
                 </select>
-                <input type="file" id="pFile" accept="image/*" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white cursor-pointer" required>
+                
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-2">Product Images (First is cover)</label>
+                    <input type="file" id="pFile" accept="image/*" multiple class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white cursor-pointer" required>
+                    <div id="sell-previews" class="flex gap-2 overflow-x-auto py-2 no-scrollbar"></div>
+                </div>
+
                 <button type="submit" id="sellSubmitBtn" class="w-full bg-gold text-black py-4 rounded-xl font-black uppercase">Post Live</button>
             </form>
         </div>
@@ -275,6 +281,22 @@
         window.toggleSellModal = () => document.getElementById('sell-modal').classList.toggle('hidden');
         window.toggleCart = () => document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
 
+        // Image Preview Handler
+        document.getElementById('pFile').onchange = (e) => {
+            const container = document.getElementById('sell-previews');
+            container.innerHTML = '';
+            Array.from(e.target.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const img = document.createElement('img');
+                    img.src = ev.target.result;
+                    img.className = "w-16 h-16 object-cover rounded-lg border border-white/10";
+                    container.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        };
+
         document.getElementById('authForm').onsubmit = async (e) => {
             e.preventDefault();
             try {
@@ -286,21 +308,32 @@
         document.getElementById('sellForm').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('sellSubmitBtn');
-            const file = document.getElementById('pFile').files[0];
+            const files = document.getElementById('pFile').files;
+            
             try {
-                btn.innerText = "UPLOADING..."; btn.disabled = true;
-                const fileRef = sRef(storage, `products/${Date.now()}_${file.name}`);
-                const snapshot = await uploadBytes(fileRef, file);
-                const url = await getDownloadURL(snapshot.ref);
+                btn.innerText = "UPLOADING ELITE ASSETS..."; btn.disabled = true;
+                const uploadUrls = [];
+
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const fileRef = sRef(storage, `products/${Date.now()}_${i}_${file.name}`);
+                    const snapshot = await uploadBytes(fileRef, file);
+                    const url = await getDownloadURL(snapshot.ref);
+                    uploadUrls.push(url);
+                }
+
                 await addDoc(pRef, {
                     name: document.getElementById('pName').value,
                     price: parseFloat(document.getElementById('pPrice').value),
                     phone: document.getElementById('pPhone').value,
                     category: document.getElementById('pCat').value,
-                    image: url,
+                    image: uploadUrls[0], // Main display image
+                    allImages: uploadUrls, // Array of all images
                     sellerEmail: auth.currentUser.email,
                     createdAt: Date.now()
                 });
+
+                document.getElementById('sell-previews').innerHTML = '';
                 window.toggleSellModal();
                 e.target.reset();
             } catch (err) { alert(err.message); }
