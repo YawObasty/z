@@ -53,7 +53,10 @@
                     <div>
                         <p id="detail-cat" class="text-gold font-black text-[10px] uppercase tracking-widest mb-2"></p>
                         <h1 id="detail-name" class="text-4xl font-black uppercase leading-tight mb-4 tracking-tighter"></h1>
-                        <p id="detail-price" class="text-3xl font-light text-gray-400"></p>
+                        <p id="detail-price" class="text-3xl font-light text-gray-400 mb-6"></p>
+                        
+                        <!-- Added Detail Specs Container -->
+                        <div id="detail-specs" class="flex flex-wrap gap-3"></div>
                     </div>
 
                     <div class="bg-[#161616] p-6 rounded-3xl border border-white/5 space-y-4">
@@ -204,10 +207,20 @@
                 <input type="text" id="pName" placeholder="Item Name" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
                 <input type="number" id="pPrice" placeholder="Price ($)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
                 <input type="tel" id="pPhone" placeholder="WhatsApp (233...)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none" required>
-                <select id="pCat" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-gray-400 outline-none">
+                
+                <!-- Updated Select to toggle fields -->
+                <select id="pCat" onchange="window.toggleFashionFields(this.value)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-gray-400 outline-none">
                     <option value="tech">Technology</option>
                     <option value="style">Fashion</option>
                 </select>
+
+                <!-- Added Fashion Fields -->
+                <div id="fashion-extras" class="hidden space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" id="pSize" placeholder="Size (e.g. XL, 44)" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none">
+                        <input type="text" id="pColor" placeholder="Color/Material" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none">
+                    </div>
+                </div>
                 
                 <div class="space-y-2">
                     <label class="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-2">Product Images (First is cover)</label>
@@ -259,6 +272,12 @@
             document.getElementById('logout-btn').classList.toggle('hidden', !user);
         });
 
+        // New: Fashion Field Toggle
+        window.toggleFashionFields = (val) => {
+            const extras = document.getElementById('fashion-extras');
+            extras.classList.toggle('hidden', val !== 'style');
+        };
+
         window.handleGoogleSignIn = async () => {
             try {
                 await signInWithPopup(auth, provider);
@@ -281,7 +300,6 @@
         window.toggleSellModal = () => document.getElementById('sell-modal').classList.toggle('hidden');
         window.toggleCart = () => document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
 
-        // Image Preview Handler
         document.getElementById('pFile').onchange = (e) => {
             const container = document.getElementById('sell-previews');
             container.innerHTML = '';
@@ -327,8 +345,10 @@
                     price: parseFloat(document.getElementById('pPrice').value),
                     phone: document.getElementById('pPhone').value,
                     category: document.getElementById('pCat').value,
-                    image: uploadUrls[0], // Main display image
-                    allImages: uploadUrls, // Array of all images
+                    size: document.getElementById('pSize').value || null, // Added
+                    color: document.getElementById('pColor').value || null, // Added
+                    image: uploadUrls[0],
+                    allImages: uploadUrls,
                     sellerEmail: auth.currentUser.email,
                     createdAt: Date.now()
                 });
@@ -336,6 +356,7 @@
                 document.getElementById('sell-previews').innerHTML = '';
                 window.toggleSellModal();
                 e.target.reset();
+                document.getElementById('fashion-extras').classList.add('hidden');
             } catch (err) { alert(err.message); }
             finally { btn.innerText = "POST LIVE"; btn.disabled = false; }
         };
@@ -363,7 +384,7 @@
 
         window.openDetail = (data) => {
             const p = JSON.parse(decodeURIComponent(data));
-            const message = `Hello Nana Obasty Elite, I am interested in purchasing the *${p.name}* listed for *$${p.price.toLocaleString()}*. Is this still available?`;
+            const message = `Hello Nana Obasty Elite, I am interested in purchasing the *${p.name}* ${p.size ? `(Size: ${p.size})` : ''} listed for *$${p.price.toLocaleString()}*. Is this still available?`;
             
             document.getElementById('detail-img').src = p.image;
             document.getElementById('detail-name').innerText = p.name;
@@ -371,6 +392,12 @@
             document.getElementById('detail-price').innerText = `$${p.price.toLocaleString()}`;
             document.getElementById('detail-wa-btn').href = `https://wa.me/${p.phone}?text=${encodeURIComponent(message)}`;
             
+            // Updated Specs Badges
+            const specsCont = document.getElementById('detail-specs');
+            specsCont.innerHTML = '';
+            if(p.size) specsCont.innerHTML += `<span class="px-4 py-2 bg-[#1a1a1a] border border-white/10 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-300">Size: ${p.size}</span>`;
+            if(p.color) specsCont.innerHTML += `<span class="px-4 py-2 bg-[#1a1a1a] border border-white/10 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-300">Color: ${p.color}</span>`;
+
             document.getElementById('pay-button').onclick = () => window.initiatePayment(p);
 
             const similarGrid = document.getElementById('similar-grid');
