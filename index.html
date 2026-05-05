@@ -172,12 +172,27 @@
     <div id="auth-modal" class="fixed inset-0 bg-black/95 z-[4000] hidden flex items-center justify-center p-4">
         <div class="bg-[#1a1a1a] w-full max-w-md rounded-[30px] p-10 border border-[#333] relative">
             <button onclick="window.toggleModal()" class="absolute top-6 right-6 material-symbols-outlined">close</button>
-            <form id="authForm" class="space-y-4">
-                <h2 class="text-3xl font-black uppercase mb-8 gold-text italic">Elite Access</h2>
-                <input type="email" id="authEmail" placeholder="Email" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none">
-                <input type="password" id="authPass" placeholder="Password" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none">
-                <button type="submit" class="w-full bg-gold text-black py-4 rounded-xl font-black uppercase">Enter</button>
-            </form>
+            <div class="space-y-6">
+                <h2 class="text-3xl font-black uppercase mb-2 gold-text italic text-center">WELCOME TO OBASTY'S WEBSITE</h2>
+                
+                <!-- Google Sign-In Button -->
+                <button onclick="window.handleGoogleSignIn()" class="w-full bg-white text-black py-4 rounded-xl font-black uppercase text-xs flex items-center justify-center gap-3 hover:bg-gray-200 transition">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5">
+                    Continue with Google
+                </button>
+
+                <div class="flex items-center gap-4">
+                    <div class="h-[1px] flex-1 bg-white/10"></div>
+                    <span class="text-[10px] text-gray-600 font-bold">OR</span>
+                    <div class="h-[1px] flex-1 bg-white/10"></div>
+                </div>
+
+                <form id="authForm" class="space-y-4">
+                    <input type="email" id="authEmail" placeholder="Email" autocapitalize="none" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none">
+                    <input type="password" id="authPass" placeholder="Password" class="w-full p-4 bg-[#0d0d0d] border border-[#333] rounded-xl text-white outline-none">
+                    <button type="submit" class="w-full bg-gold text-black py-4 rounded-xl font-black uppercase">Enter</button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -210,7 +225,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         const firebaseConfig = {
@@ -227,23 +242,31 @@
         const auth = getAuth(app);
         const storage = getStorage(app);
         const pRef = collection(db, "products");
+        const provider = new GoogleAuthProvider();
 
         let allProducts = [];
         window.isLoggedIn = false;
 
         onAuthStateChanged(auth, (user) => {
             window.isLoggedIn = !!user;
-            document.getElementById('user-display').innerText = user ? user.email.split('@')[0].toUpperCase() : "SIGN IN";
-            // MODIFIED: Show/Hide logout button based on auth state
+            document.getElementById('user-display').innerText = user ? (user.displayName || user.email.split('@')[0]).toUpperCase() : "SIGN IN";
             document.getElementById('logout-btn').classList.toggle('hidden', !user);
         });
 
-        // ADDED: Logout logic
+        window.handleGoogleSignIn = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+                window.toggleModal();
+            } catch (err) {
+                alert("Google Sign-In Error: " + err.message);
+            }
+        };
+
         window.handleLogout = async () => {
             if (confirm("Are you sure you want to log out?")) {
                 try {
                     await signOut(auth);
-                    location.reload(); // Refresh to clear states
+                    location.reload();
                 } catch(err) { alert(err.message); }
             }
         };
@@ -257,7 +280,7 @@
             try {
                 await signInWithEmailAndPassword(auth, document.getElementById('authEmail').value, document.getElementById('authPass').value);
                 window.toggleModal();
-            } catch(err) { alert(err.message); }
+            } catch(err) { alert("Login Error: " + err.message); }
         };
 
         document.getElementById('sellForm').onsubmit = async (e) => {
@@ -284,7 +307,6 @@
             finally { btn.innerText = "POST LIVE"; btn.disabled = false; }
         };
 
-        // --- ADDED: DELETE FUNCTION ---
         window.deleteProduct = async (id) => {
             if (confirm("Permanently remove this luxury listing?")) {
                 try {
@@ -293,13 +315,12 @@
             }
         };
 
-        // --- ADDED: PAYSTACK FUNCTION ---
         window.initiatePayment = (p) => {
             if(!window.isLoggedIn) { alert("Please Sign In to purchase."); window.toggleModal(); return; }
             const handler = PaystackPop.setup({
                 key: 'pk_test_fd948c38f7e164563aef8a2ce72b8ceb627932cd',
                 email: auth.currentUser.email,
-                amount: Math.round(p.price * 15 * 100), // USD to GHS conversion
+                amount: Math.round(p.price * 15 * 100),
                 currency: 'GHS',
                 ref: 'ELITE_' + Date.now(),
                 callback: (response) => alert('Elite Transaction Successful! Ref: ' + response.reference)
@@ -317,7 +338,6 @@
             document.getElementById('detail-price').innerText = `$${p.price.toLocaleString()}`;
             document.getElementById('detail-wa-btn').href = `https://wa.me/${p.phone}?text=${encodeURIComponent(message)}`;
             
-            // Link the Paystack button
             document.getElementById('pay-button').onclick = () => window.initiatePayment(p);
 
             const similarGrid = document.getElementById('similar-grid');
